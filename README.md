@@ -6,14 +6,14 @@
 
 Craving boba but unsure where to go? **Will You Be My Boba** makes finding your next favorite drink easier than ever. Powered by a community-driven database, this app helps you discover the best boba shops—whether you're chasing bold flavors, relaxing vibes, or hidden gems.
 
-### Key Features:
+### What You Can Do:
 
 - **Search by Flavor Tags:** Find drinks based on unique flavor profiles—from creamy classics to fruity delights—all curated by the community.
 - **Feeling Adventurous?** Let the app surprise you with a random drink suggestion! (WIP)
 - **Check Local Shops:** Curious about your favorite spot? See what the community thinks of their menu! (WIP)
 - **Share Your Favorites:** Be part of the boba-loving network—recommend your go-to drink and where to find it.
 
-**Join the movement! Explore, share, and sip with Will You Be My Boba!**
+**What are you waiting for? Explore, share, and sip with Will You Be My Boba!**
 
 ## Key Features
 
