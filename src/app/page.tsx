@@ -4,6 +4,7 @@ import BobaCards from "./components/BobaCards";
 import { getBobaData, getShopData } from "./utils/bobaAPI";
 import LocationModal from "./components/LocationModal";
 import DetailsCard from "./components/DetailsCard";
+import BobaAddModal from "./components/BobaAddModal";
 
 export default async function Home() {
   const bobaData = await getBobaData();
@@ -30,6 +31,7 @@ export default async function Home() {
     >
       <div>
         <LocationModal />
+        <BobaAddModal />
         <div className="flex gap-2">
           <FlavorCards />
           <BobaCards />

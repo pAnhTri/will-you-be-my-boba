@@ -13,12 +13,14 @@ import { getBobaData } from "../utils/bobaAPI";
 interface FilterContextProps {
   bobaList: Boba[];
   flavorList: string[];
+  isBobaAddModalOpen: boolean;
   isLocationModalOpen: boolean;
   selectedBoba: Boba | null;
   selectedTags: string[];
   shopList: Shop[];
   fetchBobaList: () => Promise<void>;
   setFlavorList: Dispatch<SetStateAction<string[]>>;
+  setIsBobaAddModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsLocationModalOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedBoba: Dispatch<SetStateAction<Boba | null>>;
   setSelectedTags: Dispatch<SetStateAction<string[]>>;
@@ -59,6 +61,7 @@ const FilterProvider = ({
   // Modals
   const [isLocationModalOpen, setIsLocationModalOpen] =
     useState<boolean>(false);
+  const [isBobaAddModalOpen, setIsBobaAddModalOpen] = useState<boolean>(false);
 
   const fetchBobaList = async () => {
     try {
@@ -103,12 +106,14 @@ const FilterProvider = ({
       value={{
         bobaList: filteredBobas,
         flavorList,
+        isBobaAddModalOpen,
         isLocationModalOpen,
         selectedBoba,
         selectedTags,
         shopList,
         fetchBobaList,
         setFlavorList,
+        setIsBobaAddModalOpen,
         setIsLocationModalOpen,
         setSelectedBoba,
         setSelectedTags,

@@ -86,6 +86,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 - **Node.js** (v18 or later recommended)
 - **npm** or **yarn**
 - **Google Places API Key** (for location data)
+- **MongoDB Server**
 
 ---
 

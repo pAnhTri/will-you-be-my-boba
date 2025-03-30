@@ -44,7 +44,7 @@ const LocationModal = () => {
 
   return (
     <div
-      className="fixed top-0 left-0 z-50 w-full h-full bg-black/85 flex items-center justify-center cursor-pointer"
+      className="fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center cursor-pointer"
       onClick={() => setIsLocationModalOpen(false)}
     >
       <LocationModalContent setDataAndLoading={setDataAndLoading}>

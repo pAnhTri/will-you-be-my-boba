@@ -55,7 +55,10 @@ const BobaCardsForms = ({ setDataAndLoading }: BobaCardsFormsProps) => {
   };
 
   return (
-    <div>
+    <div
+      className="relative bg-white h-1/2 w-1/2 p-2 flex flex-col rounded-md shadow-md cursor-default"
+      onClick={(e) => e.stopPropagation()}
+    >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         {/* Name */}
         <label htmlFor="name">Name</label>
