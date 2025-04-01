@@ -50,9 +50,9 @@ const LocationModalContent = ({
       className="relative bg-white h-1/2 w-1/2 p-2 flex flex-col rounded-md shadow-md cursor-default"
       onClick={(e) => e.stopPropagation()}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mb-2">
         {/* City */}
-        <label htmlFor="city">City</label>
+        <label htmlFor="city">City or Shop</label>
         <input id="city" className="input-field" {...register("city")} />
         {errors.city && <span>{errors.city.message}</span>}
 

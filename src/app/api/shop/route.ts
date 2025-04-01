@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect, Shop } from "@/app/lib/mongodb";
+import { ShopSchema } from "@/app/lib/utils/validators";
+import { z } from "zod";
 
 export const GET = async (req: NextRequest) => {
   await dbConnect();
@@ -103,5 +105,44 @@ export const GET = async (req: NextRequest) => {
         console.error("Error fetching shop data:", error);
         return NextResponse.json({ success: false }, { status: 500 });
       });
+  }
+};
+
+export const POST = async (req: NextRequest) => {
+  await dbConnect();
+
+  const data = await req.json();
+
+  try {
+    const validatedData = ShopSchema.parse(data);
+
+    const { name, location } = validatedData;
+
+    await Shop.findOneAndUpdate(
+      {
+        name,
+        "location.city": location.city,
+      },
+      {
+        $set: { location },
+      },
+      { upsert: true, new: true }
+    );
+
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (err) {
+    console.error("Error creating shop:", err);
+
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        { success: false, errors: err.errors },
+        { status: 400 }
+      );
+    } else {
+      return NextResponse.json(
+        { success: false, error: "Failed to create shop entry." },
+        { status: 500 }
+      );
+    }
   }
 };

@@ -6,6 +6,7 @@ import LocationModalContent from "./LocationModalContent";
 import { GooglePlace } from "../types";
 import LocationSearchResults from "./LocationSearchResults";
 import { getGoogleLocationData } from "../utils/bobaAPI";
+import LocationModealAddLocationButton from "./LocationModealAddLocationButton";
 
 const LocationModal = () => {
   const { isLocationModalOpen, setIsLocationModalOpen } = useFilterContext();
@@ -18,6 +19,8 @@ const LocationModal = () => {
   const [googleSearchResults, setGoogleSearchResults] = useState<GooglePlace[]>(
     []
   );
+  const [selectedGooglePlace, setSelectedGooglePlace] =
+    useState<GooglePlace | null>(null);
 
   useEffect(() => {
     const { data, loading } = dataAndLoading;
@@ -25,8 +28,48 @@ const LocationModal = () => {
     if (data && loading) {
       getGoogleLocationData(data.city, data.range)
         .then((result) => {
+          // Reset search
+          setSelectedGooglePlace(null);
+
           if (result && result.places) {
-            setGoogleSearchResults(result.places);
+            const places = result.places;
+
+            const keyword = data.city?.toLowerCase();
+            const relevantPlaces: GooglePlace[] = [];
+            const otherPlaces: GooglePlace[] = [];
+
+            // Sort by (simple) relevance and alphabet descending
+
+            if (keyword) {
+              places.map((place) => {
+                const placeName = place.displayName.text.toLowerCase();
+                if (placeName.includes(keyword)) {
+                  relevantPlaces.push(place);
+                } else {
+                  otherPlaces.push(place);
+                }
+              });
+            }
+
+            let sortedPlaces: GooglePlace[] = [];
+
+            if (relevantPlaces.length > 0 || otherPlaces.length > 0) {
+              if (relevantPlaces.length > 1)
+                relevantPlaces.sort((a, b) =>
+                  a.displayName.text.localeCompare(b.displayName.text)
+                );
+              if (otherPlaces.length > 1)
+                otherPlaces.sort((a, b) =>
+                  a.displayName.text.localeCompare(b.displayName.text)
+                );
+              sortedPlaces = [...relevantPlaces, ...otherPlaces];
+            } else {
+              sortedPlaces = places.sort((a, b) =>
+                a.displayName.text.localeCompare(b.displayName.text)
+              );
+            }
+
+            setGoogleSearchResults(sortedPlaces);
           } else {
             setGoogleSearchResults([]);
           }
@@ -52,7 +95,17 @@ const LocationModal = () => {
           dataAndLoading={dataAndLoading}
           errorMessage={errorMessage}
           googleSearchResults={googleSearchResults}
+          selectedGooglePlace={selectedGooglePlace}
+          setSelectedGooglePlace={setSelectedGooglePlace}
         />
+        {selectedGooglePlace && (
+          <LocationModealAddLocationButton
+            selectedGooglePlace={selectedGooglePlace}
+            setErrorMessage={setErrorMessage}
+            setIsLocationModalOpen={setIsLocationModalOpen}
+            setSelectedGooglePlace={setSelectedGooglePlace}
+          />
+        )}
       </LocationModalContent>
     </div>
   );

@@ -108,7 +108,7 @@ const BobaCardsForms = ({ setDataAndLoading }: BobaCardsFormsProps) => {
         <div className="flex flex-col">
           <label htmlFor="shopId">Store</label>
 
-          <div className="flex h-full w-full items-center">
+          <div className="flex h-full w-full items-center gap-2">
             <input
               id="shopId"
               list="shopList"

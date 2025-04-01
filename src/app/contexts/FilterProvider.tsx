@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { Boba, Shop } from "../types";
-import { getBobaData } from "../utils/bobaAPI";
+import { getBobaData, getShopData } from "../utils/bobaAPI";
 
 interface FilterContextProps {
   bobaList: Boba[];
@@ -19,6 +19,7 @@ interface FilterContextProps {
   selectedTags: string[];
   shopList: Shop[];
   fetchBobaList: () => Promise<void>;
+  fetchShopList: () => Promise<void>;
   setFlavorList: Dispatch<SetStateAction<string[]>>;
   setIsBobaAddModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsLocationModalOpen: Dispatch<SetStateAction<boolean>>;
@@ -76,6 +77,18 @@ const FilterProvider = ({
     }
   };
 
+  const fetchShopList = async () => {
+    try {
+      const shopData = await getShopData();
+      if (shopData) {
+        const { shop = [] } = shopData;
+        setShopList(shop);
+      }
+    } catch (error) {
+      console.error("Failed to fetch updated shop list:", error);
+    }
+  };
+
   const filteredBobas = useMemo(() => {
     if (selectedTags.length === 0) return bobaList;
     return bobaList.filter((boba) =>
@@ -112,6 +125,7 @@ const FilterProvider = ({
         selectedTags,
         shopList,
         fetchBobaList,
+        fetchShopList,
         setFlavorList,
         setIsBobaAddModalOpen,
         setIsLocationModalOpen,
