@@ -9,7 +9,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 ### What You Can Do:
 
 - **Search by Flavor Tags:** Find drinks based on unique flavor profiles—from creamy classics to fruity delights—all curated by the community.
-- **Feeling Adventurous?** Let the app surprise you with a random drink suggestion! (WIP)
+- **Feeling Adventurous?** Let the app surprise you with a random drink suggestion!
 - **Check Local Shops:** Curious about your favorite spot? See what the community thinks of their menu! (WIP)
 - **Share Your Favorites:** Be part of the boba-loving network—recommend your go-to drink and where to find it.
 
@@ -23,6 +23,11 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 
   - Search for boba drinks by selecting flavor tags such as `earthy`, `fruity`, or specific flavors.
   - Tags are community-driven and constantly updated based on user input.
+
+- **Select Random Flavor Tags**
+
+  - When you need help, click on the "IDK..." button to let the app randomly select POSSIBLE flavor combinations to narrow down your search.
+  - Up to 3 flavors can be chosen randomly.
 
 - **Display Boba Listings**
 
@@ -43,10 +48,6 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 ---
 
 ### Upcoming Features (WIP)
-
-- **Random Drink Suggestion**
-
-  - Can't decide? A "Surprise Me!" feature will suggest a random boba drink based on popular community picks.
 
 - **Community Shop Reviews**
 
@@ -172,6 +173,11 @@ npm cache clean --force
 
   - Click on a **tag** to filter the boba list by drinks that match the selected flavor.
   - Click on a **blue tag** (indicating it's active) to unselect it.
+
+- **Randomly Choose Flavor Tags**
+
+  - Click on the **"IDK..."** button on top of the flavor card to let the app add a flavor tag to the current ones for you.
+  - The **"IDK..."** button can only be clicked when less than 3 flavors have been selected
 
 - **Viewing Boba Details**
   Click on a boba entry to view:

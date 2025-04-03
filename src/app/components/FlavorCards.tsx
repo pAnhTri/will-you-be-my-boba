@@ -1,9 +1,34 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFilterContext } from "../contexts/FilterProvider";
+import FlavorRandomButton from "./FlavorRandomButton";
 
 const FlavorCards = () => {
-  const { flavorList, selectedTags, setSelectedTags } = useFilterContext();
+  const { bobaList, flavorList, selectedTags, setSelectedTags } =
+    useFilterContext();
+  const [possibleFlavorCombination, setPossibleFlavorCombination] =
+    useState<string[]>(flavorList);
+
+  useEffect(() => {
+    if (selectedTags.length === 0) {
+      setPossibleFlavorCombination(flavorList);
+      return;
+    } else if (selectedTags.length < 3) {
+      const uniquePossibleFlavorsSet = new Set<string>();
+      bobaList.forEach((boba) => {
+        boba.flavors.forEach((flavor) => {
+          if (!selectedTags.includes(flavor)) {
+            uniquePossibleFlavorsSet.add(flavor);
+          }
+        });
+      });
+
+      const uniquePossibleFlavors = Array.from(uniquePossibleFlavorsSet);
+      console.log(uniquePossibleFlavors);
+      setPossibleFlavorCombination(uniquePossibleFlavors);
+    }
+  }, [bobaList, selectedTags]);
 
   const toggleTag = (tag: string) => {
     setSelectedTags(
@@ -15,9 +40,14 @@ const FlavorCards = () => {
 
   return (
     <div className="basis-1/3 display-card">
-      <h1 className="flex w-full justify-center items-center font-bold text-lg">
-        What Flavors Are We Feeling Today?
-      </h1>
+      <div className="flex w-full justify-center items-center mb-2 gap-2">
+        <h1 className="text-lg font-bold">
+          What Flavors Are We Feeling Today?
+        </h1>
+        <FlavorRandomButton
+          possibleFlavorCombination={possibleFlavorCombination}
+        />
+      </div>
       <div className="sticky top-2 flex max-h-full overflow-y-auto flex-wrap gap-2 border border-slate-500 p-2 rounded-md inset-shadow-black inset-shadow-xs">
         {flavorList.map((tag) => (
           <button

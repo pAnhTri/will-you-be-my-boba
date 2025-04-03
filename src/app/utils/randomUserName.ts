@@ -44,6 +44,11 @@ const animals = [
   "Squirrel",
   "Bee",
   "Chicken",
+  "Human",
+  "Chameleon",
+  "Puppy",
+  "Horsey",
+  "Boba",
 ];
 
 const getRandomElement = (array: string[]) =>
