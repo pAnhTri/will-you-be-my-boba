@@ -7,7 +7,24 @@ interface BobaItemCardProps {
 }
 
 const BobaItemCard = ({ boba }: BobaItemCardProps) => {
-  const { selectedBoba, setSelectedBoba } = useFilterContext();
+  const { selectedBoba, userLocation, shopDistances, setSelectedBoba } =
+    useFilterContext();
+
+  const findShortestDistance = (shopIds: string[]) => {
+    let minDistance = Infinity;
+
+    if (!shopDistances) return "N/A";
+    else {
+      shopIds.forEach((shopId) => {
+        minDistance = Math.min(
+          minDistance,
+          shopDistances.get(shopId) ?? Infinity
+        );
+      });
+    }
+
+    return minDistance.toFixed(2);
+  };
 
   useMemo(() => {
     boba.flavors.sort((a, b) => a.localeCompare(b));
@@ -30,6 +47,11 @@ const BobaItemCard = ({ boba }: BobaItemCardProps) => {
         <h1 className="font-bold">{boba.name}</h1>
         <h2>{boba.flavors.join(", ")}</h2>
       </div>
+
+      {/* CONDITIONAL Distance */}
+      {userLocation && <h1>{findShortestDistance(boba.shopId)} mi</h1>}
+
+      {/* Enjoyment Factor */}
       <h1>{boba.enjoymentFactor.toFixed(2)}&#11088;</h1>
     </button>
   );

@@ -6,6 +6,8 @@ const ShopSchema = new mongoose.Schema({
     placesId: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
   },
 });
 

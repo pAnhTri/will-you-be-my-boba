@@ -29,6 +29,8 @@ export const addShopToDatabase = async (shop: GooglePlace) => {
       placesId: shop.id,
       address: shop.formattedAddress,
       city: city ?? "N/A",
+      latitude: shop.location.latitude,
+      longitude: shop.location.longitude,
     },
   };
 

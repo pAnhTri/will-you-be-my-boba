@@ -16,4 +16,8 @@ export interface GooglePlace {
     languageCode: string;
     text: string;
   };
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 }

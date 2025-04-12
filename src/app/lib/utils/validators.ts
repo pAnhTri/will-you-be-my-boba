@@ -58,6 +58,14 @@ export const ShopSchema = z.object({
       .string()
       .min(3, "Name must be at least 3 characters")
       .max(100, "Name cannot exceed 100 characters"),
+    latitude: z
+      .number()
+      .min(-90, "Latitude must be larger than -90 degrees")
+      .max(90, "Latitude must be smaller than 90 degrees"),
+    longitude: z
+      .number()
+      .min(-180, "Longitude must be larger than -180 degrees")
+      .max(180, "Longitude must be smaller than 180 degrees"),
   }),
 });
 

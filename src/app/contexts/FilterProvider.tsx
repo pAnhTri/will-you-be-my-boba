@@ -9,6 +9,7 @@ import {
 } from "react";
 import { Boba, Shop } from "../types";
 import { getBobaData, getShopData } from "../utils/bobaAPI";
+import { calculateDistanceFromCurrentLocation } from "../utils";
 
 interface FilterContextProps {
   bobaList: Boba[];
@@ -17,15 +18,28 @@ interface FilterContextProps {
   isLocationModalOpen: boolean;
   selectedBoba: Boba | null;
   selectedTags: string[];
+  shopDistances: Map<string, number> | undefined;
   shopList: Shop[];
+  userLocation: {
+    lat: number;
+    lng: number;
+  } | null;
   fetchBobaList: () => Promise<void>;
   fetchShopList: () => Promise<void>;
+  setBobaList: Dispatch<SetStateAction<Boba[]>>;
   setFlavorList: Dispatch<SetStateAction<string[]>>;
   setIsBobaAddModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsLocationModalOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedBoba: Dispatch<SetStateAction<Boba | null>>;
   setSelectedTags: Dispatch<SetStateAction<string[]>>;
+  setShopDistances: Dispatch<SetStateAction<Map<string, number> | undefined>>;
   setShopList: Dispatch<SetStateAction<Shop[]>>;
+  setUserLocation: Dispatch<
+    SetStateAction<{
+      lat: number;
+      lng: number;
+    } | null>
+  >;
 }
 
 const FilterContext = createContext<FilterContextProps | undefined>(undefined);
@@ -58,6 +72,12 @@ const FilterProvider = ({
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [prevSelectedTags, setPrevSelectedTags] = useState<string[]>([]);
+
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [shopDistances, setShopDistances] = useState<Map<string, number>>();
 
   // Modals
   const [isLocationModalOpen, setIsLocationModalOpen] =
@@ -114,6 +134,29 @@ const FilterProvider = ({
     }
   }, [bobaList]);
 
+  useMemo(() => {
+    if (!userLocation) return;
+
+    const distanceMap = new Map<string, number>(); //Key is shop id, value is distance from current location to shop
+
+    shopList.map((shop) => {
+      const shopCoordinates: {
+        lat: number;
+        lng: number;
+      } = {
+        lat: shop.location.latitude,
+        lng: shop.location.longitude,
+      };
+      const distance = calculateDistanceFromCurrentLocation(
+        userLocation,
+        shopCoordinates
+      );
+      distanceMap.set(shop._id, distance);
+    });
+
+    setShopDistances(distanceMap);
+  }, [userLocation, shopList]);
+
   return (
     <FilterContext.Provider
       value={{
@@ -123,15 +166,20 @@ const FilterProvider = ({
         isLocationModalOpen,
         selectedBoba,
         selectedTags,
+        shopDistances,
         shopList,
+        userLocation,
         fetchBobaList,
         fetchShopList,
+        setBobaList,
         setFlavorList,
         setIsBobaAddModalOpen,
         setIsLocationModalOpen,
         setSelectedBoba,
         setSelectedTags,
+        setShopDistances,
         setShopList,
+        setUserLocation,
       }}
     >
       {children}

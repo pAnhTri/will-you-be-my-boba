@@ -13,6 +13,7 @@ const headers = {
       "places.formattedAddress",
       "places.displayName",
       "places.addressComponents",
+      "places.location",
     ],
   },
 };
