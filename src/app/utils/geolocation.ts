@@ -56,3 +56,16 @@ export const calculateDistanceFromCurrentLocation = (
 
   return earthRadius * c;
 };
+
+export const findShortestShopDistance = (
+  shopIds: string[],
+  shopDistances: Map<string, number>
+) => {
+  let minDistance = Infinity;
+
+  shopIds.forEach((shopId) => {
+    minDistance = Math.min(minDistance, shopDistances.get(shopId) ?? Infinity);
+  });
+
+  return minDistance;
+};

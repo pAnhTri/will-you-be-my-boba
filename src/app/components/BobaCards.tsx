@@ -10,10 +10,7 @@ import BobaCardsDistanceToggleButton from "./BobaCardsDistanceToggleButton";
 const BobaCards = () => {
   const { bobaList } = useFilterContext();
   const [allowDistance, setAllowDistance] = useState<boolean>(false);
-  const [userLocation, setUserlocation] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
+  const [sortedBy, setSortedBy] = useState<string>("Enjoyment");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -23,24 +20,20 @@ const BobaCards = () => {
         <BobaCardsSortButtons
           allowDistance={allowDistance}
           isLoading={isLoading}
+          sortedBy={sortedBy}
+          setSortedBy={setSortedBy}
         />
         <h1 className="font-bold text-lg">We Have...</h1>
         <BobaCardsDistanceToggleButton
           allowDistance={allowDistance}
           isLoading={isLoading}
-          userLocation={userLocation}
           setAllowDistance={setAllowDistance}
           setIsLoading={setIsLoading}
-          setUserLocation={setUserlocation}
         />
       </div>
       <div className="flex flex-col gap-2 borderborder-slate-500 p-2 rounded-md inset-shadow-black inset-shadow-xs">
         {bobaList.map((boba) => (
-          <BobaItemCard
-            key={boba.name}
-            boba={boba}
-            userLocation={userLocation}
-          />
+          <BobaItemCard key={boba.name} boba={boba} />
         ))}
       </div>
     </div>
