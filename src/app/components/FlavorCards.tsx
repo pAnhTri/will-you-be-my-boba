@@ -49,19 +49,23 @@ const FlavorCards = () => {
         />
       </div>
       <div className="sticky top-2 flex max-h-full overflow-y-auto flex-wrap gap-2 border border-slate-500 p-2 rounded-md inset-shadow-black inset-shadow-xs">
-        {flavorList.map((tag) => (
-          <button
-            key={tag}
-            onClick={() => toggleTag(tag)}
-            className={`p-2 rounded-md border hover:bg-blue-400 ${
-              selectedTags.includes(tag)
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 shadow-black shadow-xs"
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
+        {bobaList.length > 0 ? (
+          flavorList.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => toggleTag(tag)}
+              className={`p-2 rounded-md border hover:bg-blue-400 ${
+                selectedTags.includes(tag)
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 shadow-black shadow-xs"
+              }`}
+            >
+              {tag}
+            </button>
+          ))
+        ) : (
+          <h2>Waiting patiently for your Boba flavors...</h2>
+        )}
       </div>
     </div>
   );

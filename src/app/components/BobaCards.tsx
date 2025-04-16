@@ -16,26 +16,42 @@ const BobaCards = () => {
 
   return (
     <div className="basis-1/3 display-card">
-      <div className="flex w-full justify-between items-center">
-        <BobaCardsSortButtons
-          allowDistance={allowDistance}
-          isLoading={isLoading}
-          sortedBy={sortedBy}
-          setSortedBy={setSortedBy}
-        />
+      <div
+        className={`flex w-full ${
+          bobaList.length > 0 ? "justify-between" : "justify-center"
+        } items-center`}
+      >
+        {bobaList.length > 0 && (
+          <BobaCardsSortButtons
+            allowDistance={allowDistance}
+            isLoading={isLoading}
+            sortedBy={sortedBy}
+            setSortedBy={setSortedBy}
+          />
+        )}
         <h1 className="font-bold text-lg">We Have...</h1>
-        <BobaCardsDistanceToggleButton
-          allowDistance={allowDistance}
-          isLoading={isLoading}
-          setAllowDistance={setAllowDistance}
-          setIsLoading={setIsLoading}
-        />
+        {bobaList.length > 0 && (
+          <BobaCardsDistanceToggleButton
+            allowDistance={allowDistance}
+            isLoading={isLoading}
+            setAllowDistance={setAllowDistance}
+            setIsLoading={setIsLoading}
+          />
+        )}
       </div>
-      <div className="flex flex-col gap-2 borderborder-slate-500 p-2 rounded-md inset-shadow-black inset-shadow-xs">
-        {bobaList.map((boba) => (
-          <BobaItemCard key={boba.name} boba={boba} />
-        ))}
-      </div>
+      {
+        <div className="flex flex-col gap-2 borderborder-slate-500 p-2 rounded-md inset-shadow-black inset-shadow-xs">
+          {bobaList.length > 0 ? (
+            bobaList.map((boba) => <BobaItemCard key={boba.name} boba={boba} />)
+          ) : (
+            <h2>
+              Nothing yet!
+              <br />
+              Use the + button on the bottom right to add the first Boba!
+            </h2>
+          )}
+        </div>
+      }
     </div>
   );
 };

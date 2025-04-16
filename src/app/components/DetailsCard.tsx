@@ -6,7 +6,8 @@ import { updateBobaDatabase } from "../utils/bobaAPI";
 import DetailsCardLocation from "./DetailsCardLocation";
 
 const DetailsCard = () => {
-  const { selectedBoba, fetchBobaList } = useFilterContext();
+  const { selectedBoba, shopDistances, userLocation, fetchBobaList } =
+    useFilterContext();
 
   const [ratingAndLoading, setRatingAndLoading] = useState<{
     rating: number | null;
@@ -53,7 +54,11 @@ const DetailsCard = () => {
   return (
     <div className="basis-1/3 display-card flex flex-col gap-2">
       {errorMessage && <span>{errorMessage}</span>}
-      <DetailsCardLocation shopId={selectedBoba.shopId} />
+      <DetailsCardLocation
+        shopId={selectedBoba.shopId}
+        shopDistances={shopDistances}
+        userLocation={userLocation}
+      />
       <DetailsCardUserReviews
         communityReviews={selectedBoba.communityReviews}
         setRatingAndLoading={setRatingAndLoading}

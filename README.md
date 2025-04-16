@@ -10,7 +10,8 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 
 - **Search by Flavor Tags:** Find drinks based on unique flavor profiles—from creamy classics to fruity delights—all curated by the community.
 - **Feeling Adventurous?** Let the app surprise you with a random drink suggestion!
-- **Check Local Shops:** Curious about your favorite spot? See what the community thinks of their menu! (WIP)
+- **Anything Local?** Enable your browser's geolocation to find out which shops are the closest to you!
+- **Check Local Shops:** Curious about your favorite spot? See what the community thinks of their menu!
 - **Share Your Favorites:** Be part of the boba-loving network—recommend your go-to drink and where to find it.
 
 **What are you waiting for? Explore, share, and sip with Will You Be My Boba!**
@@ -40,6 +41,11 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 
   - Users can anonymously submit their enjoyment score for drinks.
   - Scores are averaged to calculate the **Community Enjoyment Factor**.
+
+- **Sort Bobas by Name, Enjoyment, and Distance**
+
+  - Users can sort bobas by their **Name** or **Enjoyment** scores.
+  - If location is enabled, the user can also sort their boba by the **Distance** of the closest shop in miles.
 
 - **Google Maps Integration**
   - Drinks are mapped to their respective stores using the **Google Places API**.
@@ -169,6 +175,32 @@ npm cache clean --force
 
 ## Usage
 
+- **Add Boba to the Database**
+
+  - Click on the **+** button on the bottom right corner of the screen to open the **Add Boba Modal**.
+  - Fill out the form with the boba's **Name**, **Flavor** in a comma separated list, **Sweetness Level**, and **Boba Shop**.
+  - **Boba Shop** will provide options of the available shops within the database.
+  - Click on **Submit** to add the boba to the database.
+  - Click anywhere outside the **Add Boba Modal** to exit the modal.
+
+- **Update Boba**
+
+  - Click on the **+** button on the bottom right corner of the screen to open the **Add Boba Modal**.
+  - Type in the name of the boba to be updated into the **Name** field.
+  - Fill out the rest of the form as above.
+  - Click on **Submit** to update the boba within the database.
+  - Click anywhere outside the **Add Boba Modal** to exit the modal.
+
+- **Add Shop to the Database**
+
+  - Within the **Add Boba Modal**, click the **+** button next to the boba shop input to open the **Add Location Modal**.
+  - Fill out the form with either your city, shop, or relevant keywords in **City or Shop** and _OPTIONALLY_ the **Range** for the search.
+  - Click on the **Search** button to fetch a list of found shops.
+  - Select a shop from the search results.
+  - Click on **Show Me** to open the Google Maps page in a new tab.
+  - Once selected, click on the **Add Shop** button to add the selected shop to the database.
+  - Click anywhere outside the **Add Location Modal** to exit the modal.
+
 - **Filter by Flavor Tags**
 
   - Click on a **tag** to filter the boba list by drinks that match the selected flavor.
@@ -178,6 +210,17 @@ npm cache clean --force
 
   - Click on the **"IDK..."** button on top of the flavor card to let the app add a flavor tag to the current ones for you.
   - The **"IDK..."** button can only be clicked when less than 3 flavors have been selected
+
+- **Show Distances in Miles**
+
+  - Click on **Allow Distances** to be prompted with the browser's geolocation permission
+  - Once enabled, the app will show the closest available shop from the current location, calculated with the Haversine formula
+
+- **Sort Bobas**
+
+  - Click on the Sort by **Name** button to sort the boba list by name.
+  - Click on the Sort by **Enjoyment** button to sort the boba list by the boba's **Enjoyment** score.
+  - _OPTIONAL_ If geolocation is allowed, the Sort by **Distance** button becomes avaiable to sort the boba list by the distance from the current location to the closes shop.
 
 - **Viewing Boba Details**
   Click on a boba entry to view:

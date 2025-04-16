@@ -70,6 +70,7 @@ const BobaCardsForms = ({ setDataAndLoading }: BobaCardsFormsProps) => {
         <input
           id="flavors"
           className="input-field"
+          placeholder="Flavor 1, Flavor 2, Flavor 3..."
           {...register("flavors", {
             setValueAs: (value: string) => {
               return value
