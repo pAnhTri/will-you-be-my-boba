@@ -1,14 +1,14 @@
 import FilterProvider from "./contexts/FilterProvider";
 import FlavorCards from "./components/FlavorCards";
 import BobaCards from "./components/BobaCards";
-import { getBobaData, getShopData } from "./utils/bobaAPI";
 import LocationModal from "./components/LocationModal";
 import DetailsCard from "./components/DetailsCard";
 import BobaAddModal from "./components/BobaAddModal";
+import { getAllBobaData, getAllShopData } from "./lib/utils";
 
 export default async function Home() {
-  const bobaData = await getBobaData();
-  const shopData = await getShopData();
+  const bobaData = await getAllBobaData();
+  const shopData = await getAllShopData();
 
   if (!(bobaData && shopData)) {
     return (
