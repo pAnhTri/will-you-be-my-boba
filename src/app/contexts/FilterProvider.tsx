@@ -4,6 +4,7 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -116,7 +117,7 @@ const FilterProvider = ({
     );
   }, [selectedTags, bobaList]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (selectedBoba) {
       setPrevSelectedTags(selectedTags);
       setSelectedTags(selectedBoba.flavors);
@@ -125,7 +126,7 @@ const FilterProvider = ({
     }
   }, [selectedBoba]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (selectedBoba) {
       const updatedBoba = bobaList.find(
         (boba) => boba.name === selectedBoba.name
@@ -134,7 +135,7 @@ const FilterProvider = ({
     }
   }, [bobaList]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (!userLocation) return;
 
     const distanceMap = new Map<string, number>(); //Key is shop id, value is distance from current location to shop
