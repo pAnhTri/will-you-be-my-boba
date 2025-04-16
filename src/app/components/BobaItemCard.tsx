@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect } from "react";
 import { Boba } from "../types";
 import { useFilterContext } from "../contexts/FilterProvider";
 import { findShortestShopDistance } from "../utils";
@@ -20,7 +20,7 @@ const BobaItemCard = ({ boba }: BobaItemCardProps) => {
     return distance === Infinity ? "N/A" : distance.toFixed(2);
   };
 
-  useMemo(() => {
+  useEffect(() => {
     boba.flavors.sort((a, b) => a.localeCompare(b));
   }, [boba.flavors]);
 

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import FilterProvider from "./contexts/FilterProvider";
 import FlavorCards from "./components/FlavorCards";
 import BobaCards from "./components/BobaCards";
