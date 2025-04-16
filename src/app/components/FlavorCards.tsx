@@ -49,7 +49,7 @@ const FlavorCards = () => {
         />
       </div>
       <div className="sticky top-2 flex max-h-full overflow-y-auto flex-wrap gap-2 border border-slate-500 p-2 rounded-md inset-shadow-black inset-shadow-xs">
-        {bobaList.length > 0 ? (
+        {bobaList.length > 0 || selectedTags.length > 0 ? (
           flavorList.map((tag) => (
             <button
               key={tag}
