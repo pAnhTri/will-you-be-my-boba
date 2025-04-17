@@ -1,4 +1,4 @@
-import { dbConnect } from "@/app/lib/mongodb";
+import { dbConnect } from "@/lib/mongodb";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 

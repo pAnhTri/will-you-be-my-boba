@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { LocationSchema } from "../lib/utils/validators";
+import { LocationSchema } from "@/lib/validators";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";

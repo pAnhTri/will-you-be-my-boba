@@ -1,5 +1,5 @@
-import { ShopSchema } from "@/app/lib/utils/validators";
-import { GooglePlace, ShopAPI } from "@/app/types";
+import { ShopSchema } from "@/lib/validators";
+import { GooglePlace, ShopAPI } from "@/types";
 import axios from "axios";
 import { z } from "zod";
 

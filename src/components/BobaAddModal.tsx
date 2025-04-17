@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useFilterContext } from "../contexts/FilterProvider";
 import BobaAddButton from "./BobaAddButton";
 import BobaCardsForms from "./BobaCardsForms";
-import { addBobaToDatabase } from "../utils/bobaAPI";
+import { addBobaToDatabase } from "../lib/utils/bobaAPI";
 
 const BobaAddModal = () => {
   const { isBobaAddModalOpen, setIsBobaAddModalOpen, fetchBobaList } =

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Boba } from "../types";
 import { useFilterContext } from "../contexts/FilterProvider";
-import { findShortestShopDistance } from "../utils";
+import { findShortestShopDistance } from "@/lib/utils";
 
 interface BobaItemCardProps {
   boba: Boba;

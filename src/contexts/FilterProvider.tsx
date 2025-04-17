@@ -7,9 +7,9 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Boba, Shop } from "../types";
-import { getBobaData, getShopData } from "../utils/bobaAPI";
-import { calculateDistanceFromCurrentLocation } from "../utils";
+import { Boba, GooglePlace, Shop } from "@/types";
+import { getBobaData, getShopData } from "@/lib/utils/bobaAPI";
+import { calculateDistanceFromCurrentLocation } from "@/lib/utils";
 
 interface FilterContextProps {
   bobaList: Boba[];
@@ -17,6 +17,7 @@ interface FilterContextProps {
   isBobaAddModalOpen: boolean;
   isLocationModalOpen: boolean;
   selectedBoba: Boba | null;
+  selectedGooglePlace: GooglePlace | null;
   selectedTags: string[];
   shopDistances: Map<string, number> | undefined;
   shopList: Shop[];
@@ -29,6 +30,7 @@ interface FilterContextProps {
   setBobaList: Dispatch<SetStateAction<Boba[]>>;
   setFlavorList: Dispatch<SetStateAction<string[]>>;
   setIsBobaAddModalOpen: Dispatch<SetStateAction<boolean>>;
+  setSelectedGooglePlace: Dispatch<SetStateAction<GooglePlace | null>>;
   setIsLocationModalOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedBoba: Dispatch<SetStateAction<Boba | null>>;
   setSelectedTags: Dispatch<SetStateAction<string[]>>;
@@ -82,6 +84,8 @@ const FilterProvider = ({
   // Modals
   const [isLocationModalOpen, setIsLocationModalOpen] =
     useState<boolean>(false);
+  const [selectedGooglePlace, setSelectedGooglePlace] =
+    useState<GooglePlace | null>(null);
   const [isBobaAddModalOpen, setIsBobaAddModalOpen] = useState<boolean>(false);
 
   const fetchBobaList = async () => {
@@ -165,6 +169,7 @@ const FilterProvider = ({
         isBobaAddModalOpen,
         isLocationModalOpen,
         selectedBoba,
+        selectedGooglePlace,
         selectedTags,
         shopDistances,
         shopList,
@@ -172,6 +177,7 @@ const FilterProvider = ({
         fetchBobaList,
         fetchShopList,
         setBobaList,
+        setSelectedGooglePlace,
         setFlavorList,
         setIsBobaAddModalOpen,
         setIsLocationModalOpen,

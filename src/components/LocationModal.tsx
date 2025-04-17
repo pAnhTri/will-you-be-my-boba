@@ -5,11 +5,16 @@ import { useFilterContext } from "../contexts/FilterProvider";
 import LocationModalContent from "./LocationModalContent";
 import { GooglePlace } from "../types";
 import LocationSearchResults from "./LocationSearchResults";
-import { getGoogleLocationData } from "../utils/bobaAPI";
-import LocationModealAddLocationButton from "./LocationModealAddLocationButton";
+import { getGoogleLocationData } from "../lib/utils/bobaAPI";
+import LocationModalAddLocationButton from "./LocationModalAddLocationButton";
 
 const LocationModal = () => {
-  const { isLocationModalOpen, setIsLocationModalOpen } = useFilterContext();
+  const {
+    isLocationModalOpen,
+    selectedGooglePlace,
+    setIsLocationModalOpen,
+    setSelectedGooglePlace,
+  } = useFilterContext();
   const [dataAndLoading, setDataAndLoading] = useState<{
     data: { city?: string; range?: number } | null;
     loading: boolean;
@@ -19,8 +24,6 @@ const LocationModal = () => {
   const [googleSearchResults, setGoogleSearchResults] = useState<GooglePlace[]>(
     []
   );
-  const [selectedGooglePlace, setSelectedGooglePlace] =
-    useState<GooglePlace | null>(null);
 
   useEffect(() => {
     const { data, loading } = dataAndLoading;
@@ -99,7 +102,7 @@ const LocationModal = () => {
           setSelectedGooglePlace={setSelectedGooglePlace}
         />
         {selectedGooglePlace && (
-          <LocationModealAddLocationButton
+          <LocationModalAddLocationButton
             selectedGooglePlace={selectedGooglePlace}
             setErrorMessage={setErrorMessage}
             setIsLocationModalOpen={setIsLocationModalOpen}

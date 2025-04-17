@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useFilterContext } from "../contexts/FilterProvider";
 import DetailsCardUserReviews from "./DetailsCardUserReviews";
-import { updateBobaDatabase } from "../utils/bobaAPI";
+import { updateBobaDatabase } from "../lib/utils/bobaAPI";
 import DetailsCardLocation from "./DetailsCardLocation";
 
 const DetailsCard = () => {

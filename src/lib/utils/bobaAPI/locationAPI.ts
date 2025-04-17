@@ -1,4 +1,4 @@
-import { LocationAPI } from "@/app/types";
+import { LocationAPI } from "@/types";
 import axios from "axios";
 
 export const getGoogleLocationData = async (

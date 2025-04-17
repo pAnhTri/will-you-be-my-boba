@@ -30,15 +30,14 @@ const LocationSearchResults = ({
   return (
     <>
       <div className="mb-2">{googleSearchResults.length} search results</div>
-      <div className="flex flex-col overflow-y-scroll border border-black rounded-md">
+      <ul className="flex flex-col overflow-y-scroll border border-black rounded-md">
         {googleSearchResults.map((place) => {
           const cityComponent = place.addressComponents.find((component) => {
             return component.types.includes("locality");
           });
           const city = cityComponent && cityComponent.shortText;
           return (
-            <button
-              type="button"
+            <li
               key={place.id}
               className={`flex justify-between px-2 py-1 ${
                 selectedGooglePlace === place
@@ -66,10 +65,10 @@ const LocationSearchResults = ({
               >
                 Show Me
               </Link>
-            </button>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </>
   );
 };

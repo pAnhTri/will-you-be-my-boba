@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { dbConnect, Shop } from "@/app/lib/mongodb";
-import { ShopSchema } from "@/app/lib/utils/validators";
+import { dbConnect, Shop } from "@/lib/mongodb";
+import { ShopSchema } from "@/lib/validators";
 import { z } from "zod";
 
 export const GET = async (req: NextRequest) => {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ShopSchema } from "../lib/utils/validators";
+import { ShopSchema } from "@/lib/validators";
 
 type ShopType = z.infer<typeof ShopSchema>;
 

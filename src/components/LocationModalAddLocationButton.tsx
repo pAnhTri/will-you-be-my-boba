@@ -1,28 +1,27 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { GooglePlace } from "../types";
-import { addShopToDatabase } from "../utils/bobaAPI";
+import { addShopToDatabase } from "../lib/utils/bobaAPI";
 import { useFilterContext } from "../contexts/FilterProvider";
 
-interface LocationModealAddLocationButtonProps {
+interface LocationModalAddLocationButtonProps {
   selectedGooglePlace: GooglePlace | null;
   setErrorMessage: Dispatch<SetStateAction<string>>;
   setIsLocationModalOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedGooglePlace: Dispatch<SetStateAction<GooglePlace | null>>;
 }
 
-const LocationModealAddLocationButton = ({
+const LocationModalAddLocationButton = ({
   selectedGooglePlace,
   setErrorMessage,
   setIsLocationModalOpen,
   setSelectedGooglePlace,
-}: LocationModealAddLocationButtonProps) => {
+}: LocationModalAddLocationButtonProps) => {
   const { fetchShopList } = useFilterContext();
   const handleOnClick = () => {
     if (selectedGooglePlace) {
       addShopToDatabase(selectedGooglePlace)
         .then(() => fetchShopList())
         .then(() => {
-          setSelectedGooglePlace(null);
           setIsLocationModalOpen(false);
         })
         .catch((error) => {
@@ -44,4 +43,4 @@ const LocationModealAddLocationButton = ({
   );
 };
 
-export default LocationModealAddLocationButton;
+export default LocationModalAddLocationButton;

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { useFilterContext } from "../contexts/FilterProvider";
-import { sortByDistance, sortByEnjoyment, sortByName } from "../utils";
+import { sortByDistance, sortByEnjoyment, sortByName } from "@/lib/utils";
 
 interface BobaCardsSortButtonsProps {
   allowDistance: boolean;

@@ -1,5 +1,5 @@
-import { Boba, dbConnect } from "@/app/lib/mongodb";
-import { BobaSchema } from "@/app/lib/utils/validators";
+import { Boba, dbConnect } from "@/lib/mongodb";
+import { BobaSchema } from "@/lib/validators";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 

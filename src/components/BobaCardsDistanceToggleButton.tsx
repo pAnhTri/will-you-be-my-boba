@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { getGeoLocation } from "../utils";
+import { getGeoLocation } from "@/lib/utils";
 import { useFilterContext } from "../contexts/FilterProvider";
 
 interface BobaCardsDistanceToggleButtonProps {

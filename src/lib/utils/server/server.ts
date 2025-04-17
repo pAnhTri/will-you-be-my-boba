@@ -1,4 +1,4 @@
-import { Boba, dbConnect, Shop } from "../mongodb";
+import { Boba, Shop, dbConnect } from "@/lib/mongodb";
 
 export const getAllBobaData = async () => {
   await dbConnect();

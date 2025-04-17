@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { LocationSchema } from "../lib/utils/validators";
+import { LocationSchema } from "@/lib/validators";
 
 export type Location = z.infer<typeof LocationSchema>;
 

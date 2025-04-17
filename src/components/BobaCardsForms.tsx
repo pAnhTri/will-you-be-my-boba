@@ -1,8 +1,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { BobaSchema } from "../lib/utils/validators";
-import { Dispatch, SetStateAction } from "react";
+import { BobaSchema } from "@/lib/validators";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useFilterContext } from "../contexts/FilterProvider";
 
 interface BobaCardsFormsProps {
@@ -23,11 +23,18 @@ const partialSchema = BobaSchema.partial();
 type BobaSchemaType = z.infer<typeof partialSchema>;
 
 const BobaCardsForms = ({ setDataAndLoading }: BobaCardsFormsProps) => {
-  const { shopList, setIsLocationModalOpen } = useFilterContext();
+  const {
+    isLocationModalOpen,
+    shopList,
+    selectedGooglePlace,
+    setIsLocationModalOpen,
+    setSelectedGooglePlace,
+  } = useFilterContext();
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<BobaSchemaType>({
     resolver: zodResolver(partialSchema),
@@ -37,6 +44,13 @@ const BobaCardsForms = ({ setDataAndLoading }: BobaCardsFormsProps) => {
       shopId: "Boba Shop",
     },
   });
+
+  useEffect(() => {
+    if (!isLocationModalOpen && selectedGooglePlace) {
+      setValue("shopId", selectedGooglePlace.displayName.text);
+      setSelectedGooglePlace(null);
+    }
+  }, [selectedGooglePlace, isLocationModalOpen]);
 
   const onSubmit: SubmitHandler<BobaSchemaType> = (data) => {
     if (data) {
@@ -132,7 +146,7 @@ const BobaCardsForms = ({ setDataAndLoading }: BobaCardsFormsProps) => {
             {/* Location Modal */}
             <button
               type="button"
-              className="h-fit w-fit bg-blue-400 hover:bg-blue-500 p-2 rounded-md text-white shadow-black shadow-sm mb-2"
+              className="flex justify-center items-center h-8 w-8 rounded-full bg-blue-400 hover:bg-blue-500 p-2 text-white shadow-black shadow-sm mb-2"
               onClick={() => setIsLocationModalOpen(true)}
             >
               +

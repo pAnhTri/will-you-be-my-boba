@@ -1,4 +1,4 @@
-import { BobaAPI } from "@/app/types";
+import { BobaAPI } from "@/types";
 import axios from "axios";
 import generateUsername from "../randomUserName";
 
