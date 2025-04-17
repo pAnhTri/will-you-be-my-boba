@@ -1,4 +1,4 @@
-import { Boba } from "../types";
+import { Boba } from "@/types";
 import { findShortestShopDistance } from "./geolocation";
 
 export const sortByName = (BobaList: Boba[]) => {
