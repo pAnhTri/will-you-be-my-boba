@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased p-2 min-h-screen w-full`}>
+      <body className={`antialiased p-2 min-h-screen w-screen`}>
         {children}
         <Analytics />
       </body>

@@ -10,5 +10,5 @@ body {
 }
 
 .display-card {
-  @apply bg-slate-50 rounded-md p-2 shadow-black shadow-md;
+  @apply bg-slate-50 rounded-md p-2 shadow-black shadow-md self-auto h-fit;
 }
