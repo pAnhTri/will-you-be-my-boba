@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import Header from "@/components/Site-Header";
+import Footer from "@/components/Site-Footer";
+import { AuthInitializer } from "@/components/AuthInitializer";
 
 export const metadata: Metadata = {
   title: "Will You Be My Boba",
@@ -14,9 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased p-2 min-h-screen w-screen`}>
+      <body className={`antialiased flex flex-col min-h-screen`}>
+        <AuthInitializer />
+        <Header />
         {children}
         <Analytics />
+        <Footer />
       </body>
     </html>
   );

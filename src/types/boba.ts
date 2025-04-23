@@ -1,11 +1,6 @@
-export interface Boba {
-  name: string;
-  shopId: string[];
-  flavors: string[];
-  sweetnessLevel: "Low" | "Medium" | "High";
+import { BobaType } from "@/lib/mongodb/models/Boba";
+
+export type Boba = BobaType & {
+  _id: string;
   enjoymentFactor: number;
-  communityReviews: {
-    userName: string;
-    rating: number;
-  }[];
-}
+};
