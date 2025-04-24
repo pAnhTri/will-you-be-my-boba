@@ -1,16 +1,18 @@
 import HomeCard from "@/components/Home/Home-Card";
 import BobaCard from "@/components/Home/Home-Card-Bobas";
+import DetailCard from "@/components/Home/Home-Card-Details";
 import FlavorCard from "@/components/Home/Home-Card-Flavors";
 import HomeCardsSkeleton from "@/components/Home/Home-Cards-Skeleton";
-import { getBobaData } from "@/lib/utils/server";
+import { getBobaData, getShopData } from "@/lib/utils/server";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const bobaData = await getBobaData();
+  const shopData = await getShopData();
 
-  if (!bobaData) {
+  if (!bobaData || !shopData) {
     return (
       <div className="flex justify-center items-center h-screen">
         <p>No data found</p>
@@ -19,6 +21,7 @@ export default async function Home() {
   }
 
   const { bobas = [], flavors = [] } = bobaData;
+  const { shop = [] } = shopData;
 
   return (
     <>
@@ -39,6 +42,7 @@ export default async function Home() {
           <HomeCard>
             <FlavorCard initialFlavors={flavors} />
             <BobaCard initialBobas={bobas} />
+            <DetailCard initialShops={shop} />
           </HomeCard>
         </Suspense>
       </main>

@@ -1,5 +1,4 @@
-import { useBobaStore } from "@/lib/zustand/stores/boba";
-import { useFlavorStore } from "@/lib/zustand/stores/flavor";
+import { useBobaStore, useFlavorStore } from "@/lib/zustand/stores";
 
 interface RandomButtonProps {
   onClick: () => void;
@@ -28,7 +27,7 @@ const RandomButton = ({ onClick }: RandomButtonProps) => {
         onClick={onClick}
       >
         <span className="text-sm font-semibold">IDK</span>
-        <span className="text-xs">Help Me T-T</span>
+        <span className="text-xs whitespace-nowrap">Help Me T-T</span>
       </button>
     </div>
   );

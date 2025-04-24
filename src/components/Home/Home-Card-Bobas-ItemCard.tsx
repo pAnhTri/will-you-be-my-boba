@@ -1,0 +1,159 @@
+import {
+  useBobaStore,
+  useFlavorStore,
+  useLocationStore,
+} from "@/lib/zustand/stores";
+import { Boba } from "@/types/boba";
+import { JSX } from "react";
+import { FaRegStar, FaStar } from "react-icons/fa";
+import { LuMapPin } from "react-icons/lu";
+
+interface ItemCardProps {
+  boba: Boba;
+  bobasWithShops: Map<string, { shopName: string; shopId: string }[]>;
+  shortestDistance: number | null;
+  onClick: () => void;
+}
+
+const ItemCard = ({
+  boba,
+  bobasWithShops,
+  shortestDistance,
+  onClick,
+}: ItemCardProps) => {
+  const { selectedBoba } = useBobaStore();
+  const { displayFlavors } = useFlavorStore();
+
+  const shopDistances = useLocationStore((state) => state.storeLocationMap);
+  const isLocationEnabled = useLocationStore(
+    (state) => state.isLocationEnabled
+  );
+
+  const renderLocations = (): JSX.Element | JSX.Element[] => {
+    if (isLocationEnabled && shopDistances.size > 0 && shortestDistance) {
+      // Distances are stored in ascending order
+      const shopIdsFromDistances = Array.from(shopDistances.keys());
+      const shopName =
+        bobasWithShops
+          .get(boba._id)
+          ?.find((shop) => shop.shopId === shopIdsFromDistances[0])?.shopName ??
+        "N/A";
+
+      const shopCount = bobasWithShops.get(boba._id)?.length ?? 0;
+
+      return (
+        <>
+          <div>
+            <p className="text-xs text-gray-600 whitespace-nowrap">
+              {shopName}
+            </p>
+            {shopCount > 1 && (
+              <p className="text-xs text-gray-600 whitespace-nowrap">
+                + {shopCount - 1} more
+              </p>
+            )}
+          </div>
+          <p className="text-xs text-gray-600 whitespace-nowrap">
+            {shortestDistance.toFixed(2)} mi away
+          </p>
+        </>
+      );
+    } else {
+      const shopNames =
+        bobasWithShops.get(boba._id)?.map((shop) => shop.shopName) ?? [];
+
+      if (shopNames.length < 3) {
+        return shopNames.map((shopName) => (
+          <p key={shopName} className="text-xs text-gray-600 whitespace-nowrap">
+            {shopName}
+          </p>
+        ));
+      } else {
+        return (
+          <>
+            {shopNames.slice(0, 3).map((shopName) => (
+              <p
+                key={shopName}
+                className="text-xs text-gray-600 whitespace-nowrap"
+              >
+                {shopName}
+              </p>
+            ))}
+            <p className="text-xs text-gray-600 whitespace-nowrap">
+              + {shopNames.length - 3} more
+            </p>
+          </>
+        );
+      }
+    }
+  };
+
+  return (
+    <div
+      className={`container rounded-lg border border-gray-200 p-3 transition-all duration-200 cursor-pointer ${
+        selectedBoba?._id === boba._id
+          ? "bg-pink-50 border-pink-200"
+          : "hover:bg-pink-50/50 hover:border-pink-100"
+      }`}
+      onClick={onClick}
+    >
+      <div className="rounded-lg p-2 space-y-2">
+        {/* Name + Rating */}
+        <div className="flex justify-between items-center">
+          <p>{boba.name}</p>
+          <div className="flex items-center gap-1">
+            {selectedBoba?._id === boba._id ? (
+              <FaStar
+                className={`${
+                  boba.enjoymentFactor >= 4
+                    ? "text-yellow-500"
+                    : "text-gray-400"
+                } size-4`}
+              />
+            ) : (
+              <FaRegStar
+                className={`${
+                  boba.enjoymentFactor >= 4
+                    ? "text-yellow-500"
+                    : "text-gray-400"
+                } size-4`}
+              />
+            )}
+            <p className="text-sm">{boba.enjoymentFactor}</p>
+          </div>
+        </div>
+
+        {/* Flavor tags */}
+        <div className="flex flex-wrap gap-2">
+          {boba.flavors.map((flavor) => (
+            <p
+              key={flavor}
+              className={`text-xs font-semibold px-2 py-1 rounded-full ring-1 ring-gray-200 ${
+                displayFlavors.includes(flavor)
+                  ? "bg-pink-50 text-pink-600 ring-pink-200"
+                  : "bg-gray-50 text-gray-600 ring-gray-200"
+              }`}
+            >
+              {flavor}
+            </p>
+          ))}
+        </div>
+
+        {/* Location */}
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
+          <LuMapPin className="size-4 text-gray-400 shrink-0" />
+          <div
+            className={`flex container gap-1 ${
+              isLocationEnabled && shopDistances.size > 0 && shortestDistance
+                ? "justify-between"
+                : "justify-start"
+            }`}
+          >
+            {renderLocations()}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+export default ItemCard;

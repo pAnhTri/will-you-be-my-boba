@@ -3,8 +3,7 @@
 import { useMemo, useState } from "react";
 import RandomButton from "./Home-Card-Flavors-Random-Button";
 import { CiSearch } from "react-icons/ci";
-import { useFlavorStore } from "@/lib/zustand/stores/flavor";
-import { useBobaStore } from "@/lib/zustand/stores/boba";
+import { useBobaStore, useFlavorStore } from "@/lib/zustand/stores";
 
 interface FlavorCardProps {
   initialFlavors: string[];
@@ -17,9 +16,9 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   const selectedFlavors = useFlavorStore((state) => state.selectedFlavors);
   const displayFlavors = useFlavorStore((state) => state.displayFlavors);
   const { setSelectedFlavors, setDisplayFlavors } = useFlavorStore();
-  const initialBobas = useBobaStore((state) => state.initialBobas);
+  const displayBobas = useBobaStore((state) => state.displayBobas);
   const bobas = useBobaStore((state) => state.bobas);
-  const { setBobas } = useBobaStore();
+  const { setDisplayBobas } = useBobaStore();
 
   const filteredFlavors = useMemo(() => {
     if (search === "") return initialFlavors;
@@ -36,12 +35,12 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
     // Then update bobas based on the new flavors
     const newFilteredBobas =
       newSelectedFlavors.length === 0
-        ? initialBobas
+        ? bobas
         : bobas.filter((boba) =>
             // A boba should have ALL selected flavors
             newSelectedFlavors.every((flavor) => boba.flavors.includes(flavor))
           );
-    setBobas(newFilteredBobas);
+    setDisplayBobas(newFilteredBobas);
   };
 
   const handleFlavorClick = (flavor: string) => {
@@ -64,7 +63,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
     // If less than 3 flavors selected, find possible combinations
     if (selectedFlavors.length < 3) {
       const uniquePossibleFlavorsSet = new Set<string>();
-      bobas.forEach((boba) => {
+      displayBobas.forEach((boba) => {
         boba.flavors.forEach((flavor) => {
           if (!selectedFlavors.includes(flavor)) {
             uniquePossibleFlavorsSet.add(flavor);
@@ -106,20 +105,22 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
       </div>
 
       {/* Flavor list */}
-      <div className="flex flex-wrap gap-2">
-        {filteredFlavors.map((flavor) => (
-          <button
-            key={flavor}
-            className={`px-4 py-2 rounded-lg border transition-all duration-200 ${
-              displayFlavors.includes(flavor)
-                ? "bg-pink-500 text-white border-pink-500 hover:bg-pink-600"
-                : "bg-white text-gray-800 border-gray-300 hover:border-pink-300 hover:bg-pink-50"
-            }`}
-            onClick={() => handleFlavorClick(flavor)}
-          >
-            {flavor}
-          </button>
-        ))}
+      <div className="max-h-[400px] overflow-y-auto">
+        <div className="flex flex-wrap gap-2">
+          {filteredFlavors.map((flavor) => (
+            <button
+              key={flavor}
+              className={`px-4 py-2 rounded-lg border transition-all duration-200 ${
+                displayFlavors.includes(flavor)
+                  ? "bg-pink-500 text-white border-pink-500 hover:bg-pink-600"
+                  : "bg-white text-gray-800 border-gray-300 hover:border-pink-300 hover:bg-pink-50"
+              }`}
+              onClick={() => handleFlavorClick(flavor)}
+            >
+              {flavor}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
