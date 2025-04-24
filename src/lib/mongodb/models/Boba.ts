@@ -64,5 +64,6 @@ const BobaSchema = new mongoose.Schema({
 const Boba = mongoose.models.Boba || mongoose.model("Boba", BobaSchema);
 
 export type BobaType = InferSchemaType<typeof BobaSchema>;
+export type CommunityReviewType = InferSchemaType<typeof CommunityReviewSchema>;
 
 export default Boba;

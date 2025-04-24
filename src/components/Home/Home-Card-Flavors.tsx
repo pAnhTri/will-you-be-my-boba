@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import RandomButton from "./Home-Card-Flavors-Random-Button";
 import { CiSearch } from "react-icons/ci";
 import { useBobaStore, useFlavorStore } from "@/lib/zustand/stores";
+import { GiBoba } from "react-icons/gi";
 
 interface FlavorCardProps {
   initialFlavors: string[];
@@ -81,6 +82,20 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
       updateStates(newSelectedFlavors);
     }
   };
+
+  if (initialFlavors.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
+        <GiBoba className="size-24 text-muted-foreground" />
+        <h2 className="text-xl font-semibold text-muted-foreground">
+          No flavors found
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Be the first to add a flavor!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="ring-1 ring-gray-200 rounded-lg p-2 space-y-2">

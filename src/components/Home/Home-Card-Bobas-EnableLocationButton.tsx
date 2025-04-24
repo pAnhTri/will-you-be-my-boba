@@ -34,7 +34,7 @@ const EnableLocationButton = ({
             htmlFor="location"
             className="text-sm text-gray-600 cursor-pointer hover:text-gray-900 transition-colors duration-200"
           >
-            Enable Location
+            {isLocationEnabled ? "Disable Location" : "Enable Location"}
           </label>
         </>
       )}

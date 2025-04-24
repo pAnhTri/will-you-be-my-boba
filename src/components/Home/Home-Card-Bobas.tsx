@@ -14,6 +14,7 @@ import {
   useLocationStore,
 } from "@/lib/zustand/stores";
 import { harversine } from "@/lib/utils";
+import { GiBoba } from "react-icons/gi";
 
 interface BobaCardProps {
   initialBobas: Boba[];
@@ -29,6 +30,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
   const { setBobas, setSelectedBoba, setDisplayBobas } = useBobaStore();
 
   const shops = useShopStore((state) => state.shops);
+  const { setSelectedShop, setIsShowingReviews } = useShopStore();
 
   const { selectedFlavors } = useFlavorStore();
   const { setDisplayFlavors } = useFlavorStore();
@@ -37,7 +39,8 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
     (state) => state.isLocationEnabled
   );
   const shopDistances = useLocationStore((state) => state.storeLocationMap);
-  const { setIsLocationEnabled, setStoreLocationMap } = useLocationStore();
+  const { setIsLocationEnabled, setStoreLocationMap, setUserLocation } =
+    useLocationStore();
 
   useEffect(() => {
     setBobas(initialBobas);
@@ -98,6 +101,9 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
       setSelectedBoba(boba);
       setDisplayFlavors(boba.flavors);
     }
+
+    setSelectedShop(null);
+    setIsShowingReviews(false);
   };
 
   const handleEnableLocationClick = () => {
@@ -126,6 +132,8 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       };
+
+      setUserLocation(userLocation);
 
       const shopDistances: {
         key: string;
@@ -163,6 +171,20 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
 
     navigator.geolocation.getCurrentPosition(success, error, options);
   };
+
+  if (bobas.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
+        <GiBoba className="size-24 text-muted-foreground" />
+        <h2 className="text-xl font-semibold text-muted-foreground">
+          No bobas found
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Be the first to add a boba!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
