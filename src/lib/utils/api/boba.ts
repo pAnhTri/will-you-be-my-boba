@@ -1,0 +1,70 @@
+import { BobaInput } from "@/lib/validators/boba";
+import { ReviewInput } from "@/lib/validators/review";
+import { Boba } from "@/types/boba";
+import axios from "axios";
+
+export const getBobas = async () => {
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba`
+    );
+    return data as {
+      success: boolean;
+      bobas: Boba[];
+      flavors: string[];
+    };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};
+
+export const addBoba = async (payload: BobaInput) => {
+  try {
+    const { data } = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba`,
+      payload
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};
+
+export const addCommunityReview = async (
+  payload: ReviewInput & { userId: string | null },
+  bobaId: string
+) => {
+  try {
+    const { data } = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba/${encodeURIComponent(
+        bobaId
+      )}`,
+      payload
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};

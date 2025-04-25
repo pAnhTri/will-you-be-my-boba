@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import RandomButton from "./Home-Card-Flavors-Random-Button";
 import { CiSearch } from "react-icons/ci";
 import { useBobaStore, useFlavorStore } from "@/lib/zustand/stores";
@@ -14,19 +14,25 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   const [search, setSearch] = useState<string>("");
 
   // Use selectors to only subscribe to the state we need
+  const flavors = useFlavorStore((state) => state.flavors);
   const selectedFlavors = useFlavorStore((state) => state.selectedFlavors);
   const displayFlavors = useFlavorStore((state) => state.displayFlavors);
-  const { setSelectedFlavors, setDisplayFlavors } = useFlavorStore();
+  const { setSelectedFlavors, setDisplayFlavors, setFlavors } =
+    useFlavorStore();
   const displayBobas = useBobaStore((state) => state.displayBobas);
   const bobas = useBobaStore((state) => state.bobas);
   const { setDisplayBobas } = useBobaStore();
 
+  useEffect(() => {
+    setFlavors(initialFlavors);
+  }, [initialFlavors]);
+
   const filteredFlavors = useMemo(() => {
-    if (search === "") return initialFlavors;
-    return initialFlavors.filter((flavor) =>
+    if (search === "") return flavors;
+    return flavors.filter((flavor) =>
       flavor.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search, initialFlavors]);
+  }, [search, flavors]);
 
   const updateStates = (newSelectedFlavors: string[]) => {
     // First update the flavors
@@ -55,8 +61,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   const handleRandomButtonClick = () => {
     // If no flavors selected, use all initial flavors
     if (selectedFlavors.length === 0) {
-      const randomFlavor =
-        initialFlavors[Math.floor(Math.random() * initialFlavors.length)];
+      const randomFlavor = flavors[Math.floor(Math.random() * flavors.length)];
       updateStates([randomFlavor]);
       return;
     }
@@ -83,7 +88,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
     }
   };
 
-  if (initialFlavors.length === 0) {
+  if (flavors.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
         <GiBoba className="size-24 text-muted-foreground" />

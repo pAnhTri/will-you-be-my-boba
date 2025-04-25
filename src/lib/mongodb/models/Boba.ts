@@ -58,7 +58,10 @@ const BobaSchema = new mongoose.Schema({
     enum: ["Low", "Medium", "High"],
     default: "Medium",
   },
-  communityReviews: [CommunityReviewSchema],
+  communityReviews: {
+    type: [CommunityReviewSchema],
+    default: [],
+  },
 });
 
 const Boba = mongoose.models.Boba || mongoose.model("Boba", BobaSchema);

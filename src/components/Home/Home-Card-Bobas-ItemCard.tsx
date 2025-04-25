@@ -62,29 +62,20 @@ const ItemCard = ({
       const shopNames =
         bobasWithShops.get(boba._id)?.map((shop) => shop.shopName) ?? [];
 
-      if (shopNames.length < 3) {
-        return shopNames.map((shopName) => (
-          <p key={shopName} className="text-xs text-gray-600 whitespace-nowrap">
-            {shopName}
+      const shopNamesToRender = shopNames.slice(0, 3).join(", "); // Only render first 3 shop names
+
+      return (
+        <>
+          <p className="text-xs text-gray-600 whitespace-nowrap">
+            {shopNamesToRender}
           </p>
-        ));
-      } else {
-        return (
-          <>
-            {shopNames.slice(0, 3).map((shopName) => (
-              <p
-                key={shopName}
-                className="text-xs text-gray-600 whitespace-nowrap"
-              >
-                {shopName}
-              </p>
-            ))}
+          {shopNames.length > 3 && (
             <p className="text-xs text-gray-600 whitespace-nowrap">
               + {shopNames.length - 3} more
             </p>
-          </>
-        );
-      }
+          )}
+        </>
+      );
     }
   };
 
@@ -119,7 +110,7 @@ const ItemCard = ({
                 } size-4`}
               />
             )}
-            <p className="text-sm">{boba.enjoymentFactor}</p>
+            <p className="text-sm">{boba.enjoymentFactor.toFixed(2)}</p>
           </div>
         </div>
 

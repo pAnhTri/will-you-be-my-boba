@@ -6,19 +6,26 @@ import {
   useShopStore,
 } from "@/lib/zustand/stores";
 import { Shop } from "@/types/shop";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GiBoba } from "react-icons/gi";
 import LocationCard from "./Home-Card-Details-LocationCard";
 import { FiUsers } from "react-icons/fi";
 import { MdAdd } from "react-icons/md";
 import ReviewCard from "./Home-Card-Details-ReviewCard";
+import AddReviewForm from "./Home-Card-Details-AddReviewForm";
+import { compareAsc, compareDesc } from "date-fns";
 
 interface DetailCardProps {
   initialShops: Shop[];
 }
 
 const DetailCard = ({ initialShops }: DetailCardProps) => {
+  const [isAddingReview, setIsAddingReview] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [reviewsSortedBy, setReviewsSortedBy] = useState<string>("newest");
+
   const shops = useShopStore((state) => state.shops);
   const selectedShop = useShopStore((state) => state.selectedShop);
   const isShowingReviews = useShopStore((state) => state.isShowingReviews);
@@ -35,6 +42,36 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
   useEffect(() => {
     setShops(initialShops);
   }, [initialShops]);
+
+  const sortedReviews = useMemo(() => {
+    if (
+      !selectedBoba ||
+      selectedBoba.communityReviews.length === 0 ||
+      !isShowingReviews
+    )
+      return [];
+
+    switch (reviewsSortedBy) {
+      case "newest":
+        return selectedBoba.communityReviews.sort((a, b) =>
+          compareDesc(new Date(a.createdAt), new Date(b.createdAt))
+        );
+      case "oldest":
+        return selectedBoba.communityReviews.sort((a, b) =>
+          compareAsc(new Date(a.createdAt), new Date(b.createdAt))
+        );
+      case "highest":
+        return selectedBoba.communityReviews.sort(
+          (a, b) => b.rating - a.rating
+        );
+      case "lowest":
+        return selectedBoba.communityReviews.sort(
+          (a, b) => a.rating - b.rating
+        );
+      default:
+        return selectedBoba.communityReviews;
+    }
+  }, [reviewsSortedBy, selectedBoba, isShowingReviews]);
 
   const shopsOfBoba: Shop[] = useMemo(() => {
     if (isLocationEnabled && storeLocationMap.size > 0) {
@@ -89,7 +126,7 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
           } size-4`}
         />
         <p className="text-sm text-muted-foreground">
-          {selectedBoba.enjoymentFactor}
+          {selectedBoba.enjoymentFactor.toFixed(2)}
         </p>
         <p className="text-sm text-muted-foreground">
           ({selectedBoba.communityReviews.length} reviews)
@@ -181,15 +218,32 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
             </div>
 
             {/* Add Review Button */}
-            <button className="ring-1 ring-gray-200 rounded-lg  p-2">
+            <button
+              className={`ring-1 ring-gray-200 rounded-lg p-2 ${
+                isAddingReview ? "ring-pink-500" : ""
+              }`}
+              onClick={() => setIsAddingReview(!isAddingReview)}
+            >
               <MdAdd className="size-4 text-pink-500" />
             </button>
           </div>
 
+          {/* Add Review field */}
+          {isAddingReview && (
+            <AddReviewForm
+              isLoading={isLoading}
+              error={error}
+              setIsAddingReview={setIsAddingReview}
+              setReviewsSortedBy={setReviewsSortedBy}
+              setIsLoading={setIsLoading}
+              setError={setError}
+            />
+          )}
+
           {/* Review Cards */}
           <div className="flex flex-col gap-2 p-2 max-h-[400px] overflow-y-auto">
-            {selectedBoba.communityReviews.map((review) => (
-              <ReviewCard key={review.userName} review={review} />
+            {sortedReviews.map((review) => (
+              <ReviewCard key={review._id.toString()} review={review} />
             ))}
           </div>
         </>

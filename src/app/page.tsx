@@ -3,6 +3,7 @@ import BobaCard from "@/components/Home/Home-Card-Bobas";
 import DetailCard from "@/components/Home/Home-Card-Details";
 import FlavorCard from "@/components/Home/Home-Card-Flavors";
 import HomeCardsSkeleton from "@/components/Home/Home-Cards-Skeleton";
+import AddBobaModal from "@/components/Home/Home-Modal-AddBoba";
 import { getBobaData, getShopData } from "@/lib/utils/server";
 import { Suspense } from "react";
 
@@ -39,6 +40,8 @@ export default async function Home() {
 
       <main className="flex container">
         <Suspense fallback={<HomeCardsSkeleton />}>
+          {/* Modals */}
+          <AddBobaModal />
           <HomeCard>
             <FlavorCard initialFlavors={flavors} />
             <BobaCard initialBobas={bobas} />

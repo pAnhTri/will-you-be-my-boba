@@ -12,9 +12,11 @@ import {
   useFlavorStore,
   useShopStore,
   useLocationStore,
+  useModalStore,
 } from "@/lib/zustand/stores";
 import { harversine } from "@/lib/utils";
 import { GiBoba } from "react-icons/gi";
+import AddButton from "./Home-Card-Bobas-AddButton";
 
 interface BobaCardProps {
   initialBobas: Boba[];
@@ -41,6 +43,8 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
   const shopDistances = useLocationStore((state) => state.storeLocationMap);
   const { setIsLocationEnabled, setStoreLocationMap, setUserLocation } =
     useLocationStore();
+
+  const { setIsAddBobaModalOpen } = useModalStore();
 
   useEffect(() => {
     setBobas(initialBobas);
@@ -172,6 +176,10 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
     navigator.geolocation.getCurrentPosition(success, error, options);
   };
 
+  const handleAddBobaClick = () => {
+    setIsAddBobaModalOpen(true);
+  };
+
   if (bobas.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
@@ -191,10 +199,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
       {/* Title + Add button */}
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold">We have...</h2>
-        {/* WIP */}
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">
-          Add
-        </button>
+        <AddButton onClick={handleAddBobaClick} />
       </div>
 
       {/* Sort buttons */}

@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 interface FlavorStore {
+  flavors: string[];
+  setFlavors: (flavors: string[]) => void;
   selectedFlavors: string[];
   setSelectedFlavors: (flavors: string[]) => void;
   displayFlavors: string[];
@@ -8,6 +10,8 @@ interface FlavorStore {
 }
 
 export const useFlavorStore = create<FlavorStore>((set) => ({
+  flavors: [],
+  setFlavors: (flavors) => set({ flavors }),
   selectedFlavors: [],
   setSelectedFlavors: (flavors) => set({ selectedFlavors: flavors }),
   displayFlavors: [],
