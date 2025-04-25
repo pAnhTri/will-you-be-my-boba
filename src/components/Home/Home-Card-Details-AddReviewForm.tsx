@@ -135,8 +135,18 @@ const AddReviewForm = ({
           </label>
           <textarea
             {...register("review")}
-            className="ring-1 ring-pink-200 rounded-lg p-2 focus:ring-2 focus:ring-pink-300 focus:outline-none transition-all min-h-[100px]"
+            className="ring-1 ring-pink-200 rounded-lg p-2 focus:ring-2 focus:ring-pink-300 focus:outline-none transition-all min-h-[100px] resize-y whitespace-pre-wrap"
+            placeholder="Share your thoughts about this boba..."
+            rows={4}
           />
+          {/* Word Count */}
+          <p
+            className={`ml-auto text-xs text-muted-foreground ${
+              watch("review").length > 500 && "text-red-500"
+            }`}
+          >
+            {watch("review").length} / 500
+          </p>
           {errors.review && (
             <p className="text-red-500 text-sm">{errors.review.message}</p>
           )}

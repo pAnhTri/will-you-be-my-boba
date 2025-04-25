@@ -1,17 +1,16 @@
 import { dbConnect, Boba, User } from "@/lib/mongodb";
 import { generateUsername } from "@/lib/utils";
-import { MongooseError } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {
-  params: Promise<{ id: string }>;
+  params: Promise<{ bobaId: string }>;
 }
 
 export const PUT = async (req: NextRequest, { params }: Params) => {
   try {
-    const { id } = await params;
+    const { bobaId } = await params;
 
-    if (!id) {
+    if (!bobaId) {
       return NextResponse.json(
         { success: false, message: "Boba ID is required" },
         { status: 400 }
@@ -39,7 +38,7 @@ export const PUT = async (req: NextRequest, { params }: Params) => {
       }
     }
 
-    await Boba.findByIdAndUpdate(id, {
+    await Boba.findByIdAndUpdate(bobaId, {
       $push: {
         communityReviews: { userId, userName: username, rating, review },
       },
@@ -48,18 +47,18 @@ export const PUT = async (req: NextRequest, { params }: Params) => {
     await User.findOneAndUpdate(
       { supabaseId: userId },
       {
-        $push: { reviews: { bobaId: id, rating, review } },
+        $push: { reviews: { bobaId, rating, review } },
       }
     );
 
     return NextResponse.json({ success: true, message: "Review added" });
   } catch (error) {
-    if (error instanceof MongooseError) {
+    if (error instanceof Error) {
       console.error(error);
       return NextResponse.json(
         {
           success: false,
-          message: error.message,
+          message: error.message || "Database error occurred",
         },
         { status: 500 }
       );

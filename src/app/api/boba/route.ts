@@ -119,11 +119,12 @@ export const POST = async (req: NextRequest) => {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    if (error instanceof MongooseError) {
+    if (error instanceof Error) {
+      console.error(error);
       return NextResponse.json(
         {
           success: false,
-          message: error.message,
+          message: error.message || "Database error occurred",
         },
         { status: 500 }
       );

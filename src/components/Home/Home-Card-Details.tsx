@@ -15,12 +15,14 @@ import { MdAdd } from "react-icons/md";
 import ReviewCard from "./Home-Card-Details-ReviewCard";
 import AddReviewForm from "./Home-Card-Details-AddReviewForm";
 import { compareAsc, compareDesc } from "date-fns";
+import ReviewSortButton from "./Home-Card-Details-ReviewSortButton";
 
 interface DetailCardProps {
   initialShops: Shop[];
 }
 
 const DetailCard = ({ initialShops }: DetailCardProps) => {
+  // Add Review
   const [isAddingReview, setIsAddingReview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -181,14 +183,16 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
           }&q=${
             selectedShop
               ? encodeURIComponent(`place_id:${selectedShop.location.placesId}`)
-              : `${userLocation?.latitude},${userLocation?.longitude}`
+              : userLocation
+              ? `${userLocation.latitude},${userLocation.longitude}`
+              : "here"
           }`}
         ></iframe>
       </div>
 
       {/* Shop Cards */}
       <h2 className="text-lg font-semibold">Shops</h2>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto p-2">
         {shopsOfBoba.map((shop) => (
           <LocationCard
             key={shop._id}
@@ -217,6 +221,17 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
               <h2 className="text-lg font-semibold">Community Reviews</h2>
             </div>
 
+            <ReviewSortButton
+              variant={reviewsSortedBy === "newest" ? "newest" : "oldest"}
+              reviewsSortedBy={reviewsSortedBy}
+              setReviewsSortedBy={setReviewsSortedBy}
+            />
+            <ReviewSortButton
+              variant={reviewsSortedBy === "highest" ? "highest" : "lowest"}
+              reviewsSortedBy={reviewsSortedBy}
+              setReviewsSortedBy={setReviewsSortedBy}
+            />
+
             {/* Add Review Button */}
             <button
               className={`ring-1 ring-gray-200 rounded-lg p-2 ${
@@ -243,7 +258,12 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
           {/* Review Cards */}
           <div className="flex flex-col gap-2 p-2 max-h-[400px] overflow-y-auto">
             {sortedReviews.map((review) => (
-              <ReviewCard key={review._id.toString()} review={review} />
+              <ReviewCard
+                key={review._id.toString()}
+                review={review}
+                bobaId={selectedBoba._id}
+                setReviewsSortedBy={setReviewsSortedBy}
+              />
             ))}
           </div>
         </>

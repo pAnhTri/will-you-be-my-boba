@@ -68,3 +68,53 @@ export const addCommunityReview = async (
     throw new Error("Something went wrong");
   }
 };
+
+export const deleteCommunityReview = async (
+  reviewId: string,
+  bobaId: string
+) => {
+  try {
+    const { data } = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba/${encodeURIComponent(
+        bobaId
+      )}/community-review/${encodeURIComponent(reviewId)}`
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};
+
+export const updateCommunityReview = async (
+  payload: ReviewInput,
+  reviewId: string,
+  bobaId: string
+) => {
+  try {
+    const { data } = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba/${encodeURIComponent(
+        bobaId
+      )}/community-review/${encodeURIComponent(reviewId)}`,
+      payload
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};

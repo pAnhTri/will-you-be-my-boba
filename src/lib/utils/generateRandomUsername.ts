@@ -22,6 +22,11 @@ const adjectives = [
   "Evil",
   "Boop the",
   "Sleepy",
+  "Booboo",
+  "Mug the",
+  "Kiss the",
+  "Empty",
+  "Soupy",
 ];
 
 const animals = [
@@ -38,6 +43,7 @@ const animals = [
   "Duckling",
   "Pupper",
   "Chick",
+  "Chic",
   "Froggy",
   "Turtle",
   "Pony",
