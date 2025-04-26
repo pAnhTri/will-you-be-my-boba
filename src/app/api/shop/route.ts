@@ -1,4 +1,4 @@
-import Shop from "@/lib/mongodb/models/Shop";
+import { dbConnect, Shop } from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
@@ -15,7 +15,10 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    await Shop.findOneAndUpdate(
+    // Ensure database connection
+    await dbConnect();
+
+    const result = await Shop.findOneAndUpdate(
       {
         "location.placesId": data.location.placesId,
       },
@@ -25,7 +28,7 @@ export const POST = async (req: NextRequest) => {
       { upsert: true, new: true, runValidators: true }
     );
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    return NextResponse.json({ success: true, data: result }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       console.error(error);
