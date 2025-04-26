@@ -15,7 +15,6 @@ import {
   useModalStore,
 } from "@/lib/zustand/stores";
 import { harversine } from "@/lib/utils";
-import { GiBoba } from "react-icons/gi";
 import AddButton from "./Home-Card-Bobas-AddButton";
 
 interface BobaCardProps {
@@ -183,7 +182,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
   if (bobas.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
-        <GiBoba className="size-24 text-muted-foreground" />
+        <AddButton variant="no-bobas" onClick={handleAddBobaClick} />
         <h2 className="text-xl font-semibold text-muted-foreground">
           No bobas found
         </h2>
@@ -199,7 +198,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
       {/* Title + Add button */}
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold">We have...</h2>
-        <AddButton onClick={handleAddBobaClick} />
+        <AddButton variant="bobas" onClick={handleAddBobaClick} />
       </div>
 
       {/* Sort buttons */}

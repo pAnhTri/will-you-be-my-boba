@@ -14,16 +14,8 @@ export default async function Home() {
   const bobaData = await getBobaData();
   const shopData = await getShopData();
 
-  if (!bobaData || !shopData) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p>No data found</p>
-      </div>
-    );
-  }
-
-  const { bobas = [], flavors = [] } = bobaData;
-  const { shop = [] } = shopData;
+  const { bobas = [], flavors = [] } = bobaData || {};
+  const { shop = [] } = shopData || {};
 
   return (
     <>
