@@ -39,7 +39,6 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
   const isLocationEnabled = useLocationStore(
     (state) => state.isLocationEnabled
   );
-  const shopDistances = useLocationStore((state) => state.storeLocationMap);
   const { setIsLocationEnabled, setStoreLocationMap, setUserLocation } =
     useLocationStore();
 
@@ -71,13 +70,6 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
 
       return bobaShopMap;
     }, [bobas, shops]);
-
-  const shortestDistance = useMemo(() => {
-    if (!isLocationEnabled || shopDistances.size === 0) return null;
-
-    const distances = Array.from(shopDistances.values());
-    return Math.min(...distances);
-  }, [isLocationEnabled, shopDistances]);
 
   const handleSortByClick = (newSortedBy: string) => {
     setSortedBy(newSortedBy);
@@ -240,7 +232,6 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
             key={boba._id}
             boba={boba}
             bobasWithShops={bobasWithShops}
-            shortestDistance={shortestDistance}
             onClick={() => handleItemCardClick(boba)}
           />
         ))}

@@ -1,3 +1,4 @@
+import { getShopOfClosestShop } from "@/lib/utils";
 import {
   useBobaStore,
   useFlavorStore,
@@ -11,16 +12,10 @@ import { LuMapPin } from "react-icons/lu";
 interface ItemCardProps {
   boba: Boba;
   bobasWithShops: Map<string, { shopName: string; shopId: string }[]>;
-  shortestDistance: number | null;
   onClick: () => void;
 }
 
-const ItemCard = ({
-  boba,
-  bobasWithShops,
-  shortestDistance,
-  onClick,
-}: ItemCardProps) => {
+const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
   const { selectedBoba } = useBobaStore();
   const { displayFlavors } = useFlavorStore();
 
@@ -30,14 +25,17 @@ const ItemCard = ({
   );
 
   const renderLocations = (): JSX.Element | JSX.Element[] => {
-    if (isLocationEnabled && shopDistances.size > 0 && shortestDistance) {
+    if (isLocationEnabled && shopDistances.size > 0) {
       // Distances are stored in ascending order
-      const shopIdsFromDistances = Array.from(shopDistances.keys());
+
       const shopName =
         bobasWithShops
           .get(boba._id)
-          ?.find((shop) => shop.shopId === shopIdsFromDistances[0])?.shopName ??
-        "N/A";
+          ?.find(
+            (shop) =>
+              shop.shopId ===
+              getShopOfClosestShop(boba._id, shopDistances, bobasWithShops)
+          )?.shopName ?? "N/A";
 
       const shopCount = bobasWithShops.get(boba._id)?.length ?? 0;
 
@@ -54,7 +52,12 @@ const ItemCard = ({
             )}
           </div>
           <p className="text-xs text-gray-600 whitespace-nowrap">
-            {shortestDistance.toFixed(2)} mi away
+            {shopDistances
+              .get(
+                getShopOfClosestShop(boba._id, shopDistances, bobasWithShops)
+              )
+              ?.toFixed(2)}{" "}
+            mi away
           </p>
         </>
       );
@@ -135,7 +138,7 @@ const ItemCard = ({
           <LuMapPin className="size-4 text-gray-400 shrink-0" />
           <div
             className={`flex container gap-1 ${
-              isLocationEnabled && shopDistances.size > 0 && shortestDistance
+              isLocationEnabled && shopDistances.size > 0
                 ? "justify-between"
                 : "justify-start"
             }`}
