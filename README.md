@@ -1,5 +1,15 @@
 # Will You Be My Boba
 
+[![Next.js](https://img.shields.io/badge/Next.js-15.3-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.1-blue?style=flat&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-8.12-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
+[![Google Maps](https://img.shields.io/badge/Google_Maps-API-blue?style=flat&logo=google-maps)](https://developers.google.com/maps)
+[![Zustand](https://img.shields.io/badge/Zustand-5.0-blue?style=flat)](https://zustand-demo.pmnd.rs/)
+[![React Hook Form](https://img.shields.io/badge/React_Hook_Form-7.54-blue?style=flat)](https://react-hook-form.com/)
+[![Zod](https://img.shields.io/badge/Zod-3.24-blue?style=flat)](https://zod.dev/)
+
 **Your Community-Driven Guide to the Best Boba Spots**
 
 ## Description
@@ -13,6 +23,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 - **Anything Local?** Enable your browser's geolocation to find out which shops are the closest to you!
 - **Check Local Shops:** Curious about your favorite spot? See what the community thinks of their menu!
 - **Share Your Favorites:** Be part of the boba-loving network—recommend your go-to drink and where to find it.
+- **Build Your Boba Journey:** Create an account to keep track of your reviews, edit them anytime, and curate your personal boba history. Your opinions matter, and now they're always at your fingertips!
 
 **What are you waiting for? Explore, share, and sip with Will You Be My Boba!**
 
@@ -20,210 +31,305 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 
 ### Core Features
 
-- **Filter by Flavor Tags**
+#### Community Features
 
-  - Search for boba drinks by selecting flavor tags such as `earthy`, `fruity`, or specific flavors.
-  - Tags are community-driven and constantly updated based on user input.
+- **User Accounts & Reviews**
 
-- **Select Random Flavor Tags**
+  - Create an account to track your boba journey
+  - Write, edit, and delete your reviews anytime
+  - Keep a personal history of your favorite drinks
+  - Build your boba profile with your preferences
 
-  - When you need help, click on the "IDK..." button to let the app randomly select POSSIBLE flavor combinations to narrow down your search.
-  - Up to 3 flavors can be chosen randomly.
+- **Community Reviews & Ratings**
+  - Share your thoughts anonymously or with your account
+  - Rate drinks based on your experience
+  - See what others think about different drinks
+  - Contribute to the community's knowledge base
 
-- **Display Boba Listings**
+#### Discovery Features
 
-  - Each drink entry shows:
-    - **Name**: The drink’s official or popular name.
-    - **Flavor Tags**: Community-curated flavor labels.
-    - **Community Enjoyment Factor**: An aggregated score based on user ratings.
+- **Smart Flavor Tagging**
 
-- **Anonymous Enjoyment Scoring**
+  - Search drinks by unique flavor profiles
+  - Tags are community-driven and constantly updated
+  - Combine multiple tags for precise matching
+  - Discover new flavor combinations
 
-  - Users can anonymously submit their enjoyment score for drinks.
-  - Scores are averaged to calculate the **Community Enjoyment Factor**.
+- **Location-Based Search**
 
-- **Sort Bobas by Name, Enjoyment, and Distance**
+  - Find boba shops near you with geolocation
+  - Sort by distance to find the closest options
+  - View shop details and Google Maps integration
+  - Get directions to your next boba adventure
 
-  - Users can sort bobas by their **Name** or **Enjoyment** scores.
-  - If location is enabled, the user can also sort their boba by the **Distance** of the closest shop in miles.
+- **Dynamic Sorting**
+  - Sort by name for alphabetical browsing
+  - Sort by community ratings to find popular choices
+  - Sort by distance when location is enabled
+  - Filter and combine sorting options
 
-- **Google Maps Integration**
-  - Drinks are mapped to their respective stores using the **Google Places API**.
-  - Displays shop address and a Google Maps Link directly to the shop.
+### Coming Soon 🚧
 
----
+#### Personalized Recommendations
 
-### Upcoming Features (WIP)
+- **Smart Suggestions**
+  - Get personalized drink recommendations based on your review history
+  - Discover new flavors that match your preferences
+  - Receive suggestions based on similar users' tastes
+  - Build your perfect boba profile
 
-- **Community Shop Reviews**
+#### Fun Features
 
-  - Users will soon be able to browse shop profiles and their drink menus based on the community's submission.
+- **Boba of the Day**
 
-- **User Recommendations**
-  - Users will be able to suggest and add new boba drinks directly to the database.
+  - Daily featured drinks based on community favorites
+  - Special highlights for seasonal drinks
+  - Trending drinks in your area
+  - Limited-time recommendations
 
-## Tech Stack
+- **Boba Roulette**
+  - Let fate decide your next drink
+  - Random selection based on your preferences
+  - Challenge mode for adventurous drinkers
+  - Share your roulette results with friends
+
+## 🛠️ Tech Stack
 
 ### Frontend
 
-- **Next.js**
-- **React**
-- **Tailwind CSS**
+- **Next.js 15.3** - App Router, Server Components, API Routes
+- **React 19.1** - Hooks, Context API
+- **TypeScript 5** - Type safety and better developer experience
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **React Hook Form 7.54** - Form handling and validation
+- **Zod 3.24** - Schema validation
+- **Zustand 5.0** - State management
+- **React Icons 5.5** - Icon library
+- **Fuse.js 7.1** - Fuzzy search functionality
+- **date-fns 4.1** - Date manipulation and formatting
 
 ### Backend
 
-- **MongoDB**
-- **Node.js**
-- **Next.js**
+- **MongoDB 8.12** - Primary database
+- **Mongoose 8.12** - ODM for MongoDB
+- **Next.js API Routes** - Serverless API endpoints
+- **Supabase** - Authentication and user management
+  - Supabase JS Client 2.49
+  - Supabase SSR 0.6
+- **Jose 6.0** - JWT handling
 
-### APIs
+### APIs & Services
 
-- **Google Places API**
+- **Google Maps Platform**
+  - Places API - Location and place data
+  - Maps JavaScript API - Interactive maps
+  - JS API Loader 1.16
+- **Vercel Analytics 1.5** - Usage analytics
 
-### Other Tools
+### Development Tools
 
-- **Axios**
-- **Zod**
-- **React-Form-Hook**
+- **ESLint 9** - Code linting
+- **TypeScript 5** - Static type checking
+- **Turbopack** - Next.js development server
 
-## Installation
+### Environment Variables
+
+Required environment variables:
+
+```ini
+# Database
+MONGO_DB_URI=your_mongodb_uri
+
+# Google Maps
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_JWT_SECRET=your_supabase_JWT_secret
+
+# Application
+NEXT_PUBLIC_API_BASE_URL=your_project_url
+```
+
+⚠️ **Important Notes:**
+
+- Never commit your `.env` file to version control
+- Ensure all API keys have appropriate restrictions
+- Keep your MongoDB connection string secure
+- Regularly rotate your Supabase anon key
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - **Node.js** (v18 or later recommended)
 - **npm** or **yarn**
-- **Google Places API Key** (for location data)
-- **MongoDB Server**
+- **MongoDB Server** (local or Atlas)
+- **Supabase Account** (for authentication)
+- **Google Cloud Project** (for Maps API)
 
----
+### Installation
 
-### 1. Clone the Repository
+1. **Clone the Repository**
 
-```bash
-git clone https://github.com/pAnhTri/will-you-be-my-boba.git
-cd will-you-be-my-boba
-```
+   ```bash
+   git clone https://github.com/pAnhTri/will-you-be-my-boba.git
+   cd will-you-be-my-boba
+   ```
 
-### 2. Install Dependencies
+2. **Install Dependencies**
 
-Using npm:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-```bash
-npm install
-```
+3. **Set Up Environment Variables**
+   Create a `.env` file in the root directory with the following:
 
-Using yarn:
+   ```ini
+   # Database
+   MONGO_DB_URI=your_mongodb_uri
 
-```bash
-yarn install
-```
+   # Google Maps
+   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 
-### 3. Environment Variables
+   # Supabase
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_JWT_SECRET=your_supabase_JWT_secret
 
-Create a .env file in the root directory with the following:
+   # Application
+   NEXT_PUBLIC_API_BASE_URL=your_project_url
+   ```
 
-```ini
-GOOGLE_MAPS_API_KEY=your_google_api_key
-MONGO_DB_URI=your_mongodb_uri
-API_BASE_URL=your_project_url
-NEXT_PUBLIC_API_BASE_URL=your_project_url
-```
+4. **Run the Development Server**
 
-**Note:** Never commit .env files to your repository
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-### 4. Run the Development Server
+5. **Build for Production**
+   ```bash
+   npm run build
+   npm start
+   ```
 
-Using npm:
+### Required API Setup
 
-```bash
-npm run dev
-```
+#### Google Maps Platform
 
-Using yarn:
+1. Create a project in Google Cloud Console
+2. Enable the following APIs:
+   - Places API
+   - Maps JavaScript API
+3. Create API key with appropriate restrictions
+4. Add the key to your environment variables
 
-```bash
-yarn dev
-```
+#### Supabase
 
-By default, your app will be available at http://localhost:3000
+1. Create a new project in Supabase
+2. Get your project URL and anon key
+3. Set up JWT secret for authentication
+4. Add credentials to your environment variables
 
-### 5. Building for Production
+#### MongoDB
 
-To create an optimized production build:
+1. Set up a MongoDB instance (local or Atlas)
+2. Create a database user
+3. Get your connection string
+4. Add to your environment variables
 
-```bash
-npm run build
-```
+⚠️ **Security Notes:**
 
-To start the production server:
+- Never commit your `.env` file to version control
+- Ensure all API keys have appropriate restrictions
+- Keep your MongoDB connection string secure
+- Regularly rotate your Supabase anon key
+- Use environment-specific variables (development/production)
 
-```bash
-npm start
-```
+## 📖 Usage Guide
 
-### Troubleshooting
+### Adding and Managing Boba
 
-If issues arise:
+- **Add New Boba**
 
-- Ensure your .env file is correctly configured.
-- Verify your Google Places API Key is active and has the correct permissions.
-- If dependency issues persist, run:
+  - Click the **+** button next to any boba name
+  - Fill in the required details:
+    - Name
+    - Flavor tags (comma-separated)
+    - Sweetness Level
+    - Shop selection
+  - Submit to add to the database
 
-```bash
-npm cache clean --force
-```
+- **Update Existing Boba**
+  - Click the **+** button next to the boba name you want to update
+  - Modify any details as needed
+  - Submit to update the database
 
-## Usage
+### Reviews and Ratings
 
-- **Add Boba to the Database**
+- **Viewing Reviews**
 
-  - Click on the **+** button on the bottom right corner of the screen to open the **Add Boba Modal**.
-  - Fill out the form with the boba's **Name**, **Flavor** in a comma separated list, **Sweetness Level**, and **Boba Shop**.
-  - **Boba Shop** will provide options of the available shops within the database.
-  - Click on **Submit** to add the boba to the database.
-  - Click anywhere outside the **Add Boba Modal** to exit the modal.
+  - Click the **Show Reviews** button on any boba card
+  - Reviews are displayed with:
+    - Rating (0-5 stars)
+    - Review text
+    - Reviewer (if logged in) or "Anonymous"
+    - Date posted
+  - Sort reviews by:
+    - Rating (highest to lowest)
+    - Age (newest to oldest)
 
-- **Update Boba**
+- **Adding Reviews**
+  - Click the **+** button next to the sort buttons
+  - Enter your rating (0-5 stars)
+  - Write your review
+  - Choose to submit anonymously or with your account
+  - Click **Submit** to post or **Clear** to start over
 
-  - Click on the **+** button on the bottom right corner of the screen to open the **Add Boba Modal**.
-  - Type in the name of the boba to be updated into the **Name** field.
-  - Fill out the rest of the form as above.
-  - Click on **Submit** to update the boba within the database.
-  - Click anywhere outside the **Add Boba Modal** to exit the modal.
+### Managing Shops
 
-- **Add Shop to the Database**
+- **Add New Shop**
+  - In the Add Boba Modal, click **+** next to shop input
+  - Search by city/shop name
+  - Select from results
+  - Verify on Google Maps
+  - Add to database
 
-  - Within the **Add Boba Modal**, click the **+** button next to the boba shop input to open the **Add Location Modal**.
-  - Fill out the form with either your city, shop, or relevant keywords in **City or Shop** and _OPTIONALLY_ the **Range** for the search.
-  - Click on the **Search** button to fetch a list of found shops.
-  - Select a shop from the search results.
-  - Click on **Show Me** to open the Google Maps page in a new tab.
-  - Once selected, click on the **Add Shop** button to add the selected shop to the database.
-  - Click anywhere outside the **Add Location Modal** to exit the modal.
+### Discovery Features
 
 - **Filter by Flavor Tags**
 
-  - Click on a **tag** to filter the boba list by drinks that match the selected flavor.
-  - Click on a **blue tag** (indicating it's active) to unselect it.
+  - Click tags to filter the boba list
+  - Click active (blue) tags to remove them
+  - Combine multiple tags for precise matching
 
-- **Randomly Choose Flavor Tags**
+- **Random Suggestions**
 
-  - Click on the **"IDK..."** button on top of the flavor card to let the app add a flavor tag to the current ones for you.
-  - The **"IDK..."** button can only be clicked when less than 3 flavors have been selected
+  - Use "IDK..." button for random flavor combinations
+  - Limited to 3 random flavors at a time
 
-- **Show Distances in Miles**
+- **Location Features**
+  - Enable location to see distances
+  - Sort by distance to nearest shop
+  - View shop details and directions
 
-  - Click on **Allow Distances** to be prompted with the browser's geolocation permission
-  - Once enabled, the app will show the closest available shop from the current location, calculated with the Haversine formula
+### Sorting and Organization
 
-- **Sort Bobas**
+- **Sort Bobas By**
 
-  - Click on the Sort by **Name** button to sort the boba list by name.
-  - Click on the Sort by **Enjoyment** button to sort the boba list by the boba's **Enjoyment** score.
-  - _OPTIONAL_ If geolocation is allowed, the Sort by **Distance** button becomes avaiable to sort the boba list by the distance from the current location to the closes shop.
+  - Name (alphabetical)
+  - Community Rating
+  - Distance (when location enabled)
 
-- **Viewing Boba Details**
-  Click on a boba entry to view:
-  - **Flavor Tags:** Displays the drink’s flavor profile (highlighted in blue).
-  - **Community Review Details:** See what other users think about this drink.
-  - **Location Details:** View the boba shop’s address and link to Google Maps.
+- **View Details**
+  Click on any boba to see:
+  - Flavor profile
+  - Shop information
+  - Community reviews
+  - Location details

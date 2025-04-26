@@ -2,11 +2,14 @@ import { dbConnect, Boba, User } from "@/lib/mongodb";
 import { generateUsername } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
-interface Params {
-  params: Promise<{ bobaId: string }>;
-}
-
-export const PUT = async (req: NextRequest, { params }: Params) => {
+export const PUT = async (
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ bobaId: string }>;
+  }
+) => {
   try {
     const { bobaId } = await params;
 

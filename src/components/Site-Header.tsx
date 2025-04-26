@@ -24,12 +24,6 @@ const Header = () => {
             href="#"
             className="text-sm font-medium hover:text-pink-500 transition-colors"
           >
-            Community
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium hover:text-pink-500 transition-colors"
-          >
             About
           </Link>
         </nav>

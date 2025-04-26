@@ -142,12 +142,6 @@ export default function SiteHeaderNavUserButtons() {
                 href="#"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                Community
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
                 About
               </Link>
               <div className="border-t border-gray-200 my-1" />

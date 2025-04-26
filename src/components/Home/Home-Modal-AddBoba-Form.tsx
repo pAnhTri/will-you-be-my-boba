@@ -13,9 +13,13 @@
 
 import { addBoba } from "@/lib/utils/api/boba";
 import { BobaInput, bobaValidatorSchema } from "@/lib/validators/boba";
-import { useBobaStore, useShopStore } from "@/lib/zustand/stores";
+import {
+  useBobaStore,
+  useModalStore,
+  useShopStore,
+} from "@/lib/zustand/stores";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
 import { FiLoader } from "react-icons/fi";
@@ -39,14 +43,21 @@ const AddBobaForm = ({
   const [usedFlavors, setUsedFlavors] = useState<string[]>([]);
 
   const bobas = useBobaStore((state) => state.bobas);
+
   const shops = useShopStore((state) => state.shops);
+  const selectedResult = useShopStore((state) => state.selectedResult);
+
+  const isAddShopModalOpen = useModalStore((state) => state.isAddShopModalOpen);
+  const { setIsAddShopModalOpen } = useModalStore();
 
   const flavorInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
+    trigger,
     formState: { errors },
   } = useForm<BobaInput>({
     resolver: zodResolver(bobaValidatorSchema),
@@ -77,6 +88,20 @@ const AddBobaForm = ({
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!isAddShopModalOpen && selectedResult) {
+      const dataListValue = `${selectedResult.displayName.text}, ${
+        selectedResult.formattedAddress
+      } (${
+        selectedResult.addressComponents.find((component) =>
+          component.types.includes("locality")
+        )?.longText
+      })`;
+      setValue("shop", dataListValue);
+      trigger("shop");
+    }
+  }, [isAddShopModalOpen, selectedResult]);
 
   const flavors = useMemo(() => {
     if (bobas.length === 0) return [];
@@ -110,6 +135,7 @@ const AddBobaForm = ({
 
       flavorInputRef.current.value = updatedFlavors;
       setUsedFlavors(updatedFlavors.split(", "));
+      trigger("flavors");
     }
   };
 
@@ -127,6 +153,7 @@ const AddBobaForm = ({
     setUsedFlavors(newFlavors);
 
     event.target.value = newFlavors.join(", ");
+    trigger("flavors");
   };
 
   const isFlavorUsed = (flavor: string) => {
@@ -246,7 +273,10 @@ const AddBobaForm = ({
             })}
             className="flex-1 rounded-lg border-2 border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
-          <button className="bg-black text-white rounded-lg p-2">
+          <button
+            className="bg-black text-white rounded-lg p-2"
+            onClick={() => setIsAddShopModalOpen(true)}
+          >
             <MdAdd className="size-6" />
           </button>
         </div>

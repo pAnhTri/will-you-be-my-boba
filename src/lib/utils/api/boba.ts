@@ -17,7 +17,7 @@ export const getBobas = async () => {
     if (axios.isAxiosError(error)) {
       throw new Error(
         `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
-          error.response?.data.message || "Unknown Message"
+          error.response?.data.error.message || "Unknown Message"
         }`
       );
     }
@@ -36,7 +36,7 @@ export const addBoba = async (payload: BobaInput) => {
     if (axios.isAxiosError(error)) {
       throw new Error(
         `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
-          error.response?.data.message || "Unknown Message"
+          error.response?.data.error.message || "Unknown Message"
         }`
       );
     }
@@ -61,7 +61,7 @@ export const addCommunityReview = async (
     if (axios.isAxiosError(error)) {
       throw new Error(
         `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
-          error.response?.data.message || "Unknown Message"
+          error.response?.data.error.message || "Unknown Message"
         }`
       );
     }
@@ -85,7 +85,7 @@ export const deleteCommunityReview = async (
     if (axios.isAxiosError(error)) {
       throw new Error(
         `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
-          error.response?.data.message || "Unknown Message"
+          error.response?.data.error.message || "Unknown Message"
         }`
       );
     }
@@ -111,7 +111,7 @@ export const updateCommunityReview = async (
     if (axios.isAxiosError(error)) {
       throw new Error(
         `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
-          error.response?.data.message || "Unknown Message"
+          error.response?.data.error.message || "Unknown Message"
         }`
       );
     }

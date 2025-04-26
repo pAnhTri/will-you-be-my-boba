@@ -1,13 +1,16 @@
 import { Boba, dbConnect } from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
-interface Params {
-  params: { bobaId: string; reviewId: string };
-}
-
-export const PUT = async (req: NextRequest, { params }: Params) => {
+export const PUT = async (
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ bobaId: string; reviewId: string }>;
+  }
+) => {
   try {
-    const { bobaId, reviewId } = params;
+    const { bobaId, reviewId } = await params;
 
     if (!bobaId || !reviewId) {
       return NextResponse.json(
@@ -59,9 +62,16 @@ export const PUT = async (req: NextRequest, { params }: Params) => {
   }
 };
 
-export const DELETE = async (req: NextRequest, { params }: Params) => {
+export const DELETE = async (
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ bobaId: string; reviewId: string }>;
+  }
+) => {
   try {
-    const { bobaId, reviewId } = params;
+    const { bobaId, reviewId } = await params;
 
     if (!bobaId || !reviewId) {
       return NextResponse.json(

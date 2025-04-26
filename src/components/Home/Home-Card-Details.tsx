@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useAuthStore,
   useBobaStore,
   useLocationStore,
   useShopStore,
@@ -41,9 +42,18 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
   const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
   const userLocation = useLocationStore((state) => state.userLocation);
 
+  const user = useAuthStore((state) => state.user);
+
   useEffect(() => {
     setShops(initialShops);
   }, [initialShops]);
+
+  const hasUserReviewed = useMemo(() => {
+    if (!selectedBoba) return false;
+    return selectedBoba.communityReviews.some(
+      (review) => review.userId === user?.id
+    );
+  }, [selectedBoba, user]);
 
   const sortedReviews = useMemo(() => {
     if (
@@ -53,27 +63,39 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
     )
       return [];
 
+    //Extract the user review if it exsists
+    let userReview = null;
+    if (user) {
+      userReview = selectedBoba.communityReviews.find(
+        (review) => review.userId === user.id
+      );
+    }
+
+    const reviews = selectedBoba.communityReviews.filter(
+      (review) => review.userId !== user?.id
+    );
+
     switch (reviewsSortedBy) {
       case "newest":
-        return selectedBoba.communityReviews.sort((a, b) =>
+        reviews.sort((a, b) =>
           compareDesc(new Date(a.createdAt), new Date(b.createdAt))
         );
+        return userReview ? [userReview, ...reviews] : reviews;
       case "oldest":
-        return selectedBoba.communityReviews.sort((a, b) =>
+        reviews.sort((a, b) =>
           compareAsc(new Date(a.createdAt), new Date(b.createdAt))
         );
+        return userReview ? [userReview, ...reviews] : reviews;
       case "highest":
-        return selectedBoba.communityReviews.sort(
-          (a, b) => b.rating - a.rating
-        );
+        reviews.sort((a, b) => b.rating - a.rating);
+        return userReview ? [userReview, ...reviews] : reviews;
       case "lowest":
-        return selectedBoba.communityReviews.sort(
-          (a, b) => a.rating - b.rating
-        );
+        reviews.sort((a, b) => a.rating - b.rating);
+        return userReview ? [userReview, ...reviews] : reviews;
       default:
-        return selectedBoba.communityReviews;
+        return userReview ? [userReview, ...reviews] : reviews;
     }
-  }, [reviewsSortedBy, selectedBoba, isShowingReviews]);
+  }, [reviewsSortedBy, selectedBoba, isShowingReviews, user]);
 
   const shopsOfBoba: Shop[] = useMemo(() => {
     if (isLocationEnabled && storeLocationMap.size > 0) {
@@ -233,14 +255,16 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
             />
 
             {/* Add Review Button */}
-            <button
-              className={`ring-1 ring-gray-200 rounded-lg p-2 ${
-                isAddingReview ? "ring-pink-500" : ""
-              }`}
-              onClick={() => setIsAddingReview(!isAddingReview)}
-            >
-              <MdAdd className="size-4 text-pink-500" />
-            </button>
+            {!hasUserReviewed && (
+              <button
+                className={`ring-1 ring-gray-200 rounded-lg p-2 ${
+                  isAddingReview ? "ring-pink-500" : ""
+                }`}
+                onClick={() => setIsAddingReview(!isAddingReview)}
+              >
+                <MdAdd className="size-4 text-pink-500" />
+              </button>
+            )}
           </div>
 
           {/* Add Review field */}
