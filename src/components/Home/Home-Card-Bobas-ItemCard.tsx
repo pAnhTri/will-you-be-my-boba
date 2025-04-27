@@ -40,7 +40,7 @@ const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
       const shopCount = bobasWithShops.get(boba._id)?.length ?? 0;
 
       return (
-        <>
+        <div className="flex flex-col md:flex-row gap-1">
           <div>
             <p className="text-xs text-gray-600 whitespace-nowrap">
               {shopName}
@@ -59,7 +59,7 @@ const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
               ?.toFixed(2)}{" "}
             mi away
           </p>
-        </>
+        </div>
       );
     } else {
       const shopNames =

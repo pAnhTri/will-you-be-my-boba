@@ -16,17 +16,17 @@ const ReviewSortButton = ({
   setReviewsSortedBy,
 }: ReviewSortButtonProps) => {
   const variantIcon = {
-    newest: <FaSortAmountDown />,
-    oldest: <FaSortAmountUp />,
-    highest: <FaStar />,
-    lowest: <FaStar />,
+    newest: <FaSortAmountDown className="size-3" />,
+    oldest: <FaSortAmountUp className="size-3" />,
+    highest: <FaStar className="size-3" />,
+    lowest: <FaStar className="size-3" />,
   };
 
   const variantText = {
-    newest: "Newest",
-    oldest: "Oldest",
-    highest: "Highest",
-    lowest: "Lowest",
+    newest: <span className="text-sm">Newest</span>,
+    oldest: <span className="text-sm">Oldest</span>,
+    highest: <span className="text-sm">Highest</span>,
+    lowest: <span className="text-sm">Lowest</span>,
   };
 
   const handleClick = () => {

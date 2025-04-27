@@ -237,8 +237,8 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
       {/* Community Reviews*/}
       {isShowingReviews && (
         <>
-          <div className="flex items-center justify-between">
-            <div className="flex gap-2 items-center">
+          <div className="flex flex-wrap md:flex-nowrap items-center justify-between">
+            <div className="flex gap-2 items-center w-full">
               <FiUsers className="size-4 text-pink-500" />
               <h2 className="text-lg font-semibold">Community Reviews</h2>
             </div>

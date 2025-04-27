@@ -195,7 +195,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
 
       {/* Sort buttons */}
       <h2 className="text-sm text-muted-foreground font-medium">Sort by:</h2>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap md:flex-nowrap gap-2 justify-between items-center">
         <SortButton
           icon={<CiStar className="size-4" />}
           label="Rating"
