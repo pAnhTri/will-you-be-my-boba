@@ -1,15 +1,12 @@
 {
   "name": "will-you-be-my-boba",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "patch": "npm version patch && git tag v$npm_package_version",
-    "minor": "npm version minor && git tag v$npm_package_version",
-    "major": "npm version major && git tag v$npm_package_version"
+    "lint": "next lint"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
