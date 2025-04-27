@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Reset your Will You Be My Boba password",
 };
 
+export const dynamic = "force-dynamic";
+
 const ForgotPasswordPage = () => {
   return (
     <>

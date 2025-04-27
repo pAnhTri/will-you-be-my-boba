@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Signup for Will You Be My Boba",
 };
 
+export const dynamic = "force-dynamic";
+
 const SignupPage = () => {
   return (
     <>

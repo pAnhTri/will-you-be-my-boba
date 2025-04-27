@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Login to your Will You Be My Boba account",
 };
 
+export const dynamic = "force-dynamic";
+
 const LoginPage = () => {
   return (
     <>
