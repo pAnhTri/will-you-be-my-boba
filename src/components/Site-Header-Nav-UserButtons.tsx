@@ -5,13 +5,18 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { RxCross1, RxHamburgerMenu } from "react-icons/rx";
-import Image from "next/image";
 import { useAuthStore } from "@/lib/zustand/stores/auth";
 import { FiLoader } from "react-icons/fi";
 import { useAvatarStore } from "@/lib/zustand/stores/avatar";
 import Avatar from "./Site-Avatar";
 
-export default function SiteHeaderNavUserButtons() {
+interface SiteHeaderNavUserButtonsProps {
+  initialAvatar: string | null;
+}
+
+export default function SiteHeaderNavUserButtons({
+  initialAvatar,
+}: SiteHeaderNavUserButtonsProps) {
   const { user, isLoading } = useAuthStore();
 
   const avatar = useAvatarStore((state) => state.avatar);
@@ -25,43 +30,8 @@ export default function SiteHeaderNavUserButtons() {
   const supabase = createClient();
 
   useEffect(() => {
-    const fetchAvatar = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        return null;
-      }
-
-      const { data } = await supabase.storage
-        .from("avatars")
-        .list(`${user.id}`, {
-          limit: 1,
-          search: `avatar`,
-          sortBy: {
-            column: "created_at",
-            order: "desc",
-          },
-        });
-
-      if (!data || data.length === 0) {
-        return null;
-      }
-
-      const { data: publicUrlData } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(`${user.id}/${data[0].name}`);
-
-      setAvatar(publicUrlData.publicUrl);
-    };
-
-    if (!user) {
-      setAvatar(null);
-    }
-
-    fetchAvatar();
-  }, [user]);
+    setAvatar(initialAvatar);
+  }, [initialAvatar]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -109,7 +79,7 @@ export default function SiteHeaderNavUserButtons() {
             <div className="hidden md:block absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
               <div className="py-1" onClick={() => setDropdownOpen(false)}>
                 <Link
-                  href="/profile"
+                  href={`/profile/${user.id}`}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Profile
@@ -153,13 +123,18 @@ export default function SiteHeaderNavUserButtons() {
         {user ? (
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden flex items-center justify-center size-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+            className={`md:hidden flex items-center justify-center size-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors ${
+              avatar
+                ? "relative overflow-hidden hover:ring-2 hover:ring-gray-300"
+                : ""
+            }`}
           >
-            {user.user_metadata?.avatar_url ? (
-              <Image
-                src={user.user_metadata.avatar_url}
+            {avatar ? (
+              <Avatar
+                src={avatar}
                 alt={user.email || ""}
-                className="size-8 rounded-full"
+                isImageLoading={isImageLoading}
+                setIsImageLoading={setIsImageLoading}
               />
             ) : (
               <span className="text-sm font-medium text-gray-700">
@@ -218,7 +193,7 @@ export default function SiteHeaderNavUserButtons() {
               {user && (
                 <>
                   <Link
-                    href="/profile"
+                    href={`/profile/${user.id}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Profile

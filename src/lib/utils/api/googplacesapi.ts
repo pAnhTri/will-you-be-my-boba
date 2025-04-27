@@ -7,8 +7,6 @@ export const getGooglePlacesDetails = async (searchText: string) => {
     searchText !== "" ? `AND ${searchText}` : "near me"
   }`;
 
-  console.log(searcQuery);
-
   const data = {
     textQuery: searcQuery,
   };

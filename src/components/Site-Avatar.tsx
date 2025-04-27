@@ -29,7 +29,7 @@ const Avatar = ({
           isImageLoading ? "opacity-0" : "opacity-100"
         } transition-opacity duration-300`}
         priority={!isImageLoading}
-        onLoadingComplete={() => {
+        onLoad={() => {
           setIsImageLoading(false);
         }}
       />

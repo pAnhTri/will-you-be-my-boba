@@ -1,5 +1,5 @@
 import { Boba } from "@/types/boba";
-import { Boba as BobaModel, dbConnect, Shop } from "../mongodb";
+import { Boba as BobaModel, dbConnect, Shop, User } from "../mongodb";
 import { createClient } from "../supabase/server";
 
 export const getBobaData = async () => {
@@ -185,6 +185,24 @@ export const getAvatar = async () => {
     return publicUrlData.publicUrl;
   } catch (error) {
     console.error("Error fetching avatar file:", error);
+    return null;
+  }
+};
+
+export const getUser = async (supabaseId: string) => {
+  try {
+    await dbConnect();
+
+    const user = await User.findOne({ supabaseId });
+
+    if (!user) {
+      return null;
+    }
+
+    const plainResult = JSON.parse(JSON.stringify(user));
+    return plainResult;
+  } catch (error) {
+    console.error("Error fetching user:", error);
     return null;
   }
 };
