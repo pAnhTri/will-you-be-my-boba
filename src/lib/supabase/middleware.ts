@@ -37,13 +37,10 @@ export const updateSession = async (req: NextRequest) => {
   } = await supabase.auth.getUser();
 
   // Define public paths that don't require authentication
-  const publicPaths = [
-    "/",
-    "/login",
-    "/auth",
-    "/error",
-    "/api", // Allow API routes
-  ];
+  const publicPaths = ["/", "/auth"];
+
+  // Define specific API paths that are public
+  const publicApiPaths = ["/api/boba", "/api/shops"];
 
   // Check if the current path is public
   const isPublicPath = publicPaths.some(
@@ -52,10 +49,18 @@ export const updateSession = async (req: NextRequest) => {
       req.nextUrl.pathname.startsWith(`${path}/`)
   );
 
-  if (!user && !isPublicPath) {
+  const isPublicApiPath = publicApiPaths.some(
+    (path) =>
+      req.nextUrl.pathname === path ||
+      req.nextUrl.pathname.startsWith(`${path}/`)
+  );
+
+  if (!user && !isPublicPath && !isPublicApiPath) {
     // Redirect to login only for protected routes
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/auth/login";
+    // Add the original path as a redirectTo parameter
+    url.searchParams.set("redirectTo", req.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
 

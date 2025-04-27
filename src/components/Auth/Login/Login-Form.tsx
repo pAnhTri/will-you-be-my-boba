@@ -7,7 +7,7 @@ import {
 } from "@/lib/validators/login_signup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
@@ -17,6 +17,7 @@ const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   const {
@@ -44,11 +45,16 @@ const LoginForm = () => {
         return;
       }
 
-      router.push("/");
+      // Get the redirectTo parameter from the URL
+      const redirectTo = searchParams.get("redirectTo");
+
+      // If there's a redirectTo parameter, go to that page
+      // Otherwise, go to the home page
+      router.push(redirectTo || "/");
       router.refresh();
     } catch (error) {
-      setError("An unexpected error occurred");
       console.error(error);
+      setError("An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }

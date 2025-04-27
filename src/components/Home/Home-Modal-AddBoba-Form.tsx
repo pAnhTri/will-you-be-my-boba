@@ -46,6 +46,7 @@ const AddBobaForm = ({
 
   const shops = useShopStore((state) => state.shops);
   const selectedResult = useShopStore((state) => state.selectedResult);
+  const { setSelectedResult } = useShopStore();
 
   const isAddShopModalOpen = useModalStore((state) => state.isAddShopModalOpen);
   const { setIsAddShopModalOpen } = useModalStore();
@@ -76,6 +77,7 @@ const AddBobaForm = ({
       // Reset form and states
       reset();
       setUsedFlavors([]);
+      setSelectedResult(null);
       setIsSuccess(true);
     } catch (error) {
       console.error(error);

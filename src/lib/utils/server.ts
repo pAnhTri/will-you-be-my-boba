@@ -1,5 +1,6 @@
 import { Boba } from "@/types/boba";
 import { Boba as BobaModel, dbConnect, Shop } from "../mongodb";
+import { createClient } from "../supabase/server";
 
 export const getBobaData = async () => {
   await dbConnect();
@@ -130,6 +131,60 @@ export const getShopData = async () => {
     return { shop: plainResult };
   } catch (error) {
     console.error("Error fetching shop data:", error);
+    return null;
+  }
+};
+
+export const getAvatar = async () => {
+  try {
+    const supabase = await createClient();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return null;
+    }
+
+    // Filter the storage bucket for avatars
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .list(user.id, {
+        search: "avatar",
+        sortBy: {
+          column: "created_at",
+          order: "desc",
+        },
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
+      return null;
+    }
+
+    // Clean up the files when it has reached more than 10, but keep the latest 1
+    if (data.length > 10) {
+      const deletePromises = data
+        .slice(1)
+        .map((file) =>
+          supabase.storage.from("avatars").remove([`${user.id}/${file.name}`])
+        );
+
+      await Promise.all(deletePromises);
+    }
+
+    const fileName = data[0].name;
+    const { data: publicUrlData } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(`${user.id}/${fileName}`);
+
+    return publicUrlData.publicUrl;
+  } catch (error) {
+    console.error("Error fetching avatar file:", error);
     return null;
   }
 };
