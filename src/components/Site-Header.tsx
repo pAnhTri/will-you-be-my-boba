@@ -23,7 +23,7 @@ const Header = async () => {
             Discover
           </Link>
           <Link
-            href="#"
+            href="/about"
             className="text-sm font-medium hover:text-pink-500 transition-colors"
           >
             About
