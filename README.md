@@ -3,12 +3,10 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.3-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1-blue?style=flat&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-8.12-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-2.49-blue?style=flat&logo=supabase)](https://supabase.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Google Maps](https://img.shields.io/badge/Google_Maps-API-blue?style=flat&logo=google-maps)](https://developers.google.com/maps)
-[![Zustand](https://img.shields.io/badge/Zustand-5.0-blue?style=flat)](https://zustand-demo.pmnd.rs/)
-[![React Hook Form](https://img.shields.io/badge/React_Hook_Form-7.54-blue?style=flat)](https://react-hook-form.com/)
-[![Zod](https://img.shields.io/badge/Zod-3.24-blue?style=flat)](https://zod.dev/)
 
 **Your Community-Driven Guide to the Best Boba Spots**
 
@@ -108,7 +106,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 - **Fuse.js 7.1** - Fuzzy search functionality
 - **date-fns 4.1** - Date manipulation and formatting
 
-### Backend
+### Backend & Database
 
 - **MongoDB 8.12** - Primary database
 - **Mongoose 8.12** - ODM for MongoDB
@@ -124,6 +122,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
   - Places API - Location and place data
   - Maps JavaScript API - Interactive maps
   - JS API Loader 1.16
+- **Resend 4.4** - Email service for contact forms
 - **Vercel Analytics 1.5** - Usage analytics
 
 ### Development Tools
@@ -148,6 +147,9 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_JWT_SECRET=your_supabase_JWT_secret
 
+# Email
+RESEND_API_KEY=your_resend_api_key
+
 # Application
 NEXT_PUBLIC_API_BASE_URL=your_project_url
 ```
@@ -158,6 +160,7 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 - Ensure all API keys have appropriate restrictions
 - Keep your MongoDB connection string secure
 - Regularly rotate your Supabase anon key
+- Use environment-specific variables (development/production)
 
 ## 🚀 Getting Started
 
@@ -201,6 +204,9 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    SUPABASE_JWT_SECRET=your_supabase_JWT_secret
 
+   # Email
+   RESEND_API_KEY=your_resend_api_key
+
    # Application
    NEXT_PUBLIC_API_BASE_URL=your_project_url
    ```
@@ -223,7 +229,7 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 
 #### Google Maps Platform
 
-1. Create a project in Google Cloud Console
+1. Create a project in [Google Cloud Console](https://console.cloud.google.com)
 2. Enable the following APIs:
    - Places API
    - Maps JavaScript API
@@ -232,17 +238,25 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 
 #### Supabase
 
-1. Create a new project in Supabase
+1. Create a new project in [Supabase](https://supabase.com)
 2. Get your project URL and anon key
 3. Set up JWT secret for authentication
 4. Add credentials to your environment variables
 
 #### MongoDB
 
-1. Set up a MongoDB instance (local or Atlas)
+1. Set up a [MongoDB](https://www.mongodb.com/) instance (local or Atlas)
 2. Create a database user
 3. Get your connection string
 4. Add to your environment variables
+
+#### Resend
+
+1. Create an account at [Resend](https://resend.com)
+2. Get your API key from the dashboard
+3. Add the API key to your environment variables
+4. Set up email templates for contact forms
+5. Configure sender email address
 
 ⚠️ **Security Notes:**
 
