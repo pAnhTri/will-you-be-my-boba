@@ -81,10 +81,10 @@ const EditForm = ({
           {/* Word Count */}
           <p
             className={`ml-auto text-xs text-muted-foreground ${
-              watch("review").length > 500 && "text-red-500"
+              (watch("review")?.length ?? 0) > 500 && "text-red-500"
             }`}
           >
-            {watch("review").length} / 500
+            {watch("review")?.length ?? 0} / 500
           </p>
           {errors.review && (
             <p className="text-red-500 text-sm">{errors.review.message}</p>

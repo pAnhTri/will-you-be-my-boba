@@ -1,6 +1,7 @@
 // Private page
 import ProfileHeader from "@/components/Profile/Profile-Header";
-import { getUser } from "@/lib/utils/server";
+import ProfileReviews from "@/components/Profile/Profile-Reviews";
+import { getBobaData, getUser } from "@/lib/utils/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -27,9 +28,18 @@ const Profile = async ({
     return <div>User not found</div>;
   }
 
+  const bobaData = await getBobaData();
+
+  if (!bobaData) {
+    return <div>No boba data found</div>;
+  }
+
+  const { bobas = [] } = bobaData;
+
   return (
-    <main className="flex-1 container py-8">
+    <main className="flex-1 container py-8 bg-graident">
       <ProfileHeader initialUserProfile={userProfile} />
+      <ProfileReviews initialUserProfile={userProfile} bobas={bobas} />
     </main>
   );
 };

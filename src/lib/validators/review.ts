@@ -8,8 +8,8 @@ export const reviewValidatorSchema = z.object({
   review: z
     .string()
     .max(500, "Review cannot be longer than 500 characters")
-    .optional()
-    .default(""),
+    .default("")
+    .optional(),
 });
 
 export type ReviewInput = z.infer<typeof reviewValidatorSchema>;

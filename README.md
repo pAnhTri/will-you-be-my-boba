@@ -7,6 +7,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-2.49-blue?style=flat&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Google Maps](https://img.shields.io/badge/Google_Maps-API-blue?style=flat&logo=google-maps)](https://developers.google.com/maps)
+[![Resend](https://img.shields.io/badge/Resend-4.4-purple?style=flat&logo=resend)](https://resend.com/)
 
 **Your Community-Driven Guide to the Best Boba Spots**
 

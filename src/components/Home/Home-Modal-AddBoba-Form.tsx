@@ -100,7 +100,7 @@ const AddBobaForm = ({
           component.types.includes("locality")
         )?.longText
       })`;
-      setValue("shop", dataListValue);
+      setValue("shop", dataListValue, { shouldTouch: true });
       trigger("shop");
     }
   }, [isAddShopModalOpen, selectedResult]);
@@ -120,42 +120,89 @@ const AddBobaForm = ({
     if (flavorInputRef.current) {
       flavorInputRef.current.focus();
       const currentValue = flavorInputRef.current.value;
-      const currentFlavors = currentValue ? currentValue.split(", ") : [];
-      let updatedFlavors = "";
 
-      if (currentFlavors.includes(flavor)) {
-        // Remove the flavor
-        updatedFlavors = currentFlavors.filter((f) => f !== flavor).join(", ");
-      } else {
-        // Add the flavor, but handle empty input case
-        if (currentValue === "") {
-          updatedFlavors = flavor;
-        } else {
-          updatedFlavors = `${currentValue}, ${flavor}`;
-        }
+      // Handle empty input case
+      if (currentValue === "") {
+        flavorInputRef.current.value = flavor;
+        setUsedFlavors([flavor]);
+        setValue("flavors", [flavor], { shouldTouch: true });
+        trigger("flavors");
+        return;
       }
 
+      const currentFlavors = currentValue
+        ? currentValue.split(", ").filter((f) => f !== "")
+        : [];
+
+      const updatedFlavors = currentFlavors.includes(flavor)
+        ? currentFlavors.filter((f) => f !== flavor).join(", ")
+        : `${currentFlavors.join(", ")}, ${flavor}`;
+
+      const flavorsArray = updatedFlavors.split(", ");
+
+      setUsedFlavors(flavorsArray);
+      setValue("flavors", flavorsArray, { shouldTouch: true });
       flavorInputRef.current.value = updatedFlavors;
-      setUsedFlavors(updatedFlavors.split(", "));
       trigger("flavors");
     }
   };
 
   const handleFlavorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value; // Always the latest value
+
+    // Check if the latest input was a comma
+    if (inputValue[inputValue.length - 1] === ",") {
+      // Separate flavors by comma
+      const flavors = inputValue.split(",");
+      const trimmedFlavors = flavors.map((flavor) => flavor.trim());
+
+      // Ensure unique flavors
+      const uniqueFlavors = new Set(trimmedFlavors);
+      const newFlavors = Array.from(uniqueFlavors);
+
+      // Update the used flavors
+      setUsedFlavors(newFlavors);
+      setValue(
+        "flavors",
+        newFlavors.filter((flavor) => flavor !== ""),
+        {
+          shouldTouch: true,
+        }
+      );
+      trigger("flavors");
+
+      // Replace the input value with the unique flavors
+      event.target.value = newFlavors.join(", ");
+    }
+
+    // Reset used flavors if the input is empty
+    if (inputValue === "") {
+      setUsedFlavors([]);
+    }
+  };
+
+  const handleNameOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
+    const usedBoba = bobas.find((boba) => boba.name === inputValue);
 
-    // Add inputValue to selectedBoba if it doesn't exist yet and is separated by a comma
-    const flavors = inputValue.split(",");
-    const trimmedFlavors = flavors.map((flavor) => flavor.trim());
+    if (!usedBoba) {
+      reset();
+      setUsedFlavors([]);
+      return;
+    }
 
-    // Remove duplicate inputs
-    const uniqueFlavors = new Set(trimmedFlavors);
-    const newFlavors = Array.from(uniqueFlavors);
+    // When found, fill out sweetness level and flavors
+    const flavorsDisplay = usedBoba.flavors.join(", ");
+    setUsedFlavors(usedBoba.flavors);
+    setValue("flavors", usedBoba.flavors, { shouldTouch: true });
 
-    setUsedFlavors(newFlavors);
+    if (flavorInputRef.current) {
+      flavorInputRef.current.value = flavorsDisplay;
+    }
 
-    event.target.value = newFlavors.join(", ");
-    trigger("flavors");
+    setValue("sweetnessLevel", usedBoba.sweetnessLevel, {
+      shouldTouch: true,
+    });
   };
 
   const isFlavorUsed = (flavor: string) => {
@@ -186,20 +233,30 @@ const AddBobaForm = ({
         <label htmlFor="name">Name</label>
         <input
           id="name"
+          list="nameList"
           {...register("name")}
+          onBlur={handleNameOnBlur}
           placeholder="Enter the name of your boba"
           className="rounded-lg border-2 border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />
         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+
+        <datalist id="nameList">
+          {bobas.map((boba) => (
+            <option key={boba._id} value={boba.name} />
+          ))}
+        </datalist>
       </div>
 
       {/* Flavor */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="flavor">Flavors</label>
+        <label htmlFor="flavors">Flavors</label>
         <input
           id="flavors"
           {...register("flavors", {
             setValueAs: (value) => {
+              if (typeof value !== "string") return value;
+
               const flavorsArray = value.split(", ");
               if (flavorsArray[0] === "") {
                 return [];
@@ -267,10 +324,7 @@ const AddBobaForm = ({
                 ).find(
                   (option) => (option as HTMLOptionElement).value === value
                 );
-                if (shopOption) {
-                  return shopOption.getAttribute("data-shop-id");
-                }
-                return value;
+                return shopOption?.getAttribute("data-shop-id") ?? value;
               },
             })}
             className="flex-1 rounded-lg border-2 border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"

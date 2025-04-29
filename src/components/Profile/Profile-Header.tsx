@@ -3,7 +3,11 @@
 import { FaCamera } from "react-icons/fa";
 import Avatar from "../Site-Avatar";
 import { createClient } from "@/lib/supabase/client";
-import { useAuthStore, useBobaStore } from "@/lib/zustand/stores";
+import {
+  useAuthStore,
+  useBobaStore,
+  useProfileStore,
+} from "@/lib/zustand/stores";
 import { CiCircleAlert } from "react-icons/ci";
 import { FiEdit, FiLoader } from "react-icons/fi";
 import { compressImage } from "@/lib/utils";
@@ -20,11 +24,13 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
-  const [userProfile, setUserProfile] = useState<UserType>(initialUserProfile);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isUsernameUpdating, setIsUsernameUpdating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const userProfile = useProfileStore((state) => state.userProfile);
+  const { setUserProfile } = useProfileStore();
 
   const avatar = useAvatarStore((state) => state.avatar);
   const isImageLoading = useAvatarStore((state) => state.isImageLoading);
@@ -110,10 +116,11 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
     try {
       await updateUsername(user?.id ?? "", username);
 
-      setUserProfile((prev) => ({
-        ...prev,
+      if (!userProfile) throw new Error("User profile not found");
+      setUserProfile({
+        ...userProfile,
         username: username,
-      }));
+      });
 
       // Update the states of boba and selected boba
       const { bobas } = await getBobas();
@@ -181,14 +188,16 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
           <div className="flex justify-center md:justify-start items-center gap-2">
             {isEditing ? (
               <EditUsernameForm
-                currentUsername={userProfile.username ?? ""}
+                currentUsername={userProfile?.username ?? ""}
                 isUsernameUpdating={isUsernameUpdating}
                 setIsEditing={setIsEditing}
                 handleUsernameUpdate={handleUsernameUpdate}
               />
             ) : (
               <>
-                <h2 className="text-2xl font-bold">{userProfile.username}</h2>
+                <h2 className="text-2xl font-bold">
+                  {userProfile?.username ?? ""}
+                </h2>
                 <button onClick={() => setIsEditing(true)}>
                   <FiEdit className="size-4 text-gray-500 hover:text-gray-700 transition-colors duration-300" />
                 </button>
@@ -198,14 +207,14 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
 
           {/* Email */}
           <p className="text-gray-500 text-center md:text-left">
-            {userProfile.email}
+            {userProfile?.email ?? ""}
           </p>
 
           {/* Status Card */}
           <div className="flex justify-center md:justify-start items-center gap-2">
             <StatusCard
               className="flex flex-col items-center justify-center"
-              status={userProfile.reviews.length.toString()}
+              status={userProfile?.reviews.length.toString() ?? "0"}
               title="Rated Bobas"
             />
           </div>

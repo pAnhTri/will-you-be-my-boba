@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GiBoba } from "react-icons/gi";
+import Logo from "./Logo";
 import SiteHeaderNavUserButtons from "./Site-Header-Nav-UserButtons";
 import { getAvatar } from "@/lib/utils/server";
 
@@ -10,7 +10,7 @@ const Header = async () => {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo + Title */}
         <Link href="/" className="flex items-center gap-2">
-          <GiBoba className="size-8 text-pink-500" />
+          <Logo width={32} height={32} />
           <span className="text-xl font-bold">Will You Be My Boba</span>
         </Link>
 

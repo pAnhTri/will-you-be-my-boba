@@ -4,3 +4,4 @@ export * from "./generateRandomUsername";
 export * from "./time";
 export * from "./getShopOfClosestShop";
 export * from "./compressImage";
+export * from "./cn";

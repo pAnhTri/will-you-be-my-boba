@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { GiBoba } from "react-icons/gi";
+import Logo from "../Logo";
 
 const Hero = () => {
   return (
     <section className="bg-gradient-to-r from-pink-50 to-purple-50 py-8 px-4 flex flex-col items-center gap-4">
       <div className="bg-white rounded-full p-2 shadow-md">
-        <GiBoba className="text-pink-500 size-12" />
+        <Logo width={128} height={128} />
       </div>
       <h1 className="text-5xl font-bold text-center">
         About Will You Be My Boba

@@ -119,7 +119,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
           placeholder="Search for a flavor"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-8 p-2 rounded-lg border border-gray-300"
+          className="w-full pl-8 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />
         <CiSearch className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
       </div>
