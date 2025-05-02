@@ -232,11 +232,18 @@ const AddBobaForm = ({
         <label htmlFor="name">Name</label>
         <input
           id="name"
+          list="nameList"
           {...register("name")}
           onBlur={handleNameOnBlur}
           placeholder="Enter the name of your boba"
           className="rounded-lg border-2 border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />
+
+        <datalist id="nameList">
+          {bobas.map((boba) => (
+            <option key={boba._id} value={boba.name} />
+          ))}
+        </datalist>
         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
       </div>
 

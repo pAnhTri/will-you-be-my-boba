@@ -1,10 +1,10 @@
 "use client";
 
 import { Boba } from "@/types/boba";
-import { useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import EnableLocationButton from "./Home-Card-Bobas-EnableLocationButton";
 import SortButton from "./Home-Card-Bobas-SortButton";
-import { CiStar } from "react-icons/ci";
+import { CiSearch, CiStar } from "react-icons/ci";
 import { LuArrowDownUp, LuMapPin } from "react-icons/lu";
 import ItemCard from "./Home-Card-Bobas-ItemCard";
 import {
@@ -71,6 +71,24 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
 
       return bobaShopMap;
     }, [bobas, shops]);
+
+  const handleOnSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    const filteredBobas = bobas.filter((boba) => {
+      const searchByName = boba.name
+        .toLowerCase()
+        .includes(value.toLowerCase());
+      const searchByShop = boba.shopId.some((shopId) => {
+        const shop = shops.find((shop) => shop._id === shopId.toString());
+        return shop?.name.toLowerCase().includes(value.toLowerCase());
+      });
+
+      return searchByName || searchByShop;
+    });
+
+    setDisplayBobas(filteredBobas);
+  };
 
   const handleSortByClick = (newSortedBy: string) => {
     setSortedBy(newSortedBy);
@@ -238,6 +256,17 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
         <EnableLocationButton
           isLoading={isLoading}
           handleEnableLocationClick={handleEnableLocationClick}
+        />
+      </div>
+
+      {/* Search bar */}
+      <div className="relative flex items-center">
+        <CiSearch className="absolute top-1/2 left-2 -translate-y-1/2 size-4 text-gray-400" />
+        <input
+          type="text"
+          className="w-full pl-8 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          placeholder="Name or Shop..."
+          onChange={handleOnSearchChange}
         />
       </div>
 
