@@ -8,6 +8,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Google Maps](https://img.shields.io/badge/Google_Maps-API-blue?style=flat&logo=google-maps)](https://developers.google.com/maps)
 [![Resend](https://img.shields.io/badge/Resend-4.4-purple?style=flat&logo=resend)](https://resend.com/)
+[![Docker](https://img.shields.io/badge/Docker-28.0-blue?style=flat&logo=docker)](https://www.docker.com/)
 
 **Your Community-Driven Guide to the Best Boba Spots**
 
@@ -172,6 +173,7 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 - **MongoDB Server** (local or Atlas)
 - **Supabase Account** (for authentication)
 - **Google Cloud Project** (for Maps API)
+- **Docker** (optional, for containerized development)
 
 ### Installation
 
@@ -214,10 +216,20 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 
 4. **Run the Development Server**
 
+   You can run the application in two ways:
+
+   a. **Using Node.js directly:**
+
    ```bash
    npm run dev
    # or
    yarn dev
+   ```
+
+   b. **Using Docker (optional):**
+
+   ```bash
+   docker compose -f docker-compose.dev.yaml up --build
    ```
 
 5. **Build for Production**
