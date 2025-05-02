@@ -14,7 +14,7 @@ import {
   useLocationStore,
   useModalStore,
 } from "@/lib/zustand/stores";
-import { harversine } from "@/lib/utils";
+import { getClosestShopDistance, harversine } from "@/lib/utils";
 import AddButton from "./Home-Card-Bobas-AddButton";
 
 interface BobaCardProps {
@@ -39,6 +39,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
   const isLocationEnabled = useLocationStore(
     (state) => state.isLocationEnabled
   );
+  const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
   const { setIsLocationEnabled, setStoreLocationMap, setUserLocation } =
     useLocationStore();
 
@@ -83,6 +84,21 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
       case "Name":
         setDisplayBobas(
           displayBobas.sort((a, b) => a.name.localeCompare(b.name))
+        );
+        break;
+      case "Distance":
+        setDisplayBobas(
+          displayBobas.sort((a, b) => {
+            const closestShopDistanceA = getClosestShopDistance(
+              a.shopId.map((shopId) => shopId.toString()),
+              storeLocationMap
+            );
+            const closestShopDistanceB = getClosestShopDistance(
+              b.shopId.map((shopId) => shopId.toString()),
+              storeLocationMap
+            );
+            return closestShopDistanceA - closestShopDistanceB;
+          })
         );
         break;
     }
