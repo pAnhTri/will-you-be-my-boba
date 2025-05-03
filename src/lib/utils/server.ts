@@ -76,7 +76,9 @@ export const getShopData = async () => {
             input: "$bobaData",
             as: "boba",
             in: {
+              _id: "$$boba._id",
               name: "$$boba.name",
+              flavors: "$$boba.flavors",
               enjoymentFactor: {
                 $cond: {
                   if: { $gt: [{ $size: "$$boba.communityReviews" }, 0] },

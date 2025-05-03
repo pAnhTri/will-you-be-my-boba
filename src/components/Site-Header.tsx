@@ -23,6 +23,12 @@ const Header = async () => {
             Discover
           </Link>
           <Link
+            href="/shops"
+            className="text-sm font-medium hover:text-pink-500 transition-colors"
+          >
+            Shops
+          </Link>
+          <Link
             href="/about"
             className="text-sm font-medium hover:text-pink-500 transition-colors"
           >

@@ -45,9 +45,7 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
   }
-}
 
-@layer base {
   * {
     border-color: hsl(var(--border));
   }
@@ -57,11 +55,18 @@
   }
 }
 
+@layer components {
+  .search-input {
+    @apply w-full pl-8 pr-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500;
+  }
+
+  @theme inline {
+    --color-muted-foreground: hsl(var(--muted-foreground));
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-}
-@theme inline {
-  --color-muted-foreground: hsl(var(--muted-foreground));
 }

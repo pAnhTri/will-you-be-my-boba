@@ -2,7 +2,7 @@
 
 import { Boba } from "@/types/boba";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import EnableLocationButton from "./Home-Card-Bobas-EnableLocationButton";
+import EnableLocationButton from "../EnableLocationButton";
 import SortButton from "./Home-Card-Bobas-SortButton";
 import { CiSearch, CiStar } from "react-icons/ci";
 import { LuArrowDownUp, LuMapPin } from "react-icons/lu";
