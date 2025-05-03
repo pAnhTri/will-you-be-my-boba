@@ -3,7 +3,7 @@ import axios from "axios";
 export const getGooglePlacesDetails = async (searchText: string) => {
   const GooglePlaceURL = `https://places.googleapis.com/v1/places:searchText`;
 
-  const searcQuery = `(boba OR tea OR cafe OR boba tea OR boba shop OR boba cafe) ${
+  const searcQuery = `(boba OR tea OR cafe OR milk OR boba tea OR boba shop OR boba cafe) ${
     searchText !== "" ? `AND ${searchText}` : "near me"
   }`;
 

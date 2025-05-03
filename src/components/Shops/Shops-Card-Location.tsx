@@ -5,9 +5,10 @@ import { CiSearch } from "react-icons/ci";
 import { LuArrowDown10, LuArrowUpDown, LuMapPin, LuStar } from "react-icons/lu";
 import SortButton from "./Shops-Card-Location-SortButton";
 import { useLocationStore, useShopStore } from "@/lib/zustand/stores";
-import { harversine } from "@/lib/utils/harversine";
 import EnableLocationButton from "../EnableLocationButton";
 import { useState } from "react";
+import { Shop } from "@/types/shop";
+import { handleEnableLocationClick } from "@/lib/utils/handleEnableLocationClick";
 
 enum SortBy {
   Rating = "Rating",
@@ -19,80 +20,57 @@ enum SortBy {
 const LocationCard = () => {
   const [minRating, setMinRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortedBy, setSortedBy] = useState<SortBy>(SortBy.Rating);
+  const [sortedBy, setSortedBy] = useState<SortBy>(SortBy.Name);
 
   const shops = useShopStore((state) => state.shops);
+  const displayShops = useShopStore((state) => state.displayShops);
+  const { setDisplayShops } = useShopStore();
 
+  const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
   const isLocationEnabled = useLocationStore(
     (state) => state.isLocationEnabled
   );
   const { setIsLocationEnabled, setStoreLocationMap, setUserLocation } =
     useLocationStore();
 
-  const handleEnableLocationClick = () => {
-    if (isLocationEnabled) {
-      setIsLocationEnabled(false);
-      setStoreLocationMap(new Map());
-      return;
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value;
+
+    // Search for shops by name or address
+    const filteredShops = shops.filter((shop) => {
+      return (
+        shop.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        shop.location.address.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    });
+
+    setDisplayShops(filteredShops);
+  };
+
+  const handleSortClick = (sortedBy: SortBy) => {
+    setSortedBy(sortedBy);
+
+    const copyDisplayShops = displayShops;
+
+    // Sort shops by selected criteria
+    switch (sortedBy) {
+      case SortBy.Name:
+        copyDisplayShops.sort((a, b) => a.name.localeCompare(b.name));
+        setDisplayShops(copyDisplayShops);
+        break;
+      case SortBy.Rating:
+        console.log("WIP");
+        break;
+      case SortBy.Reviews:
+        console.log("WIP");
+        break;
+      case SortBy.Distance:
+        const sortedShops = Array.from(storeLocationMap.keys()).map(
+          (key) => shops.find((shop) => shop._id === key) as Shop
+        );
+        setDisplayShops(sortedShops);
+        break;
     }
-
-    if (!navigator.geolocation) {
-      console.error("Geolocation is not supported by this browser.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    const options: PositionOptions = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    const success = (position: GeolocationPosition) => {
-      // Calculate distances from user location to each shop
-      const userLocation = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-
-      setUserLocation(userLocation);
-
-      const shopDistances: {
-        key: string;
-        value: number;
-      }[] = [];
-
-      shops.forEach((shop) => {
-        const distance = harversine(userLocation, {
-          latitude: shop.location.latitude,
-          longitude: shop.location.longitude,
-        });
-        shopDistances.push({
-          key: shop._id,
-          value: distance,
-        });
-      });
-
-      //Sort shop distances by distance in ascending order and store in map
-      shopDistances.sort((a, b) => a.value - b.value);
-      const shopDistancesMap = new Map<string, number>();
-      shopDistances.forEach((shopDistance) => {
-        shopDistancesMap.set(shopDistance.key, shopDistance.value);
-      });
-
-      setStoreLocationMap(shopDistancesMap);
-      setIsLocationEnabled(true);
-      setIsLoading(false);
-    };
-
-    const error = (error: GeolocationPositionError) => {
-      console.error(error);
-      setIsLocationEnabled(false);
-      setIsLoading(false);
-    };
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
   };
 
   return (
@@ -102,7 +80,16 @@ const LocationCard = () => {
         <h2 className="text-2xl font-bold">Where we headin&apos;?</h2>
         <EnableLocationButton
           isLoading={isLoading}
-          handleEnableLocationClick={handleEnableLocationClick}
+          handleEnableLocationClick={() =>
+            handleEnableLocationClick(
+              isLocationEnabled,
+              setIsLocationEnabled,
+              setStoreLocationMap,
+              setUserLocation,
+              setIsLoading,
+              shops
+            )
+          }
         />
       </div>
 
@@ -113,6 +100,7 @@ const LocationCard = () => {
           type="text"
           placeholder="Search for a location"
           className={cn("search-input")}
+          onChange={handleSearchChange}
         />
       </div>
 
@@ -152,7 +140,7 @@ const LocationCard = () => {
                 sortedBy === sortBy && "bg-pink-500 text-white",
                 "transition-all duration-300"
               )}
-              handleOnClick={() => setSortedBy(sortBy)}
+              handleOnClick={() => handleSortClick(sortBy)}
             >
               <div className="flex items-center gap-1">
                 {sortBy === SortBy.Distance && <LuMapPin className="size-4" />}

@@ -15,7 +15,7 @@ export default async function Home() {
   const shopData = await getShopData();
 
   const { bobas = [], flavors = [] } = bobaData || {};
-  const { shop = [] } = shopData || {};
+  const { shops = [] } = shopData || {};
 
   return (
     <>
@@ -39,7 +39,7 @@ export default async function Home() {
           <HomeCard>
             <FlavorCard initialFlavors={flavors} />
             <BobaCard initialBobas={bobas} />
-            <DetailCard initialShops={shop} />
+            <DetailCard initialShops={shops} />
           </HomeCard>
         </Suspense>
       </main>

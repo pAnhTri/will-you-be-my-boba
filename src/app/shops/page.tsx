@@ -1,5 +1,7 @@
 import Card from "@/components/Shops/Shops-Card";
 import LocationCard from "@/components/Shops/Shops-Card-Location";
+import ShopInfo from "@/components/Shops/Shops-Card-ShopInfo";
+import { getShopData } from "@/lib/utils/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,6 +12,14 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const Shop = async () => {
+  const shopData = await getShopData();
+
+  if (!shopData) {
+    return <div>No shop data found</div>;
+  }
+
+  const { shops } = shopData;
+
   return (
     <>
       <section className="bg-gradient-to-r from-pink-50 to-purple-50 text-center py-6 px-4">
@@ -27,7 +37,9 @@ const Shop = async () => {
           <Card>
             <LocationCard />
           </Card>
-          <div className="border">Main 2</div>
+          <Card>
+            <ShopInfo initialShops={shops} />
+          </Card>
           <div className="border">Main 3</div>
         </div>
       </main>

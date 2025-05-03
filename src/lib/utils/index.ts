@@ -6,3 +6,4 @@ export * from "./getShopOfClosestShop";
 export * from "./compressImage";
 export * from "./cn";
 export * from "./getClosestShop";
+export * from "./handleEnableLocationClick";

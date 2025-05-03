@@ -130,7 +130,7 @@ export const getShopData = async () => {
 
     const plainResult = JSON.parse(JSON.stringify(result));
 
-    return { shop: plainResult };
+    return { shops: plainResult };
   } catch (error) {
     console.error("Error fetching shop data:", error);
     return null;
