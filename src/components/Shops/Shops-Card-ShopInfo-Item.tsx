@@ -2,13 +2,15 @@ import { cn } from "@/lib/utils/cn";
 import { useLocationStore, useShopStore } from "@/lib/zustand/stores";
 import { Shop } from "@/types/shop";
 import { HTMLAttributes } from "react";
+import { FiLoader } from "react-icons/fi";
 import { LuMapPin, LuStar } from "react-icons/lu";
 
 interface ItemProps extends HTMLAttributes<HTMLDivElement> {
   shop: Shop;
+  isLoading: boolean;
 }
 
-const Item = ({ shop, className, onClick, ...props }: ItemProps) => {
+const Item = ({ shop, className, onClick, isLoading, ...props }: ItemProps) => {
   const selectedShop = useShopStore((state) => state.selectedShop);
   const placesDetailMap = useShopStore((state) => state.placesDetailMap);
 
@@ -32,18 +34,31 @@ const Item = ({ shop, className, onClick, ...props }: ItemProps) => {
       {/* Name + Rating*/}
       <div className="flex items-center justify-between">
         <p>{shop.name}</p>
-        <div className="flex items-center gap-1">
-          {/* WIP Rating */}
-          <LuStar className="text-yellow-500" />
-          <p>{placesDetailMap.get(shop.location.placesId)?.rating || "N/A"}</p>
-        </div>
+        {isLoading ? (
+          <FiLoader className="animate-spin" />
+        ) : (
+          <div className="flex items-center gap-1">
+            <LuStar className="text-yellow-500" />
+            <p>
+              {placesDetailMap.get(shop.location.placesId)?.rating || "N/A"}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Number of reviews */}
-      <p className="text-xs text-gray-500">
-        {placesDetailMap.get(shop.location.placesId)?.userRatingCount || "N/A"}{" "}
-        reviews
-      </p>
+      {isLoading ? (
+        <div className="flex items-center gap-1">
+          <FiLoader className="animate-spin" />
+          <span>Loading...</span>
+        </div>
+      ) : (
+        <p className="text-xs text-gray-500">
+          {placesDetailMap.get(shop.location.placesId)?.userRatingCount ||
+            "N/A"}{" "}
+          reviews
+        </p>
+      )}
 
       {/* Address */}
       <div className="flex items-center gap-1">

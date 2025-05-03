@@ -69,7 +69,6 @@ const ShopInfo = ({ initialShops }: ShopInfoProps) => {
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
       {error && <div>{error}</div>}
       {/* Title and number of shops */}
       <div className="flex items-end justify-between">
@@ -83,6 +82,7 @@ const ShopInfo = ({ initialShops }: ShopInfoProps) => {
           <Item
             key={shop._id}
             shop={shop}
+            isLoading={isLoading}
             onClick={() => handleShopClick(shop)}
             className="flex flex-col gap-2"
           />
