@@ -10,6 +10,7 @@ interface ItemProps extends HTMLAttributes<HTMLDivElement> {
 
 const Item = ({ shop, className, onClick, ...props }: ItemProps) => {
   const selectedShop = useShopStore((state) => state.selectedShop);
+  const placesDetailMap = useShopStore((state) => state.placesDetailMap);
 
   const isLocationEnabled = useLocationStore(
     (state) => state.isLocationEnabled
@@ -34,12 +35,15 @@ const Item = ({ shop, className, onClick, ...props }: ItemProps) => {
         <div className="flex items-center gap-1">
           {/* WIP Rating */}
           <LuStar className="text-yellow-500" />
-          <p>WIP</p>
+          <p>{placesDetailMap.get(shop.location.placesId)?.rating || "N/A"}</p>
         </div>
       </div>
 
       {/* Number of reviews */}
-      <p className="text-xs text-gray-500">WIP reviews</p>
+      <p className="text-xs text-gray-500">
+        {placesDetailMap.get(shop.location.placesId)?.userRatingCount || "N/A"}{" "}
+        reviews
+      </p>
 
       {/* Address */}
       <div className="flex items-center gap-1">

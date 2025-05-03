@@ -19,11 +19,13 @@ enum SortBy {
 
 const LocationCard = () => {
   const [minRating, setMinRating] = useState(0);
+  const [shopFilter, setShopFilter] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [sortedBy, setSortedBy] = useState<SortBy>(SortBy.Name);
 
   const shops = useShopStore((state) => state.shops);
   const displayShops = useShopStore((state) => state.displayShops);
+  const placesDetailMap = useShopStore((state) => state.placesDetailMap);
   const { setDisplayShops } = useShopStore();
 
   const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
@@ -33,18 +35,34 @@ const LocationCard = () => {
   const { setIsLocationEnabled, setStoreLocationMap, setUserLocation } =
     useLocationStore();
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value;
-
-    // Search for shops by name or address
+  const filterShop = (searchValue: string, newMinRating: number) => {
+    // Search for shops by name or address AND rating >= minRating
     const filteredShops = shops.filter((shop) => {
       return (
-        shop.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        shop.location.address.toLowerCase().includes(searchValue.toLowerCase())
+        (shop.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          shop.location.address
+            .toLowerCase()
+            .includes(searchValue.toLowerCase())) &&
+        (placesDetailMap.get(shop.location.placesId)?.rating || 0) >=
+          newMinRating
       );
     });
 
     setDisplayShops(filteredShops);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value;
+    setShopFilter(searchValue);
+
+    filterShop(searchValue, minRating);
+  };
+
+  const handleMinRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newMinRating = Number(e.target.value);
+    setMinRating(newMinRating);
+
+    filterShop(shopFilter, newMinRating);
   };
 
   const handleSortClick = (sortedBy: SortBy) => {
@@ -59,10 +77,22 @@ const LocationCard = () => {
         setDisplayShops(copyDisplayShops);
         break;
       case SortBy.Rating:
-        console.log("WIP");
+        copyDisplayShops.sort((a, b) => {
+          const ratingA = placesDetailMap.get(a.location.placesId)?.rating || 0;
+          const ratingB = placesDetailMap.get(b.location.placesId)?.rating || 0;
+          return ratingB - ratingA;
+        });
+        setDisplayShops(copyDisplayShops);
         break;
       case SortBy.Reviews:
-        console.log("WIP");
+        copyDisplayShops.sort((a, b) => {
+          const reviewsA =
+            placesDetailMap.get(a.location.placesId)?.userRatingCount || 0;
+          const reviewsB =
+            placesDetailMap.get(b.location.placesId)?.userRatingCount || 0;
+          return reviewsB - reviewsA;
+        });
+        setDisplayShops(copyDisplayShops);
         break;
       case SortBy.Distance:
         const sortedShops = Array.from(storeLocationMap.keys()).map(
@@ -100,6 +130,7 @@ const LocationCard = () => {
           type="text"
           placeholder="Search for a location"
           className={cn("search-input")}
+          value={shopFilter}
           onChange={handleSearchChange}
         />
       </div>
@@ -121,7 +152,7 @@ const LocationCard = () => {
           max="5"
           className="w-full accent-pink-700 rounded-full"
           value={minRating}
-          onChange={(e) => setMinRating(Number(e.target.value))}
+          onChange={handleMinRatingChange}
         />
       </div>
 

@@ -40,3 +40,35 @@ export const getGooglePlacesDetails = async (searchText: string) => {
     throw new Error("Something went wrong");
   }
 };
+
+export const getGooglePlacesDetailsByLocation = async (placeId: string) => {
+  const GooglePlaceURL = `https://places.googleapis.com/v1/places/${placeId}`;
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    "X-Goog-FieldMask": ["rating", "userRatingCount"],
+  };
+
+  try {
+    const { data: response } = await axios.get(GooglePlaceURL, {
+      headers,
+    });
+
+    return {
+      placeId,
+      rating: response.rating,
+      userRatingCount: response.userRatingCount,
+    };
+  } catch (error) {
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.error.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};
