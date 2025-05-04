@@ -1,4 +1,5 @@
 import Card from "@/components/Shops/Shops-Card";
+import Details from "@/components/Shops/Shops-Card-Details";
 import LocationCard from "@/components/Shops/Shops-Card-Location";
 import ShopInfo from "@/components/Shops/Shops-Card-ShopInfo";
 import { getShopData } from "@/lib/utils/server";
@@ -40,7 +41,9 @@ const Shop = async () => {
           <Card>
             <ShopInfo initialShops={shops} />
           </Card>
-          <div className="border">Main 3</div>
+          <Card>
+            <Details />
+          </Card>
         </div>
       </main>
     </>

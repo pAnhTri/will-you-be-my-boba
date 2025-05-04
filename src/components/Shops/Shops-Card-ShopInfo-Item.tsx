@@ -38,7 +38,18 @@ const Item = ({ shop, className, onClick, isLoading, ...props }: ItemProps) => {
           <FiLoader className="animate-spin" />
         ) : (
           <div className="flex items-center gap-1">
-            <LuStar className="text-yellow-500" />
+            <LuStar
+              className={cn(
+                "size-4",
+                (placesDetailMap.get(shop.location.placesId)?.rating || 0) > 4
+                  ? selectedShop?._id === shop._id
+                    ? "text-yellow-500 fill-yellow-500"
+                    : "text-yellow-500"
+                  : selectedShop?._id === shop._id
+                    ? "text-gray-500 fill-gray-500"
+                    : "text-gray-500"
+              )}
+            />
             <p>
               {placesDetailMap.get(shop.location.placesId)?.rating || "N/A"}
             </p>
