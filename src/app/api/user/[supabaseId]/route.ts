@@ -21,7 +21,7 @@ export const GET = async (
 
     await dbConnect();
 
-    const user = await User.findOne({ supabaseId });
+    const user = await User.findOne({ supabaseId }).populate("favoriteShops");
 
     if (!user) {
       return NextResponse.json(

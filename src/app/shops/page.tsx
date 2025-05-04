@@ -2,7 +2,9 @@ import Card from "@/components/Shops/Shops-Card";
 import Details from "@/components/Shops/Shops-Card-Details";
 import LocationCard from "@/components/Shops/Shops-Card-Location";
 import ShopInfo from "@/components/Shops/Shops-Card-ShopInfo";
-import { getShopData } from "@/lib/utils/server";
+import { ShopType } from "@/lib/mongodb/models/Shop";
+import { createClient } from "@/lib/supabase/server";
+import { getBobaData, getShopData, getUser } from "@/lib/utils/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,13 +15,32 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const Shop = async () => {
-  const shopData = await getShopData();
+  const supabase = await createClient();
 
-  if (!shopData) {
-    return <div>No shop data found</div>;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const supabaseId = user?.id;
+
+  let userData = null;
+
+  if (supabaseId) {
+    userData = await getUser(supabaseId);
+  }
+
+  const shopData = await getShopData();
+  const bobaData = await getBobaData();
+
+  if (!shopData || !bobaData) {
+    return <div>No data found</div>;
   }
 
   const { shops } = shopData;
+
+  const favoriteShops: (ShopType & { _id: string })[] =
+    userData?.favoriteShops || [];
+  console.log(favoriteShops);
 
   return (
     <>
@@ -42,7 +63,7 @@ const Shop = async () => {
             <ShopInfo initialShops={shops} />
           </Card>
           <Card>
-            <Details />
+            <Details initialFavoriteShops={favoriteShops} />
           </Card>
         </div>
       </main>

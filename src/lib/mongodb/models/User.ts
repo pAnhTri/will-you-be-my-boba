@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   role: { type: String, enum: Role, default: Role.USER },
   reviews: { type: [userReviewSchema], default: [] },
+  favoriteShops: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Shop",
+    default: [],
+  },
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

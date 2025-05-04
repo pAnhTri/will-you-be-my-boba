@@ -1,6 +1,8 @@
 // Private page
+import FavoriteShops from "@/components/Profile/Profile-FavoriteShops";
 import ProfileHeader from "@/components/Profile/Profile-Header";
 import ProfileReviews from "@/components/Profile/Profile-Reviews";
+import TabSelector from "@/components/Profile/Profile-TabSelector";
 import { getBobaData, getUser } from "@/lib/utils/server";
 import { Metadata } from "next";
 
@@ -37,9 +39,11 @@ const Profile = async ({
   const { bobas = [] } = bobaData;
 
   return (
-    <main className="flex-1 container py-8 bg-graident">
+    <main className="flex-1 container py-8">
       <ProfileHeader initialUserProfile={userProfile} />
-      <ProfileReviews initialUserProfile={userProfile} bobas={bobas} />
+      <TabSelector />
+      <ProfileReviews bobas={bobas} />
+      <FavoriteShops />
     </main>
   );
 };

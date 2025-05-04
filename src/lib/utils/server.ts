@@ -79,6 +79,7 @@ export const getShopData = async () => {
               _id: "$$boba._id",
               name: "$$boba.name",
               flavors: "$$boba.flavors",
+              sweetnessLevel: "$$boba.sweetnessLevel",
               enjoymentFactor: {
                 $cond: {
                   if: { $gt: [{ $size: "$$boba.communityReviews" }, 0] },
@@ -195,7 +196,7 @@ export const getUser = async (supabaseId: string) => {
   try {
     await dbConnect();
 
-    const user = await User.findOne({ supabaseId });
+    const user = await User.findOne({ supabaseId }).populate("favoriteShops");
 
     if (!user) {
       return null;

@@ -12,15 +12,15 @@ import { CiCircleAlert } from "react-icons/ci";
 import { FiEdit, FiLoader } from "react-icons/fi";
 import { compressImage } from "@/lib/utils";
 import { useAvatarStore } from "@/lib/zustand/stores/avatar";
-import { UserType } from "@/lib/mongodb/models/User";
 import { useEffect, useState } from "react";
 import StatusCard from "./Profile-Header-StatusCard";
 import EditUsernameForm from "./Profile-Header-EditUsernameForm";
 import { updateUsername } from "@/lib/utils/api/user";
 import { getBobas } from "@/lib/utils/api/boba";
+import { PopulatedUserType } from "@/types/user";
 
 interface ProfileHeaderProps {
-  initialUserProfile: UserType;
+  initialUserProfile: PopulatedUserType;
 }
 
 const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
@@ -216,6 +216,11 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
               className="flex flex-col items-center justify-center"
               status={userProfile?.reviews.length.toString() ?? "0"}
               title="Rated Bobas"
+            />
+            <StatusCard
+              className="flex flex-col items-center justify-center"
+              status={userProfile?.favoriteShops.length.toString() ?? "0"}
+              title="Favorite Shops"
             />
           </div>
         </div>

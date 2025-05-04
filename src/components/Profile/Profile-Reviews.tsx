@@ -1,21 +1,27 @@
 "use client";
 
-import { UserType } from "@/lib/mongodb/models/User";
+import { useProfileStore } from "@/lib/zustand/stores";
 import { Boba } from "@/types/boba";
 import { LuStar } from "react-icons/lu";
 
 interface ProfileReviewsProps {
-  initialUserProfile: UserType;
   bobas: Boba[];
 }
 
-const ProfileReviews = ({ initialUserProfile, bobas }: ProfileReviewsProps) => {
-  const reviewsWithBobaName = initialUserProfile.reviews.map((review) => {
+const ProfileReviews = ({ bobas }: ProfileReviewsProps) => {
+  const userProfile = useProfileStore((state) => state.userProfile);
+  const currentTab = useProfileStore((state) => state.currentTab);
+
+  const reviewsWithBobaName = userProfile?.reviews.map((review) => {
     const boba = bobas.find((boba) => boba._id.toString() === review.bobaId);
     return { ...review, bobaName: boba?.name ?? "" };
   });
 
-  if (reviewsWithBobaName.length === 0) {
+  if (currentTab !== "reviews") {
+    return null;
+  }
+
+  if (reviewsWithBobaName?.length === 0) {
     return (
       <div className="text-center text-gray-500 py-8">No reviews found</div>
     );
@@ -23,7 +29,7 @@ const ProfileReviews = ({ initialUserProfile, bobas }: ProfileReviewsProps) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2">
-      {reviewsWithBobaName.map((review) => (
+      {reviewsWithBobaName?.map((review) => (
         <div
           key={review._id.toString()}
           className="bg-white rounded-lg p-4 border-2 border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 break-words"

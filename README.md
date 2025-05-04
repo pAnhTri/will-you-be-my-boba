@@ -3,11 +3,11 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.3-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1-blue?style=flat&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-8.12-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-8.14-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-2.49-blue?style=flat&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Google Maps](https://img.shields.io/badge/Google_Maps-API-blue?style=flat&logo=google-maps)](https://developers.google.com/maps)
-[![Resend](https://img.shields.io/badge/Resend-4.4-purple?style=flat&logo=resend)](https://resend.com/)
+[![Resend](https://img.shields.io/badge/Resend-4.5-purple?style=flat&logo=resend)](https://resend.com/)
 
 **Your Community-Driven Guide to the Best Boba Spots**
 
@@ -23,6 +23,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 - **Check Local Shops:** Curious about your favorite spot? See what the community thinks of their menu!
 - **Share Your Favorites:** Be part of the boba-loving network—recommend your go-to drink and where to find it.
 - **Build Your Boba Journey:** Create an account to keep track of your reviews, edit them anytime, and curate your personal boba history. Your opinions matter, and now they're always at your fingertips!
+- **Track Your Favorite Shops:** Browse and save your favorite boba shops, with detailed information pulled directly from Google Places API.
 
 **What are you waiting for? Explore, share, and sip with Will You Be My Boba!**
 
@@ -38,6 +39,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
   - Write, edit, and delete your reviews anytime
   - Keep a personal history of your favorite drinks
   - Build your boba profile with your preferences
+  - Save and manage your favorite boba shops
 
 - **Community Reviews & Ratings**
   - Share your thoughts anonymously or with your account
@@ -60,6 +62,8 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
   - Sort by distance to find the closest options
   - View shop details and Google Maps integration
   - Get directions to your next boba adventure
+  - Access comprehensive shop information from Google Places API
+  - Save your favorite shops for quick access
 
 - **Dynamic Sorting**
   - Sort by name for alphabetical browsing
@@ -100,7 +104,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 - **React 19.1** - Hooks, Context API
 - **TypeScript 5** - Type safety and better developer experience
 - **Tailwind CSS 4** - Utility-first CSS framework
-- **React Hook Form 7.54** - Form handling and validation
+- **React Hook Form 7.56** - Form handling and validation
 - **Zod 3.24** - Schema validation
 - **Zustand 5.0** - State management
 - **React Icons 5.5** - Icon library
@@ -109,8 +113,8 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 
 ### Backend & Database
 
-- **MongoDB 8.12** - Primary database
-- **Mongoose 8.12** - ODM for MongoDB
+- **MongoDB 8.14** - Primary database
+- **Mongoose 8.14** - ODM for MongoDB
 - **Next.js API Routes** - Serverless API endpoints
 - **Supabase** - Authentication and user management
   - Supabase JS Client 2.49
@@ -123,7 +127,8 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
   - Places API - Location and place data
   - Maps JavaScript API - Interactive maps
   - JS API Loader 1.16
-- **Resend 4.4** - Email service for contact forms
+  - Places Details API - Comprehensive shop information
+- **Resend 4.5** - Email service for contact forms
 - **Vercel Analytics 1.5** - Usage analytics
 
 ### Development Tools
@@ -308,6 +313,20 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
   - Click **Submit** to post or **Clear** to start over
 
 ### Managing Shops
+
+- **Browse Shops**
+
+  - View all shops in the database
+  - See detailed information from Google Places API
+  - Check shop ratings and reviews
+  - Get directions to any shop
+
+- **Favorite Shops**
+
+  - Save your favorite shops when signed in
+  - Access your saved shops quickly
+  - Remove shops from your favorites
+  - View your favorite shops' details
 
 - **Add New Shop**
   - In the Add Boba Modal, click **+** next to shop input

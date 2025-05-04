@@ -3,7 +3,6 @@ import axios from "axios";
 
 export const sendEmail = async (payload: EmailContactInput) => {
   try {
-    console.log("payload:", payload);
     const { data } = await axios.post("/api/send", payload);
     return data;
   } catch (error) {

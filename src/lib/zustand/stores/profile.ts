@@ -1,11 +1,11 @@
-import { UserType } from "@/lib/mongodb/models/User";
 import { create } from "zustand";
+import { PopulatedUserType } from "@/types/user";
 
 interface ProfileStore {
-  userProfile: UserType | null;
-  currentTab: string;
-  setCurrentTab: (tab: string) => void;
-  setUserProfile: (profile: UserType) => void;
+  userProfile: PopulatedUserType | null;
+  currentTab: "reviews" | "favoriteShops";
+  setCurrentTab: (tab: "reviews" | "favoriteShops") => void;
+  setUserProfile: (profile: PopulatedUserType) => void;
 }
 
 export const useProfileStore = create<ProfileStore>((set) => ({
