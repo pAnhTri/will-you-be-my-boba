@@ -1,3 +1,4 @@
+import dbConnect from "@/lib/mongodb/connect";
 import User from "@/lib/mongodb/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -53,6 +54,8 @@ export const PUT = async (
         message: "Operation not found",
       });
     }
+
+    await dbConnect();
 
     const updatedUser = await runFavoriteShopUpdate(
       supabaseId,
