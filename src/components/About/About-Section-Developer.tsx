@@ -10,7 +10,8 @@ const DeveloperSection = () => {
           <h2 className="text-3xl font-bold mb-4">Meet the Developers</h2>
           <div className="text-muted-foreground">
             <b>
-              Hello! I&apos;m the solo developer behind Will You Be My Boba.
+              Hello! I&apos;m the technical developer behind Will You Be My
+              Boba.
             </b>{" "}
             I love boba and hanging out with my friends. I created this platform
             to solve a problem my friends and me faced: finding the best boba
