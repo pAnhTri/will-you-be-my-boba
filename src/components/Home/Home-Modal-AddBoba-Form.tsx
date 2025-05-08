@@ -154,7 +154,14 @@ const AddBobaForm = ({
     if (inputValue[inputValue.length - 1] === ",") {
       // Separate flavors by comma
       const flavors = inputValue.split(",");
-      const trimmedFlavors = flavors.map((flavor) => flavor.trim());
+      const trimmedFlavors = flavors.map((flavor) => {
+        const trimmedFlavor = flavor.trim();
+
+        // Return the trimmed flavor if it's not empty and capitalize the first letter
+        return trimmedFlavor && trimmedFlavor !== ""
+          ? trimmedFlavor[0].toUpperCase() + trimmedFlavor.slice(1)
+          : "";
+      });
 
       // Ensure unique flavors
       const uniqueFlavors = new Set(trimmedFlavors);

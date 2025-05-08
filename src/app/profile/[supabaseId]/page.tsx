@@ -15,10 +15,13 @@ export const dynamic = "force-dynamic";
 
 const Profile = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ supabaseId: string }>;
+  searchParams: Promise<{ tab: "reviews" | "favoriteShops" | undefined }>;
 }) => {
   const { supabaseId } = await params;
+  const { tab } = await searchParams;
 
   if (!supabaseId) {
     return <div>No user ID provided</div>;
@@ -41,7 +44,7 @@ const Profile = async ({
   return (
     <main className="flex-1 container py-8">
       <ProfileHeader initialUserProfile={userProfile} />
-      <TabSelector />
+      <TabSelector initialTab={tab ?? "reviews"} />
       <ProfileReviews bobas={bobas} />
       <FavoriteShops />
     </main>

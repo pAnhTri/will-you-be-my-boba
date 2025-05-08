@@ -2,10 +2,19 @@
 
 import { cn } from "@/lib/utils/cn";
 import { useProfileStore } from "@/lib/zustand/stores";
+import { useEffect } from "react";
 
-const TabSelector = () => {
+interface TabSelectorProps {
+  initialTab: "reviews" | "favoriteShops";
+}
+
+const TabSelector = ({ initialTab }: TabSelectorProps) => {
   const currentTab = useProfileStore((store) => store.currentTab);
   const { setCurrentTab } = useProfileStore();
+
+  useEffect(() => {
+    setCurrentTab(initialTab);
+  }, [initialTab]);
 
   return (
     <div className="mx-auto mb-4 flex max-w-sm justify-center items-center gap-4 bg-gray-100 rounded-lg p-2">
