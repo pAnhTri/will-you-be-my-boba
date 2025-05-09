@@ -33,7 +33,7 @@ const initialConfig: GenerateContentConfig = {
         - Predict a list of flavors that are relevant based on the name of the boba
         - Avoid using the word "tea" in the list of flavors
         - Avoid flavors that describe the boba, such as "boba", "pearls", "tapioca", etc.
-        - Return the list of flavors in a comma separated list of keywords in the format of
+        - Return the list of flavors in a comma separated list of keywords in a string array
         - Capitalize the first letter of each flavor, e.g. "Brown Sugar"
         - If you cannot generate a list of flavors, return an empty array
   `,

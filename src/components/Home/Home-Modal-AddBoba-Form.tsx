@@ -59,24 +59,6 @@ const AddBobaForm = ({
 
   const flavorInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (prefillBobaFormData) {
-      setValue("name", prefillBobaFormData.name, { shouldTouch: true });
-      setValue("flavors", prefillBobaFormData.flavors, { shouldTouch: true });
-      setUsedFlavors(prefillBobaFormData.flavors);
-      setValue(
-        "sweetnessLevel",
-        prefillBobaFormData.sweetnessLevel as "Low" | "Medium" | "High",
-        {
-          shouldTouch: true,
-        }
-      );
-
-      // Consume the prefill data
-      setPrefillBobaFormData(null);
-    }
-  }, [prefillBobaFormData]);
-
   const {
     register,
     handleSubmit,
@@ -114,6 +96,31 @@ const AddBobaForm = ({
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (prefillBobaFormData) {
+      console.log("prefillBobaFormData", prefillBobaFormData);
+      setValue("name", prefillBobaFormData.name, { shouldTouch: true });
+      setValue("flavors", prefillBobaFormData.flavors, { shouldTouch: true });
+      setUsedFlavors(prefillBobaFormData.flavors);
+
+      // Input field for flavors is a comma separated list of keywords
+      if (flavorInputRef.current) {
+        flavorInputRef.current.value = prefillBobaFormData.flavors.join(", ");
+      }
+
+      setValue(
+        "sweetnessLevel",
+        prefillBobaFormData.sweetnessLevel as "Low" | "Medium" | "High",
+        {
+          shouldTouch: true,
+        }
+      );
+
+      // Consume the prefill data
+      setPrefillBobaFormData(null);
+    }
+  }, [prefillBobaFormData]);
 
   useEffect(() => {
     if (!isAddShopModalOpen && selectedResult) {
