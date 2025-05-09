@@ -87,8 +87,10 @@ const AddShopModal = () => {
         latitude: selectedResult?.location.latitude || 0,
         longitude: selectedResult?.location.longitude || 0,
         city:
-          selectedResult?.addressComponents.find((component) =>
-            component.types.includes("locality")
+          selectedResult?.addressComponents.find(
+            (component) =>
+              component.types.includes("locality") ||
+              component.types.includes("sublocality")
           )?.longText || "",
       },
     };

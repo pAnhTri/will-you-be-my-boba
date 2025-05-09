@@ -18,6 +18,7 @@ import {
   useModalStore,
   useShopStore,
 } from "@/lib/zustand/stores";
+import { useAlexAIStore } from "@/lib/zustand/stores/alexAI";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -51,7 +52,30 @@ const AddBobaForm = ({
   const isAddShopModalOpen = useModalStore((state) => state.isAddShopModalOpen);
   const { setIsAddShopModalOpen } = useModalStore();
 
+  const prefillBobaFormData = useAlexAIStore(
+    (state) => state.prefillBobaFormData
+  );
+  const { setPrefillBobaFormData } = useAlexAIStore();
+
   const flavorInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (prefillBobaFormData) {
+      setValue("name", prefillBobaFormData.name, { shouldTouch: true });
+      setValue("flavors", prefillBobaFormData.flavors, { shouldTouch: true });
+      setUsedFlavors(prefillBobaFormData.flavors);
+      setValue(
+        "sweetnessLevel",
+        prefillBobaFormData.sweetnessLevel as "Low" | "Medium" | "High",
+        {
+          shouldTouch: true,
+        }
+      );
+
+      // Consume the prefill data
+      setPrefillBobaFormData(null);
+    }
+  }, [prefillBobaFormData]);
 
   const {
     register,
@@ -96,8 +120,10 @@ const AddBobaForm = ({
       const dataListValue = `${selectedResult.displayName.text}, ${
         selectedResult.formattedAddress
       } (${
-        selectedResult.addressComponents.find((component) =>
-          component.types.includes("locality")
+        selectedResult.addressComponents.find(
+          (component) =>
+            component.types.includes("locality") ||
+            component.types.includes("sublocality")
         )?.longText
       })`;
       setValue("shop", dataListValue, { shouldTouch: true });

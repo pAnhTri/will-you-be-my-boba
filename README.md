@@ -8,6 +8,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Google Maps](https://img.shields.io/badge/Google_Maps-API-blue?style=flat&logo=google-maps)](https://developers.google.com/maps)
 [![Resend](https://img.shields.io/badge/Resend-4.5-purple?style=flat&logo=resend)](https://resend.com/)
+[![Google AI](https://img.shields.io/badge/Google_AI_Studio-Gemini_Flash_2.0-blue?style=flat&logo=google)](https://ai.google.dev/)
 
 **Your Community-Driven Guide to the Best Boba Spots**
 
@@ -30,6 +31,16 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 ## Key Features
 
 ### Core Features
+
+#### AI Assistant - Alex the Axolotl
+
+- **Smart Analytics**
+
+  - Count total number of unique flavors in the database
+  - Track total number of boba drinks available
+
+- **Form Assistance**
+  - Helps with form completion up to shop selection
 
 #### Community Features
 
@@ -116,7 +127,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 - **MongoDB 8.14** - Primary database
 - **Mongoose 8.14** - ODM for MongoDB
 - **Next.js API Routes** - Serverless API endpoints
-- **Supabase** - Authentication and user management
+- **Supabase 2.49** - Authentication and user management
   - Supabase JS Client 2.49
   - Supabase SSR 0.6
 - **Jose 6.0** - JWT handling
@@ -128,6 +139,10 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
   - Maps JavaScript API - Interactive maps
   - JS API Loader 1.16
   - Places Details API - Comprehensive shop information
+- **Google AI Studio**
+  - Gemini Flash 2.0 - AI-powered features
+  - Natural language processing
+  - Smart form assistance
 - **Resend 4.5** - Email service for contact forms
 - **Vercel Analytics 1.5** - Usage analytics
 
@@ -147,6 +162,9 @@ MONGO_DB_URI=your_mongodb_uri
 
 # Google Maps
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+
+# Google AI Studio
+GEMINI_API_KEY=your_google_ai_api_key
 
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
@@ -205,6 +223,9 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
    # Google Maps
    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 
+   # Google AI Studio
+   GEMINI_API_KEY=your_google_ai_api_key
+
    # Supabase
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -232,6 +253,13 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
    ```
 
 ### Required API Setup
+
+#### Google AI Studio
+
+1. Create a project in [Google AI Studio](https://ai.google.dev/)
+2. Enable Gemini Flash 2.0 API
+3. Create API key with appropriate restrictions
+4. Add the key to your environment variables
 
 #### Google Maps Platform
 
@@ -279,7 +307,8 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 - **Add New Boba**
 
   - Click the **+** button next to any boba name
-  - Fill in the required details:
+  - Let Alex the Axolotl help pre-fill the form details
+  - Fill in the remaining required details:
     - Name
     - Flavor tags (comma-separated)
     - Sweetness Level
@@ -367,6 +396,16 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
   - Shop information
   - Community reviews
   - Location details
+
+### AI Assistant Features
+
+- **Get Flavor Statistics**
+
+  - Ask Alex to count total flavors
+  - View boba drink count
+
+- **Form Assistance**
+  - Let Alex pre-fill form details
 
 ## 📄 License
 

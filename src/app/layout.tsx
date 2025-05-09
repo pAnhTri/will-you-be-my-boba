@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/react";
 import Header from "@/components/Site-Header";
 import Footer from "@/components/Site-Footer";
 import { AuthInitializer } from "@/components/AuthInitializer";
+import AiModal from "@/components/Site-Modal-AI";
+import AlexAIResponse from "@/components/Site-AlexAI-Response";
 
 export const metadata: Metadata = {
   title: "Will You Be My Boba",
@@ -20,6 +22,8 @@ export default function RootLayout({
       <body className={`antialiased flex flex-col min-h-screen`}>
         <AuthInitializer />
         <Header />
+        <AiModal />
+        <AlexAIResponse />
         {children}
         <Analytics />
         <Footer />

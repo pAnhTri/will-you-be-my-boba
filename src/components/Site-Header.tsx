@@ -2,11 +2,12 @@ import Link from "next/link";
 import Logo from "./Logo";
 import SiteHeaderNavUserButtons from "./Site-Header-Nav-UserButtons";
 import { getAvatar } from "@/lib/utils/server";
+import AiButton from "./Site-Header-AIButton";
 
 const Header = async () => {
   const avatar = await getAvatar();
   return (
-    <header className="sticky px-2 top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky px-2 top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo + Title */}
         <Link href="/" className="flex items-center gap-2">
@@ -34,7 +35,10 @@ const Header = async () => {
           >
             About
           </Link>
+          <AiButton variant="desktop" />
         </nav>
+
+        <AiButton variant="mobile" />
 
         {/* User Actions */}
         <SiteHeaderNavUserButtons initialAvatar={avatar} />
