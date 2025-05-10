@@ -1,0 +1,8 @@
+# Block all crawlers for /auth and /profile
+User-agent: *
+Disallow: /auth
+Disallow: /profile
+ 
+# Allow all crawlers for everything else
+User-agent: *
+Allow: /
