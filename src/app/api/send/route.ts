@@ -16,7 +16,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const { data, error } = await resend.emails.send({
-      from: "Will You Be My Boba Contact Form <onboarding@resend.dev>",
+      from: "Will You Be My Boba Contact Form <no-reply@will-you-be-my-boba.com>",
       to: ["anhtp5@uci.edu"],
       subject: subject,
       react: ContactEmailTemplate({ email, message }),
