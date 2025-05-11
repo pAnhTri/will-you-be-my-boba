@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description:
     "The best way to find your next favorite boba drink and where to get it!",
   alternates: {
-    canonical: "https://www.will-you-be-my-boba.com",
+    canonical: "https://will-you-be-my-boba.com",
   },
   keywords: [
     // Core terms
