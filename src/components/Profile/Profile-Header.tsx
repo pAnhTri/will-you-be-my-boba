@@ -15,15 +15,19 @@ import { useAvatarStore } from "@/lib/zustand/stores/avatar";
 import { useEffect, useState } from "react";
 import StatusCard from "./Profile-Header-StatusCard";
 import EditUsernameForm from "./Profile-Header-EditUsernameForm";
-import { updateUsername } from "@/lib/utils/api/user";
+import { updateAvatar, updateUsername } from "@/lib/utils/api/user";
 import { getBobas } from "@/lib/utils/api/boba";
 import { PopulatedUserType } from "@/types/user";
 
 interface ProfileHeaderProps {
   initialUserProfile: PopulatedUserType;
+  isPublic: boolean;
 }
 
-const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
+const ProfileHeader = ({
+  initialUserProfile,
+  isPublic,
+}: ProfileHeaderProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isUsernameUpdating, setIsUsernameUpdating] = useState<boolean>(false);
@@ -45,6 +49,10 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
 
   useEffect(() => {
     setUserProfile(initialUserProfile);
+
+    if (isPublic) {
+      setAvatar(initialUserProfile.avatar ?? null);
+    }
   }, [initialUserProfile]);
 
   const handleAvatarUpload = async (
@@ -93,6 +101,8 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
           upsert: true,
         });
 
+      if (error) throw error;
+
       // Get public url
       const { data: publicUrlData } = supabase.storage
         .from("avatars")
@@ -100,7 +110,8 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
 
       setAvatar(publicUrlData.publicUrl);
 
-      if (error) throw error;
+      // Update the avatar in the database
+      await updateAvatar(userId, publicUrlData.publicUrl);
     } catch (error) {
       console.error("Error uploading avatar:", error);
       setError("Failed to upload avatar. Please try again.");
@@ -164,23 +175,25 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
               <FiLoader className="size-6 animate-spin" />
             </div>
           ) : (
-            <>
-              <label
-                htmlFor="avatar-upload"
-                className="absolute inset-0 flex items-center justify-center ring-4 ring-black/50 rounded-full bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-300"
-              >
-                <FaCamera className="size-8" />
-                <span className="sr-only">Upload new avatar</span>
-              </label>
+            !isPublic && (
+              <>
+                <label
+                  htmlFor="avatar-upload"
+                  className="absolute inset-0 flex items-center justify-center ring-4 ring-black/50 rounded-full bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-300"
+                >
+                  <FaCamera className="size-8" />
+                  <span className="sr-only">Upload new avatar</span>
+                </label>
 
-              <input
-                type="file"
-                id="avatar-upload"
-                className="hidden"
-                accept="image/*"
-                onChange={handleAvatarUpload}
-              />
-            </>
+                <input
+                  type="file"
+                  id="avatar-upload"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                />
+              </>
+            )
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -198,17 +211,21 @@ const ProfileHeader = ({ initialUserProfile }: ProfileHeaderProps) => {
                 <h2 className="text-2xl font-bold">
                   {userProfile?.username ?? ""}
                 </h2>
-                <button onClick={() => setIsEditing(true)}>
-                  <FiEdit className="size-4 text-gray-500 hover:text-gray-700 transition-colors duration-300" />
-                </button>
+                {!isPublic && (
+                  <button onClick={() => setIsEditing(true)}>
+                    <FiEdit className="size-4 text-gray-500 hover:text-gray-700 transition-colors duration-300" />
+                  </button>
+                )}
               </>
             )}
           </div>
 
           {/* Email */}
-          <p className="text-gray-500 text-center md:text-left">
-            {userProfile?.email ?? ""}
-          </p>
+          {!isPublic && (
+            <p className="text-gray-500 text-center md:text-left">
+              {userProfile?.email ?? ""}
+            </p>
+          )}
 
           {/* Status Card */}
           <div className="flex justify-center md:justify-start items-center gap-2">

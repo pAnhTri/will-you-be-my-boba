@@ -43,7 +43,7 @@ const Profile = async ({
 
   return (
     <main className="flex-1 container py-8">
-      <ProfileHeader initialUserProfile={userProfile} />
+      <ProfileHeader initialUserProfile={userProfile} isPublic={false} />
       <TabSelector initialTab={tab ?? "reviews"} />
       <ProfileReviews bobas={bobas} />
       <FavoriteShops />

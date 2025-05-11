@@ -29,8 +29,27 @@ export const updateFavoriteShop = async (
 ) => {
   try {
     const { data } = await axios.put(
-      `/api/user/${encodeURIComponent(supabaseId)}/${encodeURIComponent(shopId)}`,
+      `/api/user/${encodeURIComponent(supabaseId)}/shop/${encodeURIComponent(shopId)}`,
       { operation }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};
+
+export const updateAvatar = async (supabaseId: string, avatarURL: string) => {
+  try {
+    const { data } = await axios.put(
+      `/api/user/${encodeURIComponent(supabaseId)}/avatar/${encodeURIComponent(avatarURL)}`
     );
     return data;
   } catch (error) {

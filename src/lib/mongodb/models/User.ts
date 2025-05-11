@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
     ref: "Shop",
     default: [],
   },
+  avatar: { type: String, required: false, default: null },
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

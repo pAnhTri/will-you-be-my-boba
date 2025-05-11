@@ -38,7 +38,11 @@ export const updateSession = async (req: NextRequest) => {
 
   const privatePaths = ["/profile", "/api/user"];
 
-  if (!user && privatePaths.includes(req.nextUrl.pathname)) {
+  if (
+    !user &&
+    privatePaths.some((path) => req.nextUrl.pathname.startsWith(path)) &&
+    !req.nextUrl.pathname.includes("public")
+  ) {
     // Redirect to login only for protected routes
     const url = req.nextUrl.clone();
     url.pathname = "/auth/login";
