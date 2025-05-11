@@ -6,3 +6,6 @@ Disallow: /profile
 # Allow all crawlers for everything else
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://will-you-be-my-boba.com/sitemap.xml
