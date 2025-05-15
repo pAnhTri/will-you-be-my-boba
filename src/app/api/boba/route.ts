@@ -103,13 +103,24 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
+    // Final flavor check to remove empty strings, strings with only spaces, and capitalize each word
+    const finalFlavors = flavors
+      .map((flavor: string) =>
+        flavor
+          .trim()
+          .split(" ")
+          .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ")
+      )
+      .filter((flavor: string) => flavor.trim() !== "");
+
     await dbConnect();
 
     await Boba.findOneAndUpdate(
       { name },
       {
         $addToSet: {
-          flavors: { $each: flavors },
+          flavors: { $each: finalFlavors },
           shopId: shop,
         },
         sweetnessLevel,

@@ -187,12 +187,13 @@ const AddBobaForm = ({
       // Separate flavors by comma
       const flavors = inputValue.split(",");
       const trimmedFlavors = flavors.map((flavor) => {
-        const trimmedFlavor = flavor.trim();
+        const trimmedFlavor = flavor.toLowerCase().trim();
 
-        // Return the trimmed flavor if it's not empty and capitalize the first letter
-        return trimmedFlavor && trimmedFlavor !== ""
-          ? trimmedFlavor[0].toUpperCase() + trimmedFlavor.slice(1)
-          : "";
+        // Return the trimmed flavor if it's not empty and capitalize each word
+        return trimmedFlavor
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
       });
 
       // Ensure unique flavors
@@ -218,6 +219,31 @@ const AddBobaForm = ({
     if (inputValue === "") {
       setUsedFlavors([]);
     }
+  };
+
+  const handleFlavorOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    // Remove duplicates and capitalize each word
+    const inputValue = event.target.value;
+
+    const flavorsArray = inputValue.split(", ");
+    const trimmedFlavors = flavorsArray.map((flavor) => {
+      const trimmedFlavor = flavor.toLowerCase().trim();
+
+      // Return the trimmed flavor if it's not empty and capitalize each word
+      return trimmedFlavor
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    });
+    const uniqueFlavors = new Set(trimmedFlavors);
+    const newFlavors = Array.from(uniqueFlavors);
+
+    setUsedFlavors(newFlavors);
+    setValue("flavors", newFlavors, { shouldTouch: true });
+    trigger("flavors");
+
+    // Replace the input value with the unique flavors
+    event.target.value = newFlavors.join(", ");
   };
 
   const handleNameOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -308,6 +334,7 @@ const AddBobaForm = ({
             register("flavors").ref(element);
           }}
           onChange={handleFlavorChange}
+          onBlur={handleFlavorOnBlur}
           placeholder="Flavor 1, Flavor 2, Flavor 3, etc."
           className="rounded-lg border-2 border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
         />

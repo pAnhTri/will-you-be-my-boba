@@ -5,6 +5,8 @@ import RandomButton from "./Home-Card-Flavors-Random-Button";
 import { CiSearch } from "react-icons/ci";
 import { useBobaStore, useFlavorStore } from "@/lib/zustand/stores";
 import { GiBoba } from "react-icons/gi";
+import ResetButton from "./Home-Card-Flavors-Reset-Button";
+import { cn, getPossibleFlavors } from "@/lib/utils";
 
 interface FlavorCardProps {
   initialFlavors: string[];
@@ -12,6 +14,7 @@ interface FlavorCardProps {
 
 const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   const [search, setSearch] = useState<string>("");
+  const [possibleFlavors, setPossibleFlavors] = useState<string[]>([]);
 
   // Use selectors to only subscribe to the state we need
   const flavors = useFlavorStore((state) => state.flavors);
@@ -19,12 +22,12 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   const displayFlavors = useFlavorStore((state) => state.displayFlavors);
   const { setSelectedFlavors, setDisplayFlavors, setFlavors } =
     useFlavorStore();
-  const displayBobas = useBobaStore((state) => state.displayBobas);
   const bobas = useBobaStore((state) => state.bobas);
   const { setDisplayBobas } = useBobaStore();
 
   useEffect(() => {
     setFlavors(initialFlavors);
+    setPossibleFlavors(initialFlavors);
   }, [initialFlavors]);
 
   const filteredFlavors = useMemo(() => {
@@ -48,6 +51,13 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
             newSelectedFlavors.every((flavor) => boba.flavors.includes(flavor))
           );
     setDisplayBobas(newFilteredBobas);
+
+    // Update the possible flavors
+    const updatedPossibleFlavors = getPossibleFlavors(
+      newFilteredBobas,
+      newSelectedFlavors
+    );
+    setPossibleFlavors(updatedPossibleFlavors);
   };
 
   const handleFlavorClick = (flavor: string) => {
@@ -56,6 +66,11 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
       : [...selectedFlavors, flavor];
 
     updateStates(newSelectedFlavors);
+  };
+
+  const handleResetButtonClick = () => {
+    setPossibleFlavors(flavors);
+    updateStates([]);
   };
 
   const handleRandomButtonClick = () => {
@@ -68,22 +83,11 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
 
     // If less than 3 flavors selected, find possible combinations
     if (selectedFlavors.length < 3) {
-      const uniquePossibleFlavorsSet = new Set<string>();
-      displayBobas.forEach((boba) => {
-        boba.flavors.forEach((flavor) => {
-          if (!selectedFlavors.includes(flavor)) {
-            uniquePossibleFlavorsSet.add(flavor);
-          }
-        });
-      });
-
-      const uniquePossibleFlavors = Array.from(uniquePossibleFlavorsSet);
       const randomFlavor =
-        uniquePossibleFlavors[
-          Math.floor(Math.random() * uniquePossibleFlavors.length)
-        ];
+        possibleFlavors[Math.floor(Math.random() * possibleFlavors.length)];
 
       const newSelectedFlavors = [...selectedFlavors, randomFlavor];
+
       updateStates(newSelectedFlavors);
     }
   };
@@ -105,10 +109,11 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   return (
     <div className="ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
       {/* Title + random button */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-2">
         <h2 className="text-lg font-bold">
           What Flavors Are We Feeling Today?
         </h2>
+        <ResetButton onClick={handleResetButtonClick} />
         <RandomButton onClick={handleRandomButtonClick} />
       </div>
 
@@ -130,11 +135,17 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
           {filteredFlavors.map((flavor) => (
             <button
               key={flavor}
-              className={`px-4 py-2 rounded-lg border transition-all duration-200 ${
+              disabled={
+                selectedFlavors.length > 0 &&
+                !possibleFlavors.includes(flavor) &&
+                !selectedFlavors.includes(flavor)
+              }
+              className={cn(
+                `px-4 py-2 rounded-lg border transition-all duration-200`,
                 displayFlavors.includes(flavor)
                   ? "bg-pink-500 text-white border-pink-500 hover:bg-pink-600"
-                  : "bg-white text-gray-800 border-gray-300 hover:border-pink-300 hover:bg-pink-50"
-              }`}
+                  : "bg-white text-gray-800 border-gray-300 hover:border-pink-300 hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              )}
               onClick={() => handleFlavorClick(flavor)}
             >
               {flavor}
