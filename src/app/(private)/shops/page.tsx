@@ -40,7 +40,6 @@ const Shop = async () => {
 
   const favoriteShops: (ShopType & { _id: string })[] =
     userData?.favoriteShops || [];
-  console.log(favoriteShops);
 
   return (
     <>

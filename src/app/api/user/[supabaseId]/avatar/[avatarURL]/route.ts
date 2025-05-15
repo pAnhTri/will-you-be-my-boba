@@ -9,9 +9,6 @@ export const PUT = async (
   try {
     const { supabaseId, avatarURL } = await params;
 
-    console.log("avatarURL", avatarURL);
-    console.log("supabaseId", supabaseId);
-
     if (!supabaseId || !avatarURL) {
       return NextResponse.json(
         {
@@ -23,9 +20,6 @@ export const PUT = async (
     }
 
     await dbConnect();
-
-    console.log("avatarURL", avatarURL);
-    console.log("supabaseId", supabaseId);
 
     const updatedUser = await User.findOneAndUpdate(
       { supabaseId },

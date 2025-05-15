@@ -4,6 +4,8 @@ import {
   getNumberOfDrinksFunctionDeclaration,
   getNumberOfFlavors,
   getNumberOfFlavorsFunctionDeclaration,
+  getNumberOfShops,
+  getNumberOfShopsFunctionDeclaration,
   prefillBobaForm,
 } from "@/lib/ai/tools";
 import { NextRequest, NextResponse } from "next/server";
@@ -18,6 +20,7 @@ const functionDeclarations = [
   openAddBobaModalFunctionDeclaration,
   getNumberOfFlavorsFunctionDeclaration,
   prefillBobaFormFunctionDeclaration,
+  getNumberOfShopsFunctionDeclaration,
 ];
 
 // Initial config for tool usage
@@ -91,8 +94,6 @@ export const POST = async (request: NextRequest) => {
       config: initialConfig,
     });
 
-    console.log(response);
-
     const tool_call = response.functionCalls?.[0];
     let result = null;
 
@@ -106,12 +107,14 @@ export const POST = async (request: NextRequest) => {
       } else if (function_name === "get_number_of_flavors") {
         result = await getNumberOfFlavors();
       } else if (function_name === "prefill_boba_form") {
-        result = await prefillBobaForm(
+        result = prefillBobaForm(
           tool_call.args?.page as string,
           tool_call.args?.name as string,
           tool_call.args?.flavors as string[],
           tool_call.args?.sweetnessLevel as string
         );
+      } else if (function_name === "get_number_of_shops") {
+        result = await getNumberOfShops();
       }
     }
 

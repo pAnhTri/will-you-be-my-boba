@@ -99,7 +99,6 @@ const AddBobaForm = ({
 
   useEffect(() => {
     if (prefillBobaFormData) {
-      console.log("prefillBobaFormData", prefillBobaFormData);
       setValue("name", prefillBobaFormData.name, { shouldTouch: true });
       setValue("flavors", prefillBobaFormData.flavors, { shouldTouch: true });
       setUsedFlavors(prefillBobaFormData.flavors);
