@@ -26,6 +26,11 @@ const CommunityReviewSchema = new mongoose.Schema({
     max: [5, "Rating must be between 0 and 5"],
     default: 0,
   },
+  shopId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Shop",
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -33,6 +38,19 @@ const CommunityReviewSchema = new mongoose.Schema({
   isEdited: {
     type: Boolean,
     default: false,
+  },
+});
+
+const SweetnessLevelSchema = new mongoose.Schema({
+  sweetnessLevel: {
+    type: String,
+    enum: ["Low", "Medium", "High"],
+    default: "Medium",
+  },
+  shopId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Shop",
+    required: true,
   },
 });
 
@@ -57,11 +75,11 @@ const BobaSchema = new mongoose.Schema({
       message: "Must have at least one flavor",
     },
   },
-  sweetnessLevel: {
-    type: String,
-    enum: ["Low", "Medium", "High"],
-    default: "Medium",
+  sweetness: {
+    type: [SweetnessLevelSchema],
+    default: [],
   },
+
   communityReviews: {
     type: [CommunityReviewSchema],
     default: [],
@@ -72,5 +90,6 @@ const Boba = mongoose.models.Boba || mongoose.model("Boba", BobaSchema);
 
 export type BobaType = InferSchemaType<typeof BobaSchema>;
 export type CommunityReviewType = InferSchemaType<typeof CommunityReviewSchema>;
+export type SweetnessLevelType = InferSchemaType<typeof SweetnessLevelSchema>;
 
 export default Boba;

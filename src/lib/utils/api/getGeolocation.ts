@@ -1,37 +1,17 @@
 import axios from "axios";
 
 export const getGeolocation = async (location: string) => {
-  if (location === "Current Location") {
-    return new Promise((resolve, reject) => {
-      const success = (position: GeolocationPosition) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-
-        resolve({
-          success: true,
-          location: {
-            latitude,
-            longitude,
-          },
-        });
-      };
-
-      const error = (error: GeolocationPositionError) => {
-        console.error(error);
-        reject(new Error("Error getting current location"));
-      };
-
-      const options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      };
-
-      navigator.geolocation.getCurrentPosition(success, error, options);
-    });
-  }
-
   try {
+    if (location === "Current Location") {
+      const { data } = await axios.get(`http://ip-api.com/json/`);
+      return {
+        success: true,
+        location: {
+          latitude: data.lat,
+          longitude: data.lon,
+        },
+      };
+    }
     const { data } = await axios.post(`/api/google/geolocation`, {
       location: location.toString(),
     });

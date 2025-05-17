@@ -182,8 +182,8 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
                   selectedBoba.sweetnessLevel === "Low"
                     ? "w-1/3"
                     : selectedBoba.sweetnessLevel === "Medium"
-                    ? "w-2/3"
-                    : "w-full"
+                      ? "w-2/3"
+                      : "w-full"
                 }
                 transition-all duration-300 ease-in-out
                 `}
@@ -206,8 +206,8 @@ const DetailCard = ({ initialShops }: DetailCardProps) => {
             selectedShop
               ? encodeURIComponent(`place_id:${selectedShop.location.placesId}`)
               : userLocation
-              ? `${userLocation.latitude},${userLocation.longitude}`
-              : "here"
+                ? `${userLocation.latitude},${userLocation.longitude}`
+                : "here"
           }`}
         ></iframe>
       </div>

@@ -1,6 +1,6 @@
 import { addCommunityReview, getBobas } from "@/lib/utils/api/boba";
 import { ReviewInput, reviewValidatorSchema } from "@/lib/validators/review";
-import { useAuthStore, useBobaStore } from "@/lib/zustand/stores";
+import { useAuthStore, useBobaStore, useShopStore } from "@/lib/zustand/stores";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
@@ -24,6 +24,8 @@ const AddReviewForm = ({
   setReviewsSortedBy,
 }: AddReviewFormProps) => {
   const user = useAuthStore((state) => state.user);
+
+  const selectedShop = useShopStore((state) => state.selectedShop);
 
   const selectedBoba = useBobaStore((state) => state.selectedBoba);
   const { setBobas, setDisplayBobas, setSelectedBoba } = useBobaStore();
@@ -50,6 +52,7 @@ const AddReviewForm = ({
       userId: user?.id ?? null,
       rating: data.rating,
       review: data.review || "",
+      shopId: selectedShop?._id ?? null,
     };
 
     if (selectedBoba) {

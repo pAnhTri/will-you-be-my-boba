@@ -32,7 +32,7 @@ export const GET = async () => {
           shopId: 1,
           name: 1,
           flavors: 1,
-          sweetnessLevel: 1,
+          sweetness: 1,
           communityReviews: 1,
           enjoymentFactor: 1,
         },
@@ -91,9 +91,9 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const { name, flavors, sweetnessLevel, shop } = payload;
+    const { name, flavors, sweetness, shopId } = payload;
 
-    if (!name || !flavors || !sweetnessLevel || !shop) {
+    if (!name || !flavors || !sweetness || !shopId) {
       return NextResponse.json(
         {
           success: false,
@@ -116,14 +116,44 @@ export const POST = async (req: NextRequest) => {
 
     await dbConnect();
 
+    const currentSweetness = await Boba.findOne({ name }).select("sweetness");
+
+    let updatedSweetness = currentSweetness?.sweetness;
+
+    if (currentSweetness) {
+      // Check if the sweetness already exists
+      const sweetnessExists = currentSweetness.sweetness.find(
+        (sweetness: { sweetnessLevel: string; shopId: string }) =>
+          sweetness.shopId === shopId
+      );
+
+      if (sweetnessExists) {
+        // Update the sweetness level if the shopId matches
+        updatedSweetness = currentSweetness.sweetness.map(
+          (currentSweetness: { sweetnessLevel: string; shopId: string }) => {
+            if (currentSweetness.shopId === shopId) {
+              return {
+                sweetnessLevel: sweetness.sweetnessLevel,
+                shopId: sweetness.shopId,
+              };
+            }
+            return currentSweetness;
+          }
+        );
+      } else {
+        // Add the new sweetness if the shopId does not match
+        updatedSweetness = [...currentSweetness.sweetness, sweetness];
+      }
+    }
+
     await Boba.findOneAndUpdate(
       { name },
       {
         $addToSet: {
           flavors: { $each: finalFlavors },
-          shopId: shop,
+          shopId,
         },
-        sweetnessLevel,
+        sweetness: updatedSweetness,
       },
       { upsert: true, new: true, runValidators: true }
     );

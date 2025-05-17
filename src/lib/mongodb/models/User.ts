@@ -7,6 +7,7 @@ enum Role {
 
 const userReviewSchema = new mongoose.Schema({
   bobaId: { type: String, required: true },
+  shopId: { type: String, required: true },
   rating: { type: Number, required: true },
   review: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },

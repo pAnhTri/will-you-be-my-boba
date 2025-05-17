@@ -31,7 +31,7 @@ export const getBobaData = async () => {
         shopId: 1,
         name: 1,
         flavors: 1,
-        sweetnessLevel: 1,
+        sweetness: 1,
         communityReviews: 1,
         enjoymentFactor: 1,
       },

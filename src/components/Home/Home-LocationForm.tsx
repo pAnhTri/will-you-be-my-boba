@@ -1,12 +1,12 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, harversine } from "@/lib/utils";
 import { getGeolocation } from "@/lib/utils/api/getGeolocation";
 import {
   LocationInput,
   locationValidatorSchema,
 } from "@/lib/validators/location";
-import { useLocationStore } from "@/lib/zustand/stores";
+import { useLocationStore, useShopStore } from "@/lib/zustand/stores";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -23,11 +23,16 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const userLocation = useLocationStore((state) => state.userLocation);
+  const shops = useShopStore((state) => state.shops);
+
   const setIsLocationEnabled = useLocationStore(
     (state) => state.setIsLocationEnabled
   );
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
+
+  const setStoreLocationMap = useLocationStore(
+    (state) => state.setStoreLocationMap
+  );
 
   const {
     register,
@@ -47,10 +52,39 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
       const result = await getGeolocation(data.location);
 
       setIsLocationEnabled(true);
-      setUserLocation(result.location);
+
+      const userLocation = result.location;
+      setUserLocation(userLocation);
+
+      const shopDistances: {
+        key: string;
+        value: number;
+      }[] = [];
+
+      shops.forEach((shop) => {
+        const distance = harversine(userLocation, {
+          latitude: shop.location.latitude,
+          longitude: shop.location.longitude,
+        });
+        shopDistances.push({
+          key: shop._id,
+          value: distance,
+        });
+      });
+
+      //Sort shop distances by distance in ascending order and store in map
+      shopDistances.sort((a, b) => a.value - b.value);
+      const shopDistancesMap = new Map<string, number>();
+      shopDistances.forEach((shopDistance) => {
+        shopDistancesMap.set(shopDistance.key, shopDistance.value);
+      });
+
+      setStoreLocationMap(shopDistancesMap);
+      setIsLocationEnabled(true);
     } catch (error) {
       console.error(error);
       setError("Error getting location");
+      setIsLocationEnabled(false);
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +124,10 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
             {isLoading ? (
               <FiLoader className="size-6 text-pink-500 animate-spin" />
             ) : (
-              <LuMapPin className="size-6 text-pink-500" />
+              <LuMapPin
+                className="size-6 text-pink-500 cursor-pointer hover:text-pink-600"
+                onClick={handleSubmit(onSubmit)}
+              />
             )}
           </div>
         </div>
@@ -100,13 +137,6 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
           </span>
         )}
       </form>
-      {userLocation && (
-        <div className="text-sm text-gray-500">
-          <p>
-            Current Location: {userLocation.latitude}, {userLocation.longitude}
-          </p>
-        </div>
-      )}
     </>
   );
 };

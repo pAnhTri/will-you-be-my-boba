@@ -1,4 +1,3 @@
-import { BobaInput } from "@/lib/validators/boba";
 import { ReviewInput } from "@/lib/validators/review";
 import { Boba } from "@/types/boba";
 import axios from "axios";
@@ -25,7 +24,15 @@ export const getBobas = async () => {
   }
 };
 
-export const addBoba = async (payload: BobaInput) => {
+export const addBoba = async (payload: {
+  name: string;
+  flavors: string[];
+  shopId: string;
+  sweetness: {
+    sweetnessLevel: "Low" | "Medium" | "High";
+    shopId: string;
+  };
+}) => {
   try {
     const { data } = await axios.post(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba`,
@@ -45,7 +52,7 @@ export const addBoba = async (payload: BobaInput) => {
 };
 
 export const addCommunityReview = async (
-  payload: ReviewInput & { userId: string | null },
+  payload: ReviewInput & { userId: string | null; shopId: string | null },
   bobaId: string
 ) => {
   try {

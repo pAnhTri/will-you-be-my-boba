@@ -20,7 +20,7 @@ export const PUT = async (
       );
     }
 
-    const { userId, rating, review } = await req.json();
+    const { userId, rating, review, shopId } = await req.json();
 
     if (!rating && rating !== 0) {
       return NextResponse.json(
@@ -43,14 +43,27 @@ export const PUT = async (
 
     await Boba.findByIdAndUpdate(bobaId, {
       $push: {
-        communityReviews: { userId, userName: username, rating, review },
+        communityReviews: {
+          userId,
+          userName: username,
+          rating,
+          review,
+          shopId,
+        },
       },
+    });
+
+    console.log("reviews:", {
+      bobaId,
+      rating,
+      review,
+      shopId,
     });
 
     await User.findOneAndUpdate(
       { supabaseId: userId },
       {
-        $push: { reviews: { bobaId, rating, review } },
+        $push: { reviews: { bobaId, rating, review, shopId } },
       }
     );
 

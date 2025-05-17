@@ -2,7 +2,6 @@
 
 import { Boba } from "@/types/boba";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import EnableLocationButton from "../EnableLocationButton";
 import SortButton from "./Home-Card-Bobas-SortButton";
 import { CiSearch, CiStar } from "react-icons/ci";
 import { LuArrowDownUp, LuMapPin } from "react-icons/lu";
@@ -14,16 +13,17 @@ import {
   useLocationStore,
   useModalStore,
 } from "@/lib/zustand/stores";
-import { getClosestShopDistance, handleEnableLocationClick } from "@/lib/utils";
+import { getClosestShopDistance } from "@/lib/utils";
 import AddButton from "./Home-Card-Bobas-AddButton";
+import { Shop } from "@/types/shop";
 
 interface BobaCardProps {
   initialBobas: Boba[];
+  initialShops: Shop[];
 }
 
-const BobaCard = ({ initialBobas }: BobaCardProps) => {
+const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
   const [sortedBy, setSortedBy] = useState<string>("Rating");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const bobas = useBobaStore((state) => state.bobas);
   const selectedBoba = useBobaStore((state) => state.selectedBoba);
@@ -31,7 +31,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
   const { setBobas, setSelectedBoba, setDisplayBobas } = useBobaStore();
 
   const shops = useShopStore((state) => state.shops);
-  const { setSelectedShop, setIsShowingReviews } = useShopStore();
+  const { setSelectedShop, setIsShowingReviews, setShops } = useShopStore();
 
   const { selectedFlavors } = useFlavorStore();
   const { setDisplayFlavors } = useFlavorStore();
@@ -40,14 +40,13 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
     (state) => state.isLocationEnabled
   );
   const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
-  const { setIsLocationEnabled, setStoreLocationMap, setUserLocation } =
-    useLocationStore();
 
   const { setIsAddBobaModalOpen } = useModalStore();
 
   useEffect(() => {
     setBobas(initialBobas);
     setDisplayBobas(initialBobas);
+    setShops(initialShops);
   }, [initialBobas]);
 
   const bobasWithShops: Map<string, { shopName: string; shopId: string }[]> =
@@ -81,7 +80,10 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
         .includes(value.toLowerCase());
       const searchByShop = boba.shopId.some((shopId) => {
         const shop = shops.find((shop) => shop._id === shopId.toString());
-        return shop?.name.toLowerCase().includes(value.toLowerCase());
+        return (
+          shop?.name.toLowerCase().includes(value.toLowerCase()) ||
+          shop?.location.city.toLowerCase().includes(value.toLowerCase())
+        );
       });
 
       return searchByName || searchByShop;
@@ -154,7 +156,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
   }
 
   return (
-    <div className="ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
+    <div className="basis-2/3 p-2 space-y-2">
       {/* Title + Add button */}
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold">We have...</h2>
@@ -163,7 +165,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
 
       {/* Sort buttons */}
       <h2 className="text-sm text-muted-foreground font-medium">Sort by:</h2>
-      <div className="flex flex-wrap md:flex-nowrap gap-2 justify-between items-center">
+      <div className="flex flex-wrap md:flex-nowrap gap-2 items-center">
         <SortButton
           icon={<CiStar className="size-4" />}
           label="Rating"
@@ -176,30 +178,14 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
           sortedBy={sortedBy}
           onClick={() => handleSortByClick("Name")}
         />
-        {isLocationEnabled ? (
+        {isLocationEnabled && (
           <SortButton
             icon={<LuMapPin className="size-4" />}
             label="Distance"
             sortedBy={sortedBy}
             onClick={() => handleSortByClick("Distance")}
           />
-        ) : (
-          <div className="w-10 h-4" />
         )}
-        {/* WIP Enable location */}
-        <EnableLocationButton
-          isLoading={isLoading}
-          handleEnableLocationClick={() =>
-            handleEnableLocationClick(
-              isLocationEnabled,
-              setIsLocationEnabled,
-              setStoreLocationMap,
-              setUserLocation,
-              setIsLoading,
-              shops
-            )
-          }
-        />
       </div>
 
       {/* Search bar */}
@@ -208,7 +194,7 @@ const BobaCard = ({ initialBobas }: BobaCardProps) => {
         <input
           type="text"
           className="w-full pl-8 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-          placeholder="Name or Shop..."
+          placeholder="Name, Shop, City..."
           onChange={handleOnSearchChange}
         />
       </div>

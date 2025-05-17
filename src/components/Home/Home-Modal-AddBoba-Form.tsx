@@ -78,7 +78,16 @@ const AddBobaForm = ({
     setError(null);
 
     try {
-      await addBoba(data);
+      const payload = {
+        name: data.name,
+        flavors: data.flavors,
+        sweetness: {
+          sweetnessLevel: data.sweetnessLevel,
+          shopId: data.shop,
+        },
+        shopId: data.shop,
+      };
+      await addBoba(payload);
 
       // Reset form and states
       reset();
@@ -263,10 +272,6 @@ const AddBobaForm = ({
     if (flavorInputRef.current) {
       flavorInputRef.current.value = flavorsDisplay;
     }
-
-    setValue("sweetnessLevel", usedBoba.sweetnessLevel, {
-      shouldTouch: true,
-    });
   };
 
   const isFlavorUsed = (flavor: string) => {

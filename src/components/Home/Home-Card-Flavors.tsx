@@ -107,7 +107,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   }
 
   return (
-    <div className="ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
+    <div className="basis-1/3 p-2 space-y-2">
       {/* Title + random button */}
       <div className="flex justify-between items-center gap-2">
         <h2 className="text-lg font-bold">
