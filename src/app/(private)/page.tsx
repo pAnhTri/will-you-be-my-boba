@@ -3,6 +3,7 @@ import BobaCard from "@/components/Home/Home-Card-Bobas";
 import DetailCard from "@/components/Home/Home-Card-Details";
 import FlavorCard from "@/components/Home/Home-Card-Flavors";
 import HomeCardsSkeleton from "@/components/Home/Home-Cards-Skeleton";
+import LocationForm from "@/components/Home/Home-LocationForm";
 import AddBobaModal from "@/components/Home/Home-Modal-AddBoba";
 import AddShopModal from "@/components/Home/Home-Modal-AddShop";
 import { getBobaData, getShopData } from "@/lib/utils/server";
@@ -32,16 +33,10 @@ export default async function Home() {
       </section>
 
       <main className="flex container">
-        <Suspense fallback={<HomeCardsSkeleton />}>
-          {/* Modals */}
-          <AddBobaModal />
-          <AddShopModal />
-          <HomeCard>
-            <FlavorCard initialFlavors={flavors} />
-            <BobaCard initialBobas={bobas} />
-            <DetailCard initialShops={shops} />
-          </HomeCard>
-        </Suspense>
+        <LocationForm
+          className="my-8 mx-auto"
+          topLabel="Where are we heading? Enter a street, city, or zip code"
+        />
       </main>
     </>
   );
