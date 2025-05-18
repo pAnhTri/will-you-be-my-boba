@@ -14,7 +14,7 @@ const HomeCanvas = ({ children, className, ...props }: HomeCanvasProps) => {
       )}
       {...props}
     >
-      <div className="flex flex-col sm:flex-row gap-4">{children}</div>
+      <div className="flex flex-col md:flex-row gap-4">{children}</div>
     </div>
   );
 };

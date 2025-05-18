@@ -1,7 +1,7 @@
 "use client";
 
 import { Boba } from "@/types/boba";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState, useRef } from "react";
 import SortButton from "./Home-Card-Bobas-SortButton";
 import { CiSearch, CiStar } from "react-icons/ci";
 import { LuArrowDownUp, LuMapPin } from "react-icons/lu";
@@ -44,6 +44,8 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
   const { setMaxDistance } = useLocationStore();
 
   const { setIsAddBobaModalOpen } = useModalStore();
+
+  const selectedBobaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setBobas(initialBobas);
@@ -133,6 +135,12 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
     } else {
       setSelectedBoba(boba);
       setDisplayFlavors(boba.flavors);
+      setTimeout(() => {
+        selectedBobaRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 0);
     }
 
     setSelectedShop(null);
@@ -240,14 +248,28 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
 
       {/* Item cards */}
       <div className="max-h-[400px] overflow-y-auto p-2 space-y-2">
-        {displayBobas.map((boba) => (
-          <ItemCard
-            key={boba._id}
-            boba={boba}
-            bobasWithShops={bobasWithShops}
-            onClick={() => handleItemCardClick(boba)}
-          />
-        ))}
+        {displayBobas.length > 0 ? (
+          displayBobas.map((boba) => (
+            <ItemCard
+              key={boba._id}
+              boba={boba}
+              bobasWithShops={bobasWithShops}
+              onClick={() => handleItemCardClick(boba)}
+              containerRef={
+                selectedBoba?._id === boba._id ? selectedBobaRef : null
+              }
+            />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
+            <h2 className="text-xl font-semibold text-muted-foreground">
+              No bobas found
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Be the first to add a boba in your area!
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

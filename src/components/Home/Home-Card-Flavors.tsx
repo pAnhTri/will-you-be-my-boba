@@ -109,8 +109,8 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   return (
     <div className="basis-1/3 p-2 space-y-2">
       {/* Title + random button */}
-      <div className="flex justify-between items-center gap-2">
-        <h2 className="text-lg font-bold">
+      <div className="flex flex-wrap justify-between items-center gap-2">
+        <h2 className="text-lg font-bold w-full">
           What Flavors Are We Feeling Today?
         </h2>
         <ResetButton onClick={handleResetButtonClick} />

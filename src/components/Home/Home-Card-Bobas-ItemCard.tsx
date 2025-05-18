@@ -1,22 +1,29 @@
-import { cn, getShopOfClosestShop } from "@/lib/utils";
+import { getShopOfClosestShop } from "@/lib/utils";
 import {
   useBobaStore,
   useFlavorStore,
   useLocationStore,
 } from "@/lib/zustand/stores";
 import { Boba } from "@/types/boba";
-import { JSX } from "react";
+import { JSX, RefObject } from "react";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { LuMapPin } from "react-icons/lu";
 import ItemCardDetails from "./Home-Card-Bobas-ItemCard-Details";
+import { getFlavorColor } from "@/lib/utils/flavorColors";
 
 interface ItemCardProps {
   boba: Boba;
   bobasWithShops: Map<string, { shopName: string; shopId: string }[]>;
+  containerRef: RefObject<HTMLDivElement | null> | null;
   onClick: () => void;
 }
 
-const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
+const ItemCard = ({
+  boba,
+  bobasWithShops,
+  containerRef,
+  onClick,
+}: ItemCardProps) => {
   const { selectedBoba } = useBobaStore();
   const { displayFlavors } = useFlavorStore();
 
@@ -84,7 +91,7 @@ const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
   };
 
   return (
-    <>
+    <div ref={containerRef}>
       <div
         className={`container rounded-lg border border-gray-200 p-3 transition-all duration-200 cursor-pointer ${
           selectedBoba?._id === boba._id
@@ -115,7 +122,15 @@ const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
                   } size-4`}
                 />
               )}
-              <p className="text-sm">{boba.enjoymentFactor.toFixed(2)}</p>
+              <p className="text-sm">
+                {boba.enjoymentFactor.toFixed(2)}{" "}
+                {boba.communityReviews.length > 0 && (
+                  <span className="text-gray-400 text-xs">
+                    ({boba.communityReviews.length} review
+                    {boba.communityReviews.length === 1 ? "" : "s"})
+                  </span>
+                )}
+              </p>
             </div>
           </div>
 
@@ -124,10 +139,10 @@ const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
             {boba.flavors.map((flavor) => (
               <p
                 key={flavor}
-                className={`text-xs font-semibold px-2 py-1 rounded-full ring-1 ring-gray-200 ${
+                className={`text-xs font-semibold px-2 py-1 rounded-full ring-1 ${
                   displayFlavors.includes(flavor)
                     ? "bg-pink-50 text-pink-600 ring-pink-200"
-                    : "bg-gray-50 text-gray-600 ring-gray-200"
+                    : getFlavorColor(flavor)
                 }`}
               >
                 {flavor}
@@ -150,15 +165,9 @@ const ItemCard = ({ boba, bobasWithShops, onClick }: ItemCardProps) => {
           </div>
         </div>
       </div>
-      <div
-        className={cn(
-          "overflow-hidden transition-all duration-200",
-          selectedBoba?._id === boba._id ? "max-h-[1000px]" : "max-h-0"
-        )}
-      >
-        {selectedBoba?._id === boba._id && <ItemCardDetails boba={boba} />}
-      </div>
-    </>
+
+      {selectedBoba?._id === boba._id && <ItemCardDetails boba={boba} />}
+    </div>
   );
 };
 export default ItemCard;

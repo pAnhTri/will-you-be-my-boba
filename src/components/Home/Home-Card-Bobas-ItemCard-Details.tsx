@@ -102,6 +102,15 @@ const ItemCardDetails = ({
     }
   }, [shops, boba, isLocationEnabled, storeLocationMap]);
 
+  const updateSweetnessLevel = (shop: Shop) => {
+    const sweetnessOfShop = boba.sweetness.find(
+      (sweetness) => sweetness.shopId.toString() === shop._id.toString()
+    );
+    if (sweetnessOfShop) {
+      setSweetnessLevel(sweetnessOfShop.sweetnessLevel);
+    }
+  };
+
   useEffect(() => {
     if (isLocationEnabled) {
       // Get the closest shop to the user's location
@@ -115,6 +124,9 @@ const ItemCardDetails = ({
         );
         if (shop) {
           setSelectedShop(shop);
+
+          // Set sweetness level
+          updateSweetnessLevel(shop);
         }
       }
       return;
@@ -124,13 +136,7 @@ const ItemCardDetails = ({
     if (shopsOfBoba.length > 0) {
       setSelectedShop(shopsOfBoba[0]);
       // Set sweetness level
-      const sweetnessOfShop = boba.sweetness.find(
-        (sweetness) =>
-          sweetness.shopId.toString() === shopsOfBoba[0]._id.toString()
-      );
-      if (sweetnessOfShop) {
-        setSweetnessLevel(sweetnessOfShop.sweetnessLevel);
-      }
+      updateSweetnessLevel(shopsOfBoba[0]);
     }
   }, []);
 
@@ -260,7 +266,7 @@ const ItemCardDetails = ({
       </div>
 
       {/* Google Maps iFrame API */}
-      <div className="md:basis-1/2 w-full rounded-lg overflow-hidden ring-1 ring-gray-200">
+      <div className="md:basis-1/2 w-full rounded-lg overflow-hidden ring-1 ring-gray-200 h-fit">
         <iframe
           className="w-full h-[300px]"
           style={{ border: "0" }}

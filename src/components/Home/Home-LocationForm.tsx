@@ -43,6 +43,9 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
 
   const shops = useShopStore((state) => state.shops);
 
+  const isLocationEnabled = useLocationStore(
+    (state) => state.isLocationEnabled
+  );
   const setIsLocationEnabled = useLocationStore(
     (state) => state.setIsLocationEnabled
   );
@@ -166,6 +169,7 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
             id="locationInput"
             className={cn(
               "w-full border-2 border-gray-300 rounded-md pr-8 pl-2 py-2 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-pink-500",
+              isLocationEnabled && "border-green-500 text-green-500",
               errors.location && "border-red-500",
               isLoading && "cursor-not-allowed bg-gray-100"
             )}
@@ -207,6 +211,7 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
           </div>
         </div>
         <datalist id="searchResults">
+          <option value="Current Location" />
           {searchResults.map((result) => (
             <option key={result} value={result} />
           ))}
