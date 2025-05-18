@@ -39,7 +39,9 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
   const isLocationEnabled = useLocationStore(
     (state) => state.isLocationEnabled
   );
+  const maxDistance = useLocationStore((state) => state.maxDistance);
   const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
+  const { setMaxDistance } = useLocationStore();
 
   const { setIsAddBobaModalOpen } = useModalStore();
 
@@ -141,6 +143,22 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
     setIsAddBobaModalOpen(true);
   };
 
+  const handleMaxDistanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newMaxDistance = Number(e.target.value);
+    setMaxDistance(newMaxDistance);
+
+    // Filter display bobas by max distance
+    // If the boba contains a shop that is within the max distance, then keep the boba
+    const filteredBobas = bobas.filter((boba) => {
+      return boba.shopId.some((shopId) => {
+        const distance = storeLocationMap.get(shopId.toString());
+        return distance && distance <= newMaxDistance;
+      });
+    });
+
+    setDisplayBobas(filteredBobas);
+  };
+
   if (bobas.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
@@ -163,7 +181,7 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
         <AddButton variant="bobas" onClick={handleAddBobaClick} />
       </div>
 
-      {/* Sort buttons */}
+      {/* Sort buttons + Distance slider*/}
       <h2 className="text-sm text-muted-foreground font-medium">Sort by:</h2>
       <div className="flex flex-wrap md:flex-nowrap gap-2 items-center">
         <SortButton
@@ -179,12 +197,33 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
           onClick={() => handleSortByClick("Name")}
         />
         {isLocationEnabled && (
-          <SortButton
-            icon={<LuMapPin className="size-4" />}
-            label="Distance"
-            sortedBy={sortedBy}
-            onClick={() => handleSortByClick("Distance")}
-          />
+          <>
+            <SortButton
+              icon={<LuMapPin className="size-4" />}
+              label="Distance"
+              sortedBy={sortedBy}
+              onClick={() => handleSortByClick("Distance")}
+            />
+
+            {/* Slider for maximum distance */}
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center justify-between">
+                <label htmlFor="max-distance">Maximum Distance</label>
+
+                <span className="text-sm">{maxDistance} mi</span>
+              </div>
+              <input
+                id="max-distance"
+                type="range"
+                step="1"
+                min="0"
+                max="100"
+                className="w-full accent-pink-700 rounded-full"
+                value={maxDistance}
+                onChange={handleMaxDistanceChange}
+              />
+            </div>
+          </>
         )}
       </div>
 

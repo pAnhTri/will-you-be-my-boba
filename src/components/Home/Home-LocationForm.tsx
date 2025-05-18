@@ -1,18 +1,28 @@
 "use client";
 
 import { cn, harversine } from "@/lib/utils";
-import { getGeolocation } from "@/lib/utils/api/getGeolocation";
+import {
+  getCurrentLocation,
+  getGeolocation,
+} from "@/lib/utils/api/getGeolocation";
 import {
   LocationInput,
   locationValidatorSchema,
 } from "@/lib/validators/location";
-import { useLocationStore, useShopStore } from "@/lib/zustand/stores";
+import {
+  useBobaStore,
+  useLocationStore,
+  useShopStore,
+} from "@/lib/zustand/stores";
+import { StateCity } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import Fuse from "fuse.js";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
 import { FiLoader } from "react-icons/fi";
 import { LuMapPin } from "react-icons/lu";
+import statesCities from "@/lib/utils/states+cities.json";
 
 interface LocationFormProps {
   topLabel: string;
@@ -22,6 +32,14 @@ interface LocationFormProps {
 const LocationForm = ({ topLabel, className }: LocationFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fuse, setFuse] = useState<Fuse<string> | null>(null);
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
+  const bobas = useBobaStore((state) => state.bobas);
+  const setDisplayBobas = useBobaStore((state) => state.setDisplayBobas);
 
   const shops = useShopStore((state) => state.shops);
 
@@ -29,10 +47,29 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
     (state) => state.setIsLocationEnabled
   );
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
+  const setMaxDistance = useLocationStore((state) => state.setMaxDistance);
 
   const setStoreLocationMap = useLocationStore(
     (state) => state.setStoreLocationMap
   );
+
+  useEffect(() => {
+    const statesCitiesFlatMap = (statesCities as StateCity[]).flatMap(
+      (stateCity) => stateCity.cities.map((city) => city.name)
+    );
+
+    // Get unique city names using Set
+    const uniqueCities = Array.from(new Set(statesCitiesFlatMap));
+
+    console.log(uniqueCities);
+
+    const initialFuse = new Fuse(uniqueCities, {
+      includeScore: true,
+      threshold: 0.2,
+    });
+
+    setFuse(initialFuse);
+  }, []);
 
   const {
     register,
@@ -49,7 +86,13 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
     setError(null);
 
     try {
-      const result = await getGeolocation(data.location);
+      let result = null;
+
+      if (data.location.toLowerCase() === "current location") {
+        result = await getCurrentLocation();
+      } else {
+        result = await getGeolocation(data.location);
+      }
 
       setIsLocationEnabled(true);
 
@@ -81,6 +124,17 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
 
       setStoreLocationMap(shopDistancesMap);
       setIsLocationEnabled(true);
+
+      // Filter bobas my max distance of 100 miles
+      const filteredBobas = bobas.filter((boba) => {
+        return boba.shopId.some((shopId) => {
+          const distance = shopDistancesMap.get(shopId.toString());
+          return distance && distance <= 100;
+        });
+      });
+
+      setDisplayBobas(filteredBobas);
+      setMaxDistance(100);
     } catch (error) {
       console.error(error);
       setError("Error getting location");
@@ -116,6 +170,27 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
               isLoading && "cursor-not-allowed bg-gray-100"
             )}
             {...register("location")}
+            list="searchResults"
+            onChange={(e) => {
+              const value = e.target.value;
+
+              // Clear any existing timeout
+              if (searchTimeout) {
+                clearTimeout(searchTimeout);
+              }
+
+              // Set new timeout
+              const timeout = setTimeout(() => {
+                if (fuse && value && value !== "Current Location") {
+                  const results = fuse.search(value, { limit: 20 });
+                  setSearchResults(results.map((result) => result.item));
+                } else {
+                  setSearchResults([]);
+                }
+              }, 250);
+
+              setSearchTimeout(timeout);
+            }}
             autoComplete="home city"
             placeholder="Enter a street, city, or zip code"
             disabled={isLoading}
@@ -131,6 +206,11 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
             )}
           </div>
         </div>
+        <datalist id="searchResults">
+          {searchResults.map((result) => (
+            <option key={result} value={result} />
+          ))}
+        </datalist>
         {errors.location && (
           <span className="text-sm text-red-500">
             {errors.location.message}
