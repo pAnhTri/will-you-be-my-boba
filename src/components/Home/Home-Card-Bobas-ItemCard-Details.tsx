@@ -228,14 +228,16 @@ const ItemCardDetails = ({
               />
 
               {/* Add Review Button */}
-              <button
-                className={`ring-1 ring-gray-200 rounded-lg p-2 ${
-                  isAddingReview ? "ring-pink-500" : ""
-                }`}
-                onClick={() => setIsAddingReview(!isAddingReview)}
-              >
-                <MdAdd className="size-4 text-pink-500" />
-              </button>
+              {selectedShop && (
+                <button
+                  className={`ring-1 ring-gray-200 rounded-lg p-2 ${
+                    isAddingReview ? "ring-pink-500" : ""
+                  }`}
+                  onClick={() => setIsAddingReview(!isAddingReview)}
+                >
+                  <MdAdd className="size-4 text-pink-500" />
+                </button>
+              )}
             </div>
 
             {/* Add Review field */}
