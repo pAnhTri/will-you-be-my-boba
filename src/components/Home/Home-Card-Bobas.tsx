@@ -215,7 +215,7 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
 
             {/* Slider for maximum distance */}
             <div className="flex flex-col gap-1">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <label htmlFor="max-distance">Maximum Distance</label>
 
                 <span className="text-sm">{maxDistance} mi</span>
