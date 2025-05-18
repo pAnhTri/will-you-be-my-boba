@@ -154,7 +154,7 @@ const AddBobaForm = ({
         uniqueFlavors.add(flavor);
       });
     });
-    return Array.from(uniqueFlavors);
+    return Array.from(uniqueFlavors).sort((a, b) => a.localeCompare(b));
   }, [bobas]);
 
   const handleFlavorClick = (flavor: string) => {
@@ -348,11 +348,11 @@ const AddBobaForm = ({
         )}
 
         {/* Flavor List */}
-        <div className="flex flex-wrap gap-2 max-h-20 overflow-y-auto">
+        <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto sm:overflow-x-hidden sm:max-h-20 sm:overflow-y-auto p-2">
           {flavors.map((flavor) => (
             <div
               key={flavor}
-              className={`text-xs rounded-lg p-2 cursor-pointer ${
+              className={`text-xs rounded-lg p-2 cursor-pointer whitespace-nowrap ${
                 isFlavorUsed(flavor) ? "bg-pink-500 text-white" : "bg-gray-200"
               }`}
               onClick={() => handleFlavorClick(flavor)}
