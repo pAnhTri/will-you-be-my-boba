@@ -159,7 +159,6 @@ const AddBobaForm = ({
 
   const handleFlavorClick = (flavor: string) => {
     if (flavorInputRef.current) {
-      flavorInputRef.current.focus();
       const currentValue = flavorInputRef.current.value;
 
       // Handle empty input case
