@@ -37,6 +37,7 @@ const MagicLink = ({ className }: HTMLAttributes<HTMLDivElement>) => {
         email: data.email,
         options: {
           shouldCreateUser: false,
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/confirm`,
         },
       });
 
