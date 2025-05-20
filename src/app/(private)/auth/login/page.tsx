@@ -1,4 +1,4 @@
-import LoginForm from "@/components/Auth/Login/Login-Form";
+import LoginMethod from "@/components/Auth/Login/Login-Method";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -17,8 +17,7 @@ const LoginPage = () => {
         <p className="text-muted-foreground">Sign in to your account</p>
       </div>
 
-      {/* Login Form */}
-      <LoginForm />
+      <LoginMethod />
 
       {/* Signup Link */}
       <p className="text-center">
