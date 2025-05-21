@@ -53,7 +53,7 @@ const Shop = async () => {
         </p>
       </section>
 
-      <main className="container px-4 py-6">
+      <main className="px-4 py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <LocationCard />

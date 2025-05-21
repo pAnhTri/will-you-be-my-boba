@@ -177,7 +177,7 @@ const ItemCardDetails = ({
         </div>
         {/* Sweetness */}
         <h2 className="text-lg font-semibold">Sweetness</h2>
-        <div className="container flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <div className="flex-7/8 h-2 bg-gray-100 w-full rounded-full">
             <div
               className={`

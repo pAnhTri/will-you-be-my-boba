@@ -9,7 +9,7 @@ const HomeCanvas = ({ children, className, ...props }: HomeCanvasProps) => {
   return (
     <div
       className={cn(
-        "container mx-auto h-full border-2 p-6 rounded-lg shadow-lg",
+        "mx-auto h-full border-2 p-6 rounded-lg shadow-lg",
         className
       )}
       {...props}

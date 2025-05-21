@@ -7,7 +7,7 @@ interface SectionProps extends HTMLAttributes<HTMLDivElement> {
 const Section = ({ className, id, children, ...props }: SectionProps) => {
   return (
     <section id={id} className={`${className}`} {...props}>
-      <div className="container mx-auto max-w-5xl">{children}</div>
+      <div className="mx-auto max-w-5xl">{children}</div>
     </section>
   );
 };

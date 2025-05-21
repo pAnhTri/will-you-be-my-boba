@@ -93,7 +93,7 @@ const ItemCard = ({
   return (
     <div ref={containerRef}>
       <div
-        className={`container rounded-lg border border-gray-200 p-3 transition-all duration-200 cursor-pointer ${
+        className={`rounded-lg border border-gray-200 p-3 transition-all duration-200 cursor-pointer ${
           selectedBoba?._id === boba._id
             ? "bg-pink-50 border-pink-200"
             : "hover:bg-pink-50/50 hover:border-pink-100"
@@ -154,7 +154,7 @@ const ItemCard = ({
           <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
             <LuMapPin className="size-4 text-gray-400 shrink-0" />
             <div
-              className={`flex container gap-1 ${
+              className={`flex gap-1 ${
                 isLocationEnabled && shopDistances.size > 0
                   ? "justify-between"
                   : "justify-start"

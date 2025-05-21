@@ -22,7 +22,7 @@ const Item = ({ shop, className, onClick, isLoading, ...props }: ItemProps) => {
   return (
     <div
       className={cn(
-        "container rounded-lg border border-gray-200 p-3 transition-all duration-200 cursor-pointer",
+        "rounded-lg border border-gray-200 p-3 transition-all duration-200 cursor-pointer",
         className,
         selectedShop?._id === shop._id
           ? "bg-pink-50 border-pink-200"

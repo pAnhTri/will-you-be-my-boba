@@ -42,7 +42,7 @@ const Profile = async ({
   const { bobas = [] } = bobaData;
 
   return (
-    <main className="flex-1 container py-8">
+    <main className="flex-1 py-8">
       <ProfileHeader initialUserProfile={userProfile} isPublic={false} />
       <TabSelector initialTab={tab ?? "reviews"} />
       <ProfileReviews bobas={bobas} />

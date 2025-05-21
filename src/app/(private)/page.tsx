@@ -19,7 +19,7 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen">
       {/* Hero Section - Quick and minimal */}
       <section className="bg-gradient-to-r from-pink-50 to-purple-50 py-6 px-4">
-        <div className="container mx-auto text-center">
+        <div className="mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Will You Be My Boba?
           </h1>
@@ -29,7 +29,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <main className="flex flex-col px-4 container">
+      <main className="flex flex-col px-4">
         <AddBobaModal />
         <AddShopModal />
         <LocationForm

@@ -21,7 +21,7 @@ const PublicProfile = async ({
   }
 
   return (
-    <main className="flex-1 container py-8">
+    <main className="flex-1 py-8">
       <ProfileHeader initialUserProfile={userProfile} isPublic={true} />
     </main>
   );

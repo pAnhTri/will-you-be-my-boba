@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 
 const About = () => {
   return (
-    <main className="flex-1 container">
+    <main className="flex-1">
       <Hero />
       <Section id="mission" className="py-20 px-4 bg-white">
         <MissionSection />

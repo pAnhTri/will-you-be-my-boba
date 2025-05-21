@@ -8,7 +8,7 @@ const Header = async () => {
   const avatar = await getAvatar();
   return (
     <header className="sticky px-2 top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="flex h-16 items-center justify-between">
         {/* Logo + Title */}
         <Link href="/" className="flex items-center gap-2">
           <Logo width={32} height={32} />
