@@ -3,8 +3,10 @@ import FavoriteShops from "@/components/Profile/Profile-FavoriteShops";
 import ProfileHeader from "@/components/Profile/Profile-Header";
 import ProfileReviews from "@/components/Profile/Profile-Reviews";
 import TabSelector from "@/components/Profile/Profile-TabSelector";
+import { createClient } from "@/lib/supabase/server";
 import { getBobaData, getUser } from "@/lib/utils/server";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Profile | Will You Be My Boba",
@@ -23,8 +25,12 @@ const Profile = async ({
   const { supabaseId } = await params;
   const { tab } = await searchParams;
 
-  if (!supabaseId) {
-    return <div>No user ID provided</div>;
+  const supabase = await createClient();
+  const { data: user } = await supabase.auth.getUser();
+
+  // Check for unauthorized access
+  if (!supabaseId || user.user?.id !== supabaseId) {
+    notFound();
   }
 
   const userProfile = await getUser(supabaseId);

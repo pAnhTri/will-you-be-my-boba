@@ -15,7 +15,7 @@ const userReviewSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
   supabaseId: { type: String, required: true, unique: true },
-  username: { type: String, required: false, unique: true, default: null },
+  username: { type: String, required: false, default: null },
   email: { type: String, required: true, unique: true },
   role: { type: String, enum: Role, default: Role.USER },
   reviews: { type: [userReviewSchema], default: [] },
