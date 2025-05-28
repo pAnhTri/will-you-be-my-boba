@@ -118,7 +118,7 @@ export const POST = async (req: NextRequest) => {
 
     const currentSweetness = await Boba.findOne({ name }).select("sweetness");
 
-    let updatedSweetness = currentSweetness?.sweetness;
+    let updatedSweetness = [sweetness]; // Initialize with the new sweetness value
 
     if (currentSweetness) {
       // Check if the sweetness already exists
@@ -145,6 +145,8 @@ export const POST = async (req: NextRequest) => {
         updatedSweetness = [...currentSweetness.sweetness, sweetness];
       }
     }
+
+    console.log("updatedSweetness:", updatedSweetness);
 
     await Boba.findOneAndUpdate(
       { name },

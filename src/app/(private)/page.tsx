@@ -36,7 +36,7 @@ export default async function Home() {
           className="my-8 mx-auto"
           topLabel="Where are we heading? Enter a street, city, or zip code"
         />
-        <HomeCanvas className="my-8">
+        <HomeCanvas className="my-8 container md:max-w-screen">
           <FlavorCard initialFlavors={flavors} />
           <BobaCard initialBobas={bobas} initialShops={shops} />
         </HomeCanvas>

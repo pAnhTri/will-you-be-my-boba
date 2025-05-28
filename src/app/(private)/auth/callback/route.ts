@@ -17,15 +17,11 @@ export async function GET(request: Request) {
     if (!error) {
       const { data } = await supabase.auth.getUser();
 
-      console.log(data);
-
       // Connect to MongoDB
       await dbConnect();
 
       // Check if user exists in MongoDB
       const existingUser = await User.findOne({ supabaseId: data.user?.id });
-
-      console.log(existingUser);
 
       if (!existingUser) {
         // Create new user in MongoDB

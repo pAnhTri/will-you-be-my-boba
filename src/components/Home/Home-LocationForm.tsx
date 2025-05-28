@@ -64,8 +64,6 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
     // Get unique city names using Set
     const uniqueCities = Array.from(new Set(statesCitiesFlatMap));
 
-    console.log(uniqueCities);
-
     const initialFuse = new Fuse(uniqueCities, {
       includeScore: true,
       threshold: 0.2,

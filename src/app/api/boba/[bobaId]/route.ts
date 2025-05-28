@@ -53,13 +53,6 @@ export const PUT = async (
       },
     });
 
-    console.log("reviews:", {
-      bobaId,
-      rating,
-      review,
-      shopId,
-    });
-
     await User.findOneAndUpdate(
       { supabaseId: userId },
       {
