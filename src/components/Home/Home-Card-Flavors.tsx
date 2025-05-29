@@ -3,10 +3,15 @@
 import { useEffect, useMemo, useState } from "react";
 import RandomButton from "./Home-Card-Flavors-Random-Button";
 import { CiSearch } from "react-icons/ci";
-import { useBobaStore, useFlavorStore } from "@/lib/zustand/stores";
+import {
+  useBobaStore,
+  useFlavorStore,
+  useLocationStore,
+} from "@/lib/zustand/stores";
 import { GiBoba } from "react-icons/gi";
 import ResetButton from "./Home-Card-Flavors-Reset-Button";
 import { cn, getPossibleFlavors } from "@/lib/utils";
+import { Boba } from "@/types/boba";
 
 interface FlavorCardProps {
   initialFlavors: string[];
@@ -25,6 +30,12 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   const bobas = useBobaStore((state) => state.bobas);
   const { setDisplayBobas } = useBobaStore();
 
+  const isLocationEnabled = useLocationStore(
+    (state) => state.isLocationEnabled
+  );
+  const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
+  const maxDistance = useLocationStore((state) => state.maxDistance);
+
   useEffect(() => {
     setFlavors(initialFlavors);
     setPossibleFlavors(initialFlavors);
@@ -42,14 +53,37 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
     setSelectedFlavors(newSelectedFlavors);
     setDisplayFlavors(newSelectedFlavors);
 
+    let newFilteredBobas: Boba[] = bobas;
+
     // Then update bobas based on the new flavors
-    const newFilteredBobas =
-      newSelectedFlavors.length === 0
-        ? bobas
-        : bobas.filter((boba) =>
-            // A boba should have ALL selected flavors
-            newSelectedFlavors.every((flavor) => boba.flavors.includes(flavor))
-          );
+    if (isLocationEnabled) {
+      // Filter bobas by max distance as base boba list
+      const bobasWithMaxDistance = bobas.filter((boba) => {
+        return boba.shopId.some((shopId) => {
+          const distance = storeLocationMap.get(shopId.toString());
+          return distance && distance <= maxDistance;
+        });
+      });
+
+      newFilteredBobas =
+        newSelectedFlavors.length === 0
+          ? bobasWithMaxDistance
+          : bobasWithMaxDistance.filter((boba) =>
+              newSelectedFlavors.every((flavor) =>
+                boba.flavors.includes(flavor)
+              )
+            );
+    } else {
+      newFilteredBobas =
+        newSelectedFlavors.length === 0
+          ? bobas
+          : bobas.filter((boba) =>
+              // A boba should have ALL selected flavors
+              newSelectedFlavors.every((flavor) =>
+                boba.flavors.includes(flavor)
+              )
+            );
+    }
     setDisplayBobas(newFilteredBobas);
 
     // Update the possible flavors

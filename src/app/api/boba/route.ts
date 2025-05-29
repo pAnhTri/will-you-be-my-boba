@@ -146,8 +146,6 @@ export const POST = async (req: NextRequest) => {
       }
     }
 
-    console.log("updatedSweetness:", updatedSweetness);
-
     await Boba.findOneAndUpdate(
       { name },
       {
