@@ -12,3 +12,7 @@ export type Shop = ShopType & {
   _id: string;
   menu: MenuItem[];
 };
+
+export type ShopTypeWithDistance = ShopType & {
+  distance: number;
+};

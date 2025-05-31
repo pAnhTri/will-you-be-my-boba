@@ -16,6 +16,7 @@ import {
 import { getClosestShopDistance } from "@/lib/utils";
 import AddButton from "./Home-Card-Bobas-AddButton";
 import { Shop } from "@/types/shop";
+import AlternativeShops from "./Home-Card-Bobas-AlternativeShops";
 
 interface BobaCardProps {
   initialBobas: Boba[];
@@ -240,9 +241,10 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
         <CiSearch className="absolute top-1/2 left-2 -translate-y-1/2 size-4 text-gray-400" />
         <input
           type="text"
-          className="w-full pl-8 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          className="w-full pl-8 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed"
           placeholder="Name, Shop, City..."
           onChange={handleOnSearchChange}
+          disabled={displayBobas.length === 0}
         />
       </div>
 
@@ -260,6 +262,8 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
               }
             />
           ))
+        ) : isLocationEnabled ? (
+          <AlternativeShops />
         ) : (
           <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
             <h2 className="text-xl font-semibold text-muted-foreground">

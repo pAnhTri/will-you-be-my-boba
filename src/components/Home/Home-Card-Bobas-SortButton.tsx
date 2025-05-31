@@ -1,3 +1,5 @@
+import { useBobaStore } from "@/lib/zustand/stores";
+
 interface SortButtonProps {
   icon: React.ReactNode;
   label: string;
@@ -6,6 +8,8 @@ interface SortButtonProps {
 }
 
 const SortButton = ({ icon, label, onClick, sortedBy }: SortButtonProps) => {
+  const displayBobas = useBobaStore((state) => state.displayBobas);
+
   return (
     <button
       onClick={onClick}
@@ -13,7 +17,8 @@ const SortButton = ({ icon, label, onClick, sortedBy }: SortButtonProps) => {
         sortedBy === label
           ? "bg-gray-100 text-gray-900"
           : "text-gray-600 hover:bg-gray-50 hover:border-gray-300"
-      }`}
+      } disabled:opacity-50 disabled:cursor-not-allowed`}
+      disabled={displayBobas.length === 0}
     >
       {icon}
       {label}

@@ -3,7 +3,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.3-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1-blue?style=flat&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-8.14-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-8.15-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-2.49-blue?style=flat&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-blue?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Google Maps](https://img.shields.io/badge/Google_Maps-API-blue?style=flat&logo=google-maps)](https://developers.google.com/maps)
@@ -116,7 +116,7 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 - **TypeScript 5** - Type safety and better developer experience
 - **Tailwind CSS 4** - Utility-first CSS framework
 - **React Hook Form 7.56** - Form handling and validation
-- **Zod 3.24** - Schema validation
+- **Zod 3.25** - Schema validation
 - **Zustand 5.0** - State management
 - **React Icons 5.5** - Icon library
 - **Fuse.js 7.1** - Fuzzy search functionality
@@ -124,8 +124,8 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 
 ### Backend & Database
 
-- **MongoDB 8.14** - Primary database
-- **Mongoose 8.14** - ODM for MongoDB
+- **MongoDB 8.15** - Primary database
+- **Mongoose 8.15** - ODM for MongoDB
 - **Next.js API Routes** - Serverless API endpoints
 - **Supabase 2.49** - Authentication and user management
   - Supabase JS Client 2.49

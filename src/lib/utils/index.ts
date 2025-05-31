@@ -8,3 +8,4 @@ export * from "./cn";
 export * from "./getClosestShop";
 export * from "./handleEnableLocationClick";
 export * from "./getPossibleFlavors";
+export * from "./formatSearchResultsToShop";
