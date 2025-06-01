@@ -2,33 +2,11 @@ import axios from "axios";
 
 // TODO: PUT THIS INTO A SERVER ACTION TO HIDE THE API KEY
 export const getGooglePlacesDetails = async (searchText: string) => {
-  const GooglePlaceURL = `https://places.googleapis.com/v1/places:searchText`;
-
-  const searcQuery = `(boba OR tea OR cafe OR milk OR boba tea OR boba shop OR boba cafe) ${
-    searchText !== "" ? `AND ${searchText}` : "near me"
-  }`;
-
-  const data = {
-    textQuery: searcQuery,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    "X-Goog-FieldMask": [
-      "places.id",
-      "places.formattedAddress",
-      "places.displayName",
-      "places.addressComponents",
-      "places.location",
-    ],
-  };
-
   try {
-    const { data: response } = await axios.post(GooglePlaceURL, data, {
-      headers,
+    const { data } = await axios.post("/api/google/places", {
+      searchText,
     });
-    return response;
+    return data;
   } catch (error) {
     console.error(error);
     if (axios.isAxiosError(error)) {
@@ -49,39 +27,10 @@ export const getGooglePlacesDetailsWithLocationBias = async (
   },
   maxDistance: number
 ) => {
-  const GooglePlaceURL = `https://places.googleapis.com/v1/places:searchText`;
-
-  const searcQuery =
-    "(boba OR tea OR cafe OR milk OR boba tea OR boba shop OR boba cafe)";
-
-  const data = {
-    textQuery: searcQuery,
-    locationBias: {
-      circle: {
-        center: {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-        radius: maxDistance * 1609.34 > 50000 ? 50000 : maxDistance * 1609.34, // Convert miles to meters
-      },
-    },
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    "X-Goog-FieldMask": [
-      "places.id",
-      "places.formattedAddress",
-      "places.displayName",
-      "places.addressComponents",
-      "places.location",
-    ],
-  };
-
   try {
-    const { data: response } = await axios.post(GooglePlaceURL, data, {
-      headers,
+    const { data: response } = await axios.post("/api/google/places/bias", {
+      location,
+      maxDistance,
     });
     return response;
   } catch (error) {
@@ -98,23 +47,15 @@ export const getGooglePlacesDetailsWithLocationBias = async (
 };
 
 export const getGooglePlacesDetailsByLocation = async (placeId: string) => {
-  const GooglePlaceURL = `https://places.googleapis.com/v1/places/${placeId}`;
-
-  const headers = {
-    "Content-Type": "application/json",
-    "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    "X-Goog-FieldMask": ["rating", "userRatingCount"],
-  };
-
   try {
-    const { data: response } = await axios.get(GooglePlaceURL, {
-      headers,
+    const { data: response } = await axios.post(`/api/google/places/location`, {
+      placeId,
     });
 
     return {
       placeId,
-      rating: response.rating,
-      userRatingCount: response.userRatingCount,
+      rating: response.place.rating,
+      userRatingCount: response.place.userRatingCount,
     };
   } catch (error) {
     console.error(error);
