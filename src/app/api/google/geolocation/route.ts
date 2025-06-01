@@ -13,9 +13,17 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const formattedLocation = location.replace(/\s+/g, "+");
+    const API_KEY = process.env.GOOGLE_BACKEND_API_KEY;
 
-    const geocodingURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${formattedLocation}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
+    if (!API_KEY) {
+      return NextResponse.json(
+        { success: false, message: "API key is not set" },
+        { status: 500 }
+      );
+    }
+
+    const formattedLocation = location.replace(/\s+/g, "+");
+    const geocodingURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${formattedLocation}&key=${API_KEY}`;
 
     const { data } = await axios.get(geocodingURL);
 
