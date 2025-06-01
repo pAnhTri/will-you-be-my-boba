@@ -161,7 +161,8 @@ Required environment variables:
 MONGO_DB_URI=your_mongodb_uri
 
 # Google Maps
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_embedded_api_key
+GOOGLE_BACKEND_API_KEY=your_google_places_and_geocoding_api_key
 
 # Google AI Studio
 GEMINI_API_KEY=your_google_ai_api_key
@@ -221,7 +222,8 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
    MONGO_DB_URI=your_mongodb_uri
 
    # Google Maps
-   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_embedded_api_key
+   GOOGLE_BACKEND_API_KEY=your_google_places_and_geocoding_api_key
 
    # Google AI Studio
    GEMINI_API_KEY=your_google_ai_api_key
