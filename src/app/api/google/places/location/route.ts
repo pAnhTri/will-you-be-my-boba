@@ -21,7 +21,7 @@ export const POST = async (req: NextRequest) => {
 
     const headers = {
       "Content-Type": "application/json",
-      "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+      "X-Goog-Api-Key": API_KEY,
       "X-Goog-FieldMask": ["rating", "userRatingCount"],
     };
 
