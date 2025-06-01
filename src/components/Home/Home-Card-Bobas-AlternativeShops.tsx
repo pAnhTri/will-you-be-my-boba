@@ -58,6 +58,9 @@ const AlternativeShops = ({
           userLocation as { latitude: number; longitude: number }
         );
 
+        // Sort the results by distance
+        formattedAlternativeShops.sort((a, b) => a.distance - b.distance);
+
         // Store results in cache
         cache.current.set(cacheKey, formattedAlternativeShops);
         setAlternativeShops(formattedAlternativeShops);
