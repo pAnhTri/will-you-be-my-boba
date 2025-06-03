@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// TODO: PUT THIS INTO A SERVER ACTION TO HIDE THE API KEY
 export const getGooglePlacesDetails = async (searchText: string) => {
   try {
     const { data } = await axios.post("/api/google/places", {

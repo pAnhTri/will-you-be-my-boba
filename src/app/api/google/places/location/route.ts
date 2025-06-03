@@ -1,9 +1,26 @@
+import { dbConnect } from "@/lib/mongodb";
+import ShopDetailCache from "@/lib/mongodb/models/ShopDetailCache";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   try {
     const { placeId } = await req.json();
+
+    // Find shop in cache first if not found then get from google places api
+    await dbConnect();
+
+    const cachedShop = await ShopDetailCache.findOne({ placeId });
+
+    if (cachedShop) {
+      return NextResponse.json({
+        success: true,
+        place: {
+          rating: cachedShop.rating,
+          userRatingCount: cachedShop.userRatingCount,
+        },
+      });
+    }
 
     const API_KEY = process.env.GOOGLE_BACKEND_API_KEY;
 
@@ -27,6 +44,13 @@ export const POST = async (req: NextRequest) => {
 
     const { data: response } = await axios.get(GooglePlaceURL, {
       headers,
+    });
+
+    // Cache the shop details
+    await ShopDetailCache.create({
+      placeId,
+      rating: response.rating,
+      userRatingCount: response.userRatingCount,
     });
 
     return NextResponse.json(
