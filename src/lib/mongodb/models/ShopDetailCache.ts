@@ -4,7 +4,7 @@ const ShopDetailCacheSchema = new mongoose.Schema({
   placeId: { type: String, required: true, unique: true },
   rating: { type: Number, required: true },
   userRatingCount: { type: Number, required: true },
-  createdAt: { type: Date, default: Date.now, expires: "1d" },
+  createdAt: { type: Date, default: Date.now, expires: "7d" },
 });
 
 const ShopDetailCache =
