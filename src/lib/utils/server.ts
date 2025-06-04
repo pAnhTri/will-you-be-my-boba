@@ -30,8 +30,8 @@ export const getBobaData = async () => {
         _id: 1,
         shopId: 1,
         name: 1,
-        flavors: 1,
         sweetness: 1,
+        flavors: 1,
         communityReviews: 1,
         enjoymentFactor: 1,
       },
@@ -50,8 +50,9 @@ export const getBobaData = async () => {
       return null;
     }
 
-    const flavors = Array.from(new Set(result.flatMap((boba) => boba.flavors)));
-    flavors.sort((a, b) => a.localeCompare(b));
+    const flavors: string[] = await BobaModel.distinct("flavors").sort({
+      flavors: 1,
+    });
 
     const plainResult = JSON.parse(JSON.stringify(result));
 
