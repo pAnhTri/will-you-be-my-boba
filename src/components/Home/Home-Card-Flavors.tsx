@@ -10,8 +10,9 @@ import {
 } from "@/lib/zustand/stores";
 import { GiBoba } from "react-icons/gi";
 import ResetButton from "./Home-Card-Flavors-Reset-Button";
-import { cn, getPossibleFlavors } from "@/lib/utils";
+import { getPossibleFlavors } from "@/lib/utils";
 import { Boba } from "@/types/boba";
+import FlavorTag from "./Home-Card-Flavors-Tag";
 
 interface FlavorCardProps {
   initialFlavors: string[];
@@ -24,7 +25,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
   // Use selectors to only subscribe to the state we need
   const flavors = useFlavorStore((state) => state.flavors);
   const selectedFlavors = useFlavorStore((state) => state.selectedFlavors);
-  const displayFlavors = useFlavorStore((state) => state.displayFlavors);
+
   const { setSelectedFlavors, setDisplayFlavors, setFlavors } =
     useFlavorStore();
   const bobas = useBobaStore((state) => state.bobas);
@@ -126,6 +127,61 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
     }
   };
 
+  const renderFlavorTags = (filteredFlavors: string[]) => {
+    // Extract the base flavors from the tea flavors
+    const baseFlavors: string[] = [];
+    const teaFlavors: string[] = [];
+
+    filteredFlavors.forEach((flavor) => {
+      if (flavor.toLowerCase().includes("tea")) {
+        baseFlavors.push(flavor);
+      } else {
+        teaFlavors.push(flavor);
+      }
+    });
+
+    // If there are no base flavors, render tea tags as per normal
+    if (baseFlavors.length === 0) {
+      return teaFlavors.map((flavor) => (
+        <FlavorTag
+          key={flavor}
+          flavor={flavor}
+          possibleFlavors={possibleFlavors}
+          onClick={() => handleFlavorClick(flavor)}
+        />
+      ));
+    }
+
+    // Render the base and tea tags in two displayFlavors
+    return (
+      <>
+        {/* Base flavors */}
+        <div className="border-b border-gray-200 pb-2 mb-2 flex flex-wrap gap-2">
+          {baseFlavors.map((flavor) => (
+            <FlavorTag
+              key={flavor}
+              flavor={flavor}
+              possibleFlavors={possibleFlavors}
+              onClick={() => handleFlavorClick(flavor)}
+            />
+          ))}
+        </div>
+
+        {/* Tea flavors */}
+        <div className="flex flex-wrap gap-2">
+          {teaFlavors.map((flavor) => (
+            <FlavorTag
+              key={flavor}
+              flavor={flavor}
+              possibleFlavors={possibleFlavors}
+              onClick={() => handleFlavorClick(flavor)}
+            />
+          ))}
+        </div>
+      </>
+    );
+  };
+
   if (flavors.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center ring-1 ring-gray-200 rounded-lg p-2 space-y-2">
@@ -165,27 +221,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
 
       {/* Flavor list */}
       <div className="max-h-[400px] overflow-y-auto">
-        <div className="flex flex-wrap gap-2">
-          {filteredFlavors.map((flavor) => (
-            <button
-              key={flavor}
-              disabled={
-                selectedFlavors.length > 0 &&
-                !possibleFlavors.includes(flavor) &&
-                !selectedFlavors.includes(flavor)
-              }
-              className={cn(
-                `px-4 py-2 rounded-lg border transition-all duration-200`,
-                displayFlavors.includes(flavor)
-                  ? "bg-pink-500 text-white border-pink-500 hover:bg-pink-600"
-                  : "bg-white text-gray-800 border-gray-300 hover:border-pink-300 hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              )}
-              onClick={() => handleFlavorClick(flavor)}
-            >
-              {flavor}
-            </button>
-          ))}
-        </div>
+        {renderFlavorTags(filteredFlavors)}
       </div>
     </div>
   );

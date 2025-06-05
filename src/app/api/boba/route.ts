@@ -1,59 +1,17 @@
 import { Boba, dbConnect } from "@/lib/mongodb";
+import { getBobaData } from "@/lib/utils/server";
 import { MongooseError } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    await dbConnect();
-
-    const aggregateOperations = {
-      addFields: {
-        $addFields: {
-          enjoymentFactor: {
-            $cond: {
-              if: { $gt: [{ $size: "$communityReviews" }, 0] },
-              then: {
-                $avg: {
-                  $map: {
-                    input: "$communityReviews",
-                    as: "review",
-                    in: "$$review.rating",
-                  },
-                },
-              },
-              else: 0,
-            },
-          },
-        },
-      },
-      project: {
-        $project: {
-          _id: 1,
-          shopId: 1,
-          name: 1,
-          flavors: 1,
-          sweetness: 1,
-          communityReviews: 1,
-          enjoymentFactor: 1,
-        },
-      },
-      sort: { $sort: { enjoymentFactor: -1 as 1 | 1 } },
-    };
-
-    const result = await Boba.aggregate([
-      aggregateOperations.addFields,
-      aggregateOperations.sort,
-      aggregateOperations.project,
-    ]);
-
-    const flavors = Array.from(new Set(result.flatMap((boba) => boba.flavors)));
-    flavors.sort((a, b) => a.localeCompare(b));
+    const result = await getBobaData();
 
     return NextResponse.json(
       {
         success: true,
-        bobas: result,
-        flavors,
+        bobas: result?.bobas,
+        flavors: result?.flavors,
       },
       { status: 200 }
     );
