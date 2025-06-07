@@ -16,13 +16,11 @@ import {
 } from "@/lib/zustand/stores";
 import { StateCity } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
 import { FiLoader } from "react-icons/fi";
 import { LuMapPin } from "react-icons/lu";
-import statesCities from "@/lib/utils/states+cities.json";
 
 interface LocationFormProps {
   topLabel: string;
@@ -32,11 +30,12 @@ interface LocationFormProps {
 const LocationForm = ({ topLabel, className }: LocationFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fuse, setFuse] = useState<Fuse<string> | null>(null);
+  const [cities, setCities] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
+  const [isLoadingCities, setIsLoadingCities] = useState(false);
 
   const bobas = useBobaStore((state) => state.bobas);
   const setDisplayBobas = useBobaStore((state) => state.setDisplayBobas);
@@ -57,19 +56,29 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
   );
 
   useEffect(() => {
-    const statesCitiesFlatMap = (statesCities as StateCity[]).flatMap(
-      (stateCity) => stateCity.cities.map((city) => city.name)
-    );
+    const loadCities = async () => {
+      setIsLoadingCities(true);
 
-    // Get unique city names using Set
-    const uniqueCities = Array.from(new Set(statesCitiesFlatMap));
+      try {
+        const response = await fetch("/states+cities.json");
+        const statesCitiesData = await response.json();
 
-    const initialFuse = new Fuse(uniqueCities, {
-      includeScore: true,
-      threshold: 0.2,
-    });
+        const statesCitiesFlatMap = (statesCitiesData as StateCity[]).flatMap(
+          (stateCity) => stateCity.cities.map((city) => city.name)
+        );
 
-    setFuse(initialFuse);
+        // Get unique city names using Set
+        const uniqueCities = Array.from(new Set(statesCitiesFlatMap));
+        setCities(uniqueCities);
+      } catch (error) {
+        console.error("Error loading cities:", error);
+        setError("Error loading city data");
+      } finally {
+        setIsLoadingCities(false);
+      }
+    };
+
+    loadCities();
   }, []);
 
   const {
@@ -169,12 +178,12 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
               "w-full border-2 border-gray-300 rounded-md pr-8 pl-2 py-2 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-pink-500",
               isLocationEnabled && "border-green-500 text-green-500",
               errors.location && "border-red-500",
-              isLoading && "cursor-not-allowed bg-gray-100"
+              (isLoading || isLoadingCities) && "cursor-not-allowed bg-gray-100"
             )}
             {...register("location")}
             list="searchResults"
             onChange={(e) => {
-              const value = e.target.value;
+              const value = e.target.value.toLowerCase();
 
               // Clear any existing timeout
               if (searchTimeout) {
@@ -183,9 +192,11 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
 
               // Set new timeout
               const timeout = setTimeout(() => {
-                if (fuse && value && value !== "Current Location") {
-                  const results = fuse.search(value, { limit: 20 });
-                  setSearchResults(results.map((result) => result.item));
+                if (value && value !== "current location") {
+                  const results = cities
+                    .filter((city) => city.toLowerCase().includes(value))
+                    .slice(0, 20);
+                  setSearchResults(results);
                 } else {
                   setSearchResults([]);
                 }
@@ -194,11 +205,15 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
               setSearchTimeout(timeout);
             }}
             autoComplete="home city"
-            placeholder="Enter a street, city, or zip code"
-            disabled={isLoading}
+            placeholder={
+              isLoadingCities
+                ? "Loading cities..."
+                : "Enter a street, city, or zip code"
+            }
+            disabled={isLoading || isLoadingCities}
           />
           <div className="absolute inset-y-0 right-2 flex items-center">
-            {isLoading ? (
+            {isLoading || isLoadingCities ? (
               <FiLoader className="size-6 text-pink-500 animate-spin" />
             ) : (
               <LuMapPin

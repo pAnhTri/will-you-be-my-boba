@@ -1,11 +1,7 @@
-import HomeCanvas from "@/components/Home/Home-Canvas";
-import BobaCard from "@/components/Home/Home-Card-Bobas";
-import FlavorCard from "@/components/Home/Home-Card-Flavors";
-import LocationForm from "@/components/Home/Home-LocationForm";
-import AddBobaModal from "@/components/Home/Home-Modal-AddBoba";
-import AddShopModal from "@/components/Home/Home-Modal-AddShop";
 import { getBobaData, getShopData } from "@/lib/utils/server";
+import DynamicHome from "@/components/Home/Home-Dynamic";
 
+// Force dynamic rendering to ensure fresh data on each page load
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -30,16 +26,11 @@ export default async function Home() {
       </section>
 
       <main className="flex flex-col px-4">
-        <AddBobaModal />
-        <AddShopModal />
-        <LocationForm
-          className="my-8 mx-auto"
-          topLabel="Where are we heading? Enter a street, city, or zip code"
+        <DynamicHome
+          initialFlavors={flavors}
+          initialBobas={bobas}
+          initialShops={shops}
         />
-        <HomeCanvas className="my-8 container md:max-w-screen">
-          <FlavorCard initialFlavors={flavors} />
-          <BobaCard initialBobas={bobas} initialShops={shops} />
-        </HomeCanvas>
       </main>
     </div>
   );
