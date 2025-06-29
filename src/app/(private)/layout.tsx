@@ -6,6 +6,11 @@ import Footer from "@/components/Site-Footer";
 import { AuthInitializer } from "@/components/AuthInitializer";
 import AiModal from "@/components/Site-Modal-AI";
 import AlexAIResponse from "@/components/Site-AlexAI-Response";
+import {
+  ColorSchemeScript,
+  MantineProvider,
+  mantineHtmlProps,
+} from "@mantine/core";
 
 export const metadata: Metadata = {
   title: {
@@ -103,15 +108,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" {...mantineHtmlProps}>
+      <head>
+        <ColorSchemeScript />
+      </head>
+
       <body className={`antialiased flex flex-col min-h-screen`}>
-        <AuthInitializer />
-        <Header />
-        <AiModal />
-        <AlexAIResponse />
-        {children}
-        <Analytics />
-        <Footer />
+        <MantineProvider>
+          <AuthInitializer />
+          <Header />
+          <AiModal />
+          <AlexAIResponse />
+          {children}
+          <Analytics />
+          <Footer />
+        </MantineProvider>
       </body>
     </html>
   );

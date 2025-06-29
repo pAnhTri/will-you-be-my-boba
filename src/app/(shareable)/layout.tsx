@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import {
+  ColorSchemeScript,
+  MantineProvider,
+  mantineHtmlProps,
+} from "@mantine/core";
 
 export const metadata: Metadata = {
   title: "Share Your Profile | Will You Be My Boba",
@@ -13,10 +18,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" {...mantineHtmlProps}>
+      <head>
+        <ColorSchemeScript />
+      </head>
       <body className={`antialiased flex flex-col min-h-screen`}>
-        {children}
-        <Analytics />
+        <MantineProvider>
+          {children}
+          <Analytics />
+        </MantineProvider>
       </body>
     </html>
   );

@@ -220,7 +220,7 @@ const FlavorCard = ({ initialFlavors }: FlavorCardProps) => {
       </div>
 
       {/* Flavor list */}
-      <div className="max-h-[400px] overflow-y-auto">
+      <div className="max-h-[400px] overflow-y-auto border sm:border-none border-pink-500 p-2 rounded-lg">
         {renderFlavorTags(filteredFlavors)}
       </div>
     </div>

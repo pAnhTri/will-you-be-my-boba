@@ -249,7 +249,7 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
       </div>
 
       {/* Item cards */}
-      <div className="max-h-[400px] overflow-y-auto p-2 space-y-2">
+      <div className="max-h-[400px] overflow-y-auto p-2 space-y-2 border sm:border-none border-pink-500 rounded-lg">
         {displayBobas.length > 0 ? (
           displayBobas.map((boba) => (
             <ItemCard

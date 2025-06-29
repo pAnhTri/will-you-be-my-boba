@@ -339,15 +339,16 @@ const AddBobaForm = ({
           }}
           onChange={handleFlavorChange}
           onBlur={handleFlavorOnBlur}
-          placeholder="Flavor 1, Flavor 2, Flavor 3, etc."
-          className="rounded-lg border-2 border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          placeholder="Describe your boba with comma separated keywords, e.g. 'Taro, Milk Tea, Rich'"
+          className="rounded-lg border-2 border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder:text-xs"
         />
         {errors.flavors && (
           <p className="text-red-500">{errors.flavors.message}</p>
         )}
 
         {/* Flavor List */}
-        <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto sm:overflow-x-hidden sm:max-h-20 sm:overflow-y-auto p-2">
+        <p className="text-xs">Boba inspos:</p>
+        <div className="relative flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto sm:overflow-x-hidden sm:max-h-20 sm:overflow-y-auto p-2">
           {flavors.map((flavor) => (
             <div
               key={flavor}
