@@ -40,6 +40,13 @@ const BobaCard = dynamic(() => import("@/components/Home/Home-Card-Bobas"), {
   ssr: false,
 });
 
+const ReportModal = dynamic(
+  () => import("@/components/Home/Modal/ReportModal"),
+  {
+    ssr: false,
+  }
+);
+
 interface DynamicHomeProps {
   initialFlavors: string[];
   initialBobas: Boba[];
@@ -55,6 +62,7 @@ export const DynamicHome = ({
     <>
       <AddBobaModal />
       <AddShopModal />
+      <ReportModal />
       <LocationForm
         className="my-8 mx-auto"
         topLabel="Where are we heading? Enter a street, city, or zip code"

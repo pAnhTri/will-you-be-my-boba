@@ -14,9 +14,8 @@ import {
   useLocationStore,
   useShopStore,
 } from "@/lib/zustand/stores";
-import { StateCity } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
 import { FiLoader } from "react-icons/fi";
@@ -30,12 +29,6 @@ interface LocationFormProps {
 const LocationForm = ({ topLabel, className }: LocationFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [cities, setCities] = useState<string[]>([]);
-  const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
-  const [isLoadingCities, setIsLoadingCities] = useState(false);
 
   const bobas = useBobaStore((state) => state.bobas);
   const setDisplayBobas = useBobaStore((state) => state.setDisplayBobas);
@@ -54,32 +47,6 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
   const setStoreLocationMap = useLocationStore(
     (state) => state.setStoreLocationMap
   );
-
-  useEffect(() => {
-    const loadCities = async () => {
-      setIsLoadingCities(true);
-
-      try {
-        const response = await fetch("/states+cities.json");
-        const statesCitiesData = await response.json();
-
-        const statesCitiesFlatMap = (statesCitiesData as StateCity[]).flatMap(
-          (stateCity) => stateCity.cities.map((city) => city.name)
-        );
-
-        // Get unique city names using Set
-        const uniqueCities = Array.from(new Set(statesCitiesFlatMap));
-        setCities(uniqueCities);
-      } catch (error) {
-        console.error("Error loading cities:", error);
-        setError("Error loading city data");
-      } finally {
-        setIsLoadingCities(false);
-      }
-    };
-
-    loadCities();
-  }, []);
 
   const {
     register,
@@ -178,42 +145,15 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
               "w-full border-2 border-gray-300 rounded-md pr-8 pl-2 py-2 focus:outline-none focus:ring-2 ring-offset-2 focus:ring-pink-500",
               isLocationEnabled && "border-green-500 text-green-500",
               errors.location && "border-red-500",
-              (isLoading || isLoadingCities) && "cursor-not-allowed bg-gray-100"
+              isLoading && "cursor-not-allowed bg-gray-100"
             )}
             {...register("location")}
-            list="searchResults"
-            onChange={(e) => {
-              const value = e.target.value.toLowerCase();
-
-              // Clear any existing timeout
-              if (searchTimeout) {
-                clearTimeout(searchTimeout);
-              }
-
-              // Set new timeout
-              const timeout = setTimeout(() => {
-                if (value && value !== "current location") {
-                  const results = cities
-                    .filter((city) => city.toLowerCase().includes(value))
-                    .slice(0, 20);
-                  setSearchResults(results);
-                } else {
-                  setSearchResults([]);
-                }
-              }, 250);
-
-              setSearchTimeout(timeout);
-            }}
             autoComplete="home city"
-            placeholder={
-              isLoadingCities
-                ? "Loading cities..."
-                : "Enter a street, city, or zip code"
-            }
-            disabled={isLoading || isLoadingCities}
+            placeholder="Enter a street, city, or zip code"
+            disabled={isLoading}
           />
           <div className="absolute inset-y-0 right-2 flex items-center">
-            {isLoading || isLoadingCities ? (
+            {isLoading ? (
               <FiLoader className="size-6 text-pink-500 animate-spin" />
             ) : (
               <LuMapPin
@@ -223,12 +163,6 @@ const LocationForm = ({ topLabel, className }: LocationFormProps) => {
             )}
           </div>
         </div>
-        <datalist id="searchResults">
-          <option value="Current Location" />
-          {searchResults.map((result) => (
-            <option key={result} value={result} />
-          ))}
-        </datalist>
         {errors.location && (
           <span className="text-sm text-red-500">
             {errors.location.message}

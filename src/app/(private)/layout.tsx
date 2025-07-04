@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "@mantine/core/styles.css";
 import "../globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import Header from "@/components/Site-Header";
@@ -110,7 +111,7 @@ export default function RootLayout({
   return (
     <html lang="en" {...mantineHtmlProps}>
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript suppressHydrationWarning />
       </head>
 
       <body className={`antialiased flex flex-col min-h-screen`}>

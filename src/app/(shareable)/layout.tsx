@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "@mantine/core/styles.css";
 import "../globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import {

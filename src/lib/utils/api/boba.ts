@@ -125,3 +125,21 @@ export const updateCommunityReview = async (
     throw new Error("Something went wrong");
   }
 };
+
+export const getBobaByName = async (name: string): Promise<Boba> => {
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba/name/${encodeURIComponent(name)}`
+    );
+    return data.boba;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `API Error: ${error.response?.status || "Unknown Status"}; Message: ${
+          error.response?.data.error.message || "Unknown Message"
+        }`
+      );
+    }
+    throw new Error("Something went wrong");
+  }
+};

@@ -10,6 +10,7 @@ import { FaRegStar, FaStar } from "react-icons/fa";
 import { LuMapPin } from "react-icons/lu";
 import ItemCardDetails from "./Home-Card-Bobas-ItemCard-Details";
 import { getFlavorColor } from "@/lib/utils/flavorColors";
+import ReportButton from "./ItemCard/ReportButton";
 
 interface ItemCardProps {
   boba: Boba;
@@ -164,6 +165,8 @@ const ItemCard = ({
             </div>
           </div>
         </div>
+        {/* Report Modal */}
+        <ReportButton />
       </div>
 
       {selectedBoba?._id === boba._id && <ItemCardDetails boba={boba} />}
