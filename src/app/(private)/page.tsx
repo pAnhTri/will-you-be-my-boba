@@ -1,5 +1,6 @@
 import { getBobaData, getShopData } from "@/lib/utils/server";
 import DynamicHome from "@/components/Home/Home-Dynamic";
+import ReportAlert from "@/components/Home/Alert/ReportAlert";
 
 // Force dynamic rendering to ensure fresh data on each page load
 export const dynamic = "force-dynamic";
@@ -25,7 +26,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <main className="flex flex-col px-4">
+      <main className="flex flex-col px-4 relative">
+        <ReportAlert />
         <DynamicHome
           initialFlavors={flavors}
           initialBobas={bobas}

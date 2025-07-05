@@ -24,7 +24,9 @@ const ReportModal = () => {
       }}
     >
       <h3 className="text-2xl font-bold text-center">Report: </h3>
-      <p className="text-center">{selectedBobaToReport}</p>
+      <p className="text-center text-lg text-pink-400">
+        {selectedBobaToReport}
+      </p>
       <ReportModalForm />
     </Modal>
   );

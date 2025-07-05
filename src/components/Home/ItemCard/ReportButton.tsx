@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useReportStore } from "@/lib/zustand/stores";
 import { Button } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { HTMLAttributes } from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 
@@ -16,8 +15,6 @@ const ReportButton = ({
   const setSelectedBobaToReport = useReportStore(
     (state) => state.setSelectedBobaToReport
   );
-
-  const matches = useMediaQuery("(min-width: 62em)");
 
   const handleReportClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -42,16 +39,13 @@ const ReportButton = ({
         variant="subtle"
         size="xs"
         title="Report this boba"
-        leftSection={
-          matches ? <FaExclamationTriangle className="size-4" /> : null
-        }
         onClick={handleReportClick}
       >
-        {matches ? (
-          <span className="text-sm hidden sm:inline-block">Report</span>
-        ) : (
-          <FaExclamationTriangle className="size-4" />
-        )}
+        <div className="flex gap-1 items-center">
+          <FaExclamationTriangle className="size-4 hidden md:block" />
+          <span className="text-sm hidden md:inline-block">Report</span>
+          <FaExclamationTriangle className="size-4 block md:hidden" />
+        </div>
       </Button>
     </div>
   );

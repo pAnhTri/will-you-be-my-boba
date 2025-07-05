@@ -1,8 +1,15 @@
 import { cn, getBobaByName, getShopById } from "@/lib/utils";
+import { createReport } from "@/lib/utils/api/report";
 import { reportValidatorSchema, ReportInput } from "@/lib/validators/report";
 import { useReportStore } from "@/lib/zustand/stores";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Select, Skeleton, Textarea } from "@mantine/core";
+import {
+  Button,
+  LoadingOverlay,
+  Select,
+  Skeleton,
+  Textarea,
+} from "@mantine/core";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CiCircleAlert } from "react-icons/ci";
@@ -15,6 +22,7 @@ const ReportModalForm = ({
     { value: string; label: string }[]
   >([]);
   const [isShopLoading, setIsShopLoading] = useState(false);
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const setIsReportModalOpen = useReportStore(
@@ -28,6 +36,8 @@ const ReportModalForm = ({
   const setSelectedBobaToReport = useReportStore(
     (state) => state.setSelectedBobaToReport
   );
+
+  const setSuccessMessage = useReportStore((state) => state.setSuccessMessage);
 
   const {
     control,
@@ -99,16 +109,49 @@ const ReportModalForm = ({
     setIsReportModalOpen(false);
   };
 
-  const onSubmit: SubmitHandler<ReportInput> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ReportInput> = async (data) => {
+    const payload: ReportInput & { boba: string } = {
+      ...data,
+      boba: selectedBobaToReport!,
+    };
+
+    setIsSubmitLoading(true);
+    setError(null);
+
+    try {
+      const message = await createReport(payload);
+
+      reset();
+      setCachedShopData([]);
+      setSelectedBobaToReport(null);
+      setSuccessMessage(message);
+      setIsReportModalOpen(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    } finally {
+      setIsSubmitLoading(false);
+    }
   };
 
   return (
     <form
-      className={cn("max-w-md flex flex-col gap-4 justify-center", className)}
+      className={cn(
+        "max-w-md flex flex-col gap-4 justify-center relative",
+        className
+      )}
       {...props}
       onSubmit={handleSubmit(onSubmit)}
     >
+      <LoadingOverlay
+        visible={isSubmitLoading}
+        zIndex={1000}
+        overlayProps={{ blur: 2 }}
+        loaderProps={{ color: "pink", size: "sm" }}
+      />
       {/* Error */}
       {error && (
         <div className="bg-red-50 text-red-600 p-3 rounded-md flex items-start gap-2 text-sm">
