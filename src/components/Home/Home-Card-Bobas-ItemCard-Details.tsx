@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { HTMLAttributes, useEffect, useMemo, useState, useRef } from "react";
+import { HTMLAttributes, useEffect, useMemo, useState } from "react";
 import { Boba } from "@/types/boba";
 import {
   useAuthStore,
@@ -18,11 +18,13 @@ import { compareDesc } from "date-fns";
 
 interface ItemCardDetailsProps extends HTMLAttributes<HTMLDivElement> {
   boba: Boba;
+  initialMapUrl: string;
 }
 
 const ItemCardDetails = ({
   boba,
   className,
+  initialMapUrl,
   ...props
 }: ItemCardDetailsProps) => {
   const [sweetnessLevel, setSweetnessLevel] = useState<string>("Medium");
@@ -31,8 +33,7 @@ const ItemCardDetails = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reviewsSortedBy, setReviewsSortedBy] = useState<string>("newest");
-  const [mapUrl, setMapUrl] = useState<string>("current location");
-  const hasInitialized = useRef(false);
+  const [mapUrl, setMapUrl] = useState<string>(initialMapUrl);
 
   const user = useAuthStore((state) => state.user);
 
@@ -113,39 +114,10 @@ const ItemCardDetails = ({
   };
 
   useEffect(() => {
-    // Only run once on mount and when shopsOfBoba is available
-    if (hasInitialized.current || shopsOfBoba.length === 0) return;
-
-    hasInitialized.current = true;
-
-    if (isLocationEnabled) {
-      // Get the closest shop to the user's location
-      const closestShopId = Array.from(storeLocationMap.keys()).find((shopId) =>
-        boba.shopId.some((id) => id.toString() === shopId.toString())
-      );
-
-      if (closestShopId) {
-        const shop = shops.find(
-          (s) => s._id.toString() === closestShopId.toString()
-        );
-        if (shop) {
-          setSelectedShop(shop);
-
-          // Set sweetness level
-          updateSweetnessLevel(shop);
-        }
-      }
-      return;
+    if (selectedShop) {
+      updateSweetnessLevel(selectedShop);
     }
-
-    // Select the first shop
-    setSelectedShop(shopsOfBoba[0]);
-    // Set sweetness level
-    updateSweetnessLevel(shopsOfBoba[0]);
-
-    // Build the map url
-    setMapUrl(`${shopsOfBoba[0].name}, ${shopsOfBoba[0].location.address}`);
-  }, [shopsOfBoba, isLocationEnabled, storeLocationMap, shops, boba.shopId]);
+  }, [selectedShop]);
 
   const renderMap = (mapUrl: string) => {
     return (

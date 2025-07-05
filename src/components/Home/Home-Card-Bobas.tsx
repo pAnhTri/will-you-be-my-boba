@@ -25,6 +25,8 @@ interface BobaCardProps {
 
 const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
   const [sortedBy, setSortedBy] = useState<string>("Rating");
+  const [initialMapUrl, setInitialMapUrl] =
+    useState<string>("current location");
   const [filterBobaInput, setFilterBobaInput] = useState<string>("");
 
   const bobas = useBobaStore((state) => state.bobas);
@@ -138,6 +140,34 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
     } else {
       setSelectedBoba(boba);
       setDisplayFlavors(boba.flavors);
+
+      // Set the initial map url by choosing the closest shop if location is enabled
+      if (isLocationEnabled) {
+        // Get the closest shop to the user's location
+        const closestShopId = Array.from(storeLocationMap.keys()).find(
+          (shopId) =>
+            boba.shopId.some((id) => id.toString() === shopId.toString())
+        );
+
+        if (closestShopId) {
+          const shop = shops.find(
+            (s) => s._id.toString() === closestShopId.toString()
+          );
+          if (shop) {
+            setSelectedShop(shop);
+            setInitialMapUrl(`${shop.name}, ${shop.location.address}`);
+          }
+        }
+      } else {
+        const shop = shops.find(
+          (s) => s._id.toString() === boba.shopId[0].toString()
+        );
+        if (shop) {
+          setSelectedShop(shop);
+          setInitialMapUrl(`${shop.name}, ${shop.location.address}`);
+        }
+      }
+
       setTimeout(() => {
         selectedBobaRef.current?.scrollIntoView({
           behavior: "smooth",
@@ -145,8 +175,6 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
         });
       }, 0);
     }
-
-    setSelectedShop(null);
     setIsShowingReviews(false);
   };
 
@@ -258,6 +286,7 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
               key={boba._id}
               boba={boba}
               bobasWithShops={bobasWithShops}
+              initialMapUrl={initialMapUrl}
               onClick={() => handleItemCardClick(boba)}
               containerRef={
                 selectedBoba?._id === boba._id ? selectedBobaRef : null

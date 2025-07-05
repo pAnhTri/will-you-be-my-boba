@@ -16,6 +16,7 @@ interface ItemCardProps {
   boba: Boba;
   bobasWithShops: Map<string, { shopName: string; shopId: string }[]>;
   containerRef: RefObject<HTMLDivElement | null> | null;
+  initialMapUrl: string;
   onClick: () => void;
 }
 
@@ -23,6 +24,7 @@ const ItemCard = ({
   boba,
   bobasWithShops,
   containerRef,
+  initialMapUrl,
   onClick,
 }: ItemCardProps) => {
   const { selectedBoba } = useBobaStore();
@@ -169,7 +171,9 @@ const ItemCard = ({
         <ReportButton />
       </div>
 
-      {selectedBoba?._id === boba._id && <ItemCardDetails boba={boba} />}
+      {selectedBoba?._id === boba._id && (
+        <ItemCardDetails boba={boba} initialMapUrl={initialMapUrl} />
+      )}
     </div>
   );
 };
