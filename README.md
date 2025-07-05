@@ -35,7 +35,6 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 #### AI Assistant - Alex the Axolotl
 
 - **Smart Analytics**
-
   - Count total number of unique flavors in the database
   - Track total number of boba drinks available
 
@@ -45,7 +44,6 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 #### Community Features
 
 - **User Accounts & Reviews**
-
   - Create an account to track your boba journey
   - Write, edit, and delete your reviews anytime
   - Keep a personal history of your favorite drinks
@@ -61,14 +59,12 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 #### Discovery Features
 
 - **Smart Flavor Tagging**
-
   - Search drinks by unique flavor profiles
   - Tags are community-driven and constantly updated
   - Combine multiple tags for precise matching
   - Discover new flavor combinations
 
 - **Location-Based Search**
-
   - Find boba shops near you with geolocation
   - Sort by distance to find the closest options
   - View shop details and Google Maps integration
@@ -95,7 +91,6 @@ Craving boba but unsure where to go? **Will You Be My Boba** makes finding your 
 #### Fun Features
 
 - **Boba of the Day**
-
   - Daily featured drinks based on community favorites
   - Special highlights for seasonal drinks
   - Trending drinks in your area
@@ -307,7 +302,6 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 ### Adding and Managing Boba
 
 - **Add New Boba**
-
   - Click the **+** button next to any boba name
   - Let Alex the Axolotl help pre-fill the form details
   - Fill in the remaining required details:
@@ -325,7 +319,6 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 ### Reviews and Ratings
 
 - **Viewing Reviews**
-
   - Click the **Show Reviews** button on any boba card
   - Reviews are displayed with:
     - Rating (0-5 stars)
@@ -346,14 +339,12 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 ### Managing Shops
 
 - **Browse Shops**
-
   - View all shops in the database
   - See detailed information from Google Places API
   - Check shop ratings and reviews
   - Get directions to any shop
 
 - **Favorite Shops**
-
   - Save your favorite shops when signed in
   - Access your saved shops quickly
   - Remove shops from your favorites
@@ -369,13 +360,11 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 ### Discovery Features
 
 - **Filter by Flavor Tags**
-
   - Click tags to filter the boba list
   - Click active (blue) tags to remove them
   - Combine multiple tags for precise matching
 
 - **Random Suggestions**
-
   - Use "IDK..." button for random flavor combinations
   - Limited to 3 random flavors at a time
 
@@ -387,7 +376,6 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 ### Sorting and Organization
 
 - **Sort Bobas By**
-
   - Name (alphabetical)
   - Community Rating
   - Distance (when location enabled)
@@ -402,7 +390,6 @@ NEXT_PUBLIC_API_BASE_URL=your_project_url
 ### AI Assistant Features
 
 - **Get Flavor Statistics**
-
   - Ask Alex to count total flavors
   - View boba drink count
 

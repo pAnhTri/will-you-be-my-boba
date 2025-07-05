@@ -65,7 +65,7 @@ const FavoriteShopContent = ({ shop }: FavoriteShopContentProps) => {
             referrerPolicy="no-referrer-when-downgrade"
             src={`https://www.google.com/maps/embed/v1/place?key=${
               process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-            }&q=${encodeURIComponent(`place_id:${shop.location.placesId}`)}`}
+            }&q=${encodeURIComponent(`${shop.name}, ${shop.location.address}`)}`}
           ></iframe>
         </div>
       )}

@@ -279,7 +279,9 @@ const ItemCardDetails = ({
             process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
           }&q=${
             selectedShop
-              ? encodeURIComponent(`place_id:${selectedShop.location.placesId}`)
+              ? encodeURIComponent(
+                  `${selectedShop.name}, ${selectedShop.location.address}`
+                )
               : userLocation
                 ? `${userLocation.latitude},${userLocation.longitude}`
                 : "here"
