@@ -25,6 +25,7 @@ interface BobaCardProps {
 
 const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
   const [sortedBy, setSortedBy] = useState<string>("Rating");
+  const [filterBobaInput, setFilterBobaInput] = useState<string>("");
 
   const bobas = useBobaStore((state) => state.bobas);
   const selectedBoba = useBobaStore((state) => state.selectedBoba);
@@ -78,6 +79,7 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
 
   const handleOnSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setFilterBobaInput(value);
 
     const filteredBobas = bobas.filter((boba) => {
       const searchByName = boba.name
@@ -244,7 +246,7 @@ const BobaCard = ({ initialBobas, initialShops }: BobaCardProps) => {
           className="w-full pl-8 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed"
           placeholder="Name, Shop, City..."
           onChange={handleOnSearchChange}
-          disabled={displayBobas.length === 0}
+          disabled={displayBobas.length === 0 && filterBobaInput === ""}
         />
       </div>
 

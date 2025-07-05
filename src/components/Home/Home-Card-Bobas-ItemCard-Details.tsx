@@ -277,15 +277,11 @@ const ItemCardDetails = ({
           referrerPolicy="no-referrer-when-downgrade"
           src={`https://www.google.com/maps/embed/v1/place?key=${
             process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-          }&q=${
-            selectedShop
-              ? encodeURIComponent(
-                  `${selectedShop.name}, ${selectedShop.location.address}`
-                )
-              : userLocation
-                ? `${userLocation.latitude},${userLocation.longitude}`
-                : "here"
-          }`}
+          }&q=${encodeURIComponent(
+            `${selectedShop?.name || userLocation?.latitude || "here"}, ${
+              selectedShop?.location.address || userLocation?.longitude || ""
+            }`
+          )}`}
         ></iframe>
       </div>
     </div>
