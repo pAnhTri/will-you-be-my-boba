@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { HTMLAttributes, useEffect, useMemo, useState } from "react";
+import { HTMLAttributes, useEffect, useMemo, useState, useRef } from "react";
 import { Boba } from "@/types/boba";
 import {
   useAuthStore,
@@ -32,6 +32,7 @@ const ItemCardDetails = ({
   const [error, setError] = useState<string | null>(null);
   const [reviewsSortedBy, setReviewsSortedBy] = useState<string>("newest");
   const [mapUrl, setMapUrl] = useState<string>("current location");
+  const hasInitialized = useRef(false);
 
   const user = useAuthStore((state) => state.user);
 
@@ -112,6 +113,11 @@ const ItemCardDetails = ({
   };
 
   useEffect(() => {
+    // Only run once on mount and when shopsOfBoba is available
+    if (hasInitialized.current || shopsOfBoba.length === 0) return;
+
+    hasInitialized.current = true;
+
     if (isLocationEnabled) {
       // Get the closest shop to the user's location
       const closestShopId = Array.from(storeLocationMap.keys()).find((shopId) =>
@@ -133,15 +139,13 @@ const ItemCardDetails = ({
     }
 
     // Select the first shop
-    if (shopsOfBoba.length > 0) {
-      setSelectedShop(shopsOfBoba[0]);
-      // Set sweetness level
-      updateSweetnessLevel(shopsOfBoba[0]);
+    setSelectedShop(shopsOfBoba[0]);
+    // Set sweetness level
+    updateSweetnessLevel(shopsOfBoba[0]);
 
-      // Build the map url
-      setMapUrl(`${shopsOfBoba[0].name}, ${shopsOfBoba[0].location.address}`);
-    }
-  }, []);
+    // Build the map url
+    setMapUrl(`${shopsOfBoba[0].name}, ${shopsOfBoba[0].location.address}`);
+  }, [shopsOfBoba, isLocationEnabled, storeLocationMap, shops, boba.shopId]);
 
   const renderMap = (mapUrl: string) => {
     return (
