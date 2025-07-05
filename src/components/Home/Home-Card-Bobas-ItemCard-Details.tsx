@@ -31,13 +31,13 @@ const ItemCardDetails = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reviewsSortedBy, setReviewsSortedBy] = useState<string>("newest");
+  const [mapUrl, setMapUrl] = useState<string>("current location");
 
   const user = useAuthStore((state) => state.user);
 
   const isLocationEnabled = useLocationStore(
     (state) => state.isLocationEnabled
   );
-  const userLocation = useLocationStore((state) => state.userLocation);
   const storeLocationMap = useLocationStore((state) => state.storeLocationMap);
 
   const shops = useShopStore((state) => state.shops);
@@ -137,14 +137,21 @@ const ItemCardDetails = ({
       setSelectedShop(shopsOfBoba[0]);
       // Set sweetness level
       updateSweetnessLevel(shopsOfBoba[0]);
+
+      // Build the map url
+      setMapUrl(`${shopsOfBoba[0].name}, ${shopsOfBoba[0].location.address}`);
     }
   }, []);
 
   const handleShopClick = (shop: Shop) => {
     if (selectedShop?._id === shop._id) {
       setSelectedShop(null);
+      setMapUrl("current location");
     } else {
       setSelectedShop(shop);
+
+      // Build the map url
+      setMapUrl(`${shop.name}, ${shop.location.address}`);
 
       // Set sweetness level
       const sweetnessOfShop = boba.sweetness.find(
@@ -277,11 +284,7 @@ const ItemCardDetails = ({
           referrerPolicy="no-referrer-when-downgrade"
           src={`https://www.google.com/maps/embed/v1/place?key=${
             process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-          }&q=${encodeURIComponent(
-            `${selectedShop?.name || userLocation?.latitude || "here"}, ${
-              selectedShop?.location.address || userLocation?.longitude || ""
-            }`
-          )}`}
+          }&q=${encodeURIComponent(mapUrl)}`}
         ></iframe>
       </div>
     </div>
