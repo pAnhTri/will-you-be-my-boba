@@ -143,6 +143,21 @@ const ItemCardDetails = ({
     }
   }, []);
 
+  const renderMap = (mapUrl: string) => {
+    return (
+      <iframe
+        className="w-full h-[300px]"
+        style={{ border: "0" }}
+        loading="lazy"
+        allowFullScreen
+        referrerPolicy="no-referrer-when-downgrade"
+        src={`https://www.google.com/maps/embed/v1/place?key=${
+          process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+        }&q=${encodeURIComponent(mapUrl)}`}
+      ></iframe>
+    );
+  };
+
   const handleShopClick = (shop: Shop) => {
     if (selectedShop?._id === shop._id) {
       setSelectedShop(null);
@@ -276,16 +291,7 @@ const ItemCardDetails = ({
 
       {/* Google Maps iFrame API */}
       <div className="md:basis-1/2 w-full rounded-lg overflow-hidden ring-1 ring-gray-200 h-fit">
-        <iframe
-          className="w-full h-[300px]"
-          style={{ border: "0" }}
-          loading="lazy"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps/embed/v1/place?key=${
-            process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-          }&q=${encodeURIComponent(mapUrl)}`}
-        ></iframe>
+        {renderMap(mapUrl)}
       </div>
     </div>
   );
