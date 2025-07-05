@@ -9,7 +9,7 @@ export const GET = async (
   const { shopId } = await params;
 
   try {
-    dbConnect();
+    await dbConnect();
 
     const shop: ShopType | null = await Shop.findById(shopId);
 

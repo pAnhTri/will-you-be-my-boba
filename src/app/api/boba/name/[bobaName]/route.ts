@@ -9,7 +9,7 @@ export const GET = async (
   const { bobaName } = await params;
 
   try {
-    dbConnect();
+    await dbConnect();
 
     const boba: BobaType | null = await Boba.findOne({ name: bobaName });
 
