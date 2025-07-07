@@ -1,5 +1,5 @@
 import { Boba } from "@/types/boba";
-import { Boba as BobaModel, dbConnect, Shop, User } from "../mongodb";
+import { Boba as BobaModel, dbConnect, Report, Shop, User } from "../mongodb";
 import { createClient } from "../supabase/server";
 
 export const getBobaData = async () => {
@@ -207,6 +207,42 @@ export const getUser = async (supabaseId: string) => {
     return plainResult;
   } catch (error) {
     console.error("Error fetching user:", error);
+    return null;
+  }
+};
+
+export const getAllReports = async () => {
+  try {
+    await dbConnect();
+
+    const reports = await Report.find({}).populate("shop");
+
+    const plainResult = JSON.parse(JSON.stringify(reports));
+    return plainResult;
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    return null;
+  }
+};
+
+export const getReportByType = async (
+  type: "flavor" | "shop" | "name" | "other" | "solved"
+) => {
+  try {
+    await dbConnect();
+
+    const reportsByType = await Report.find({
+      type: { $regex: type, $options: "i" },
+    }).populate("shop");
+
+    if (!reportsByType) {
+      return null;
+    }
+
+    const plainResult = JSON.parse(JSON.stringify(reportsByType));
+    return plainResult;
+  } catch (error) {
+    console.error("Error fetching reports by type:", error);
     return null;
   }
 };

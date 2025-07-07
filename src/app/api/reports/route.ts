@@ -2,6 +2,22 @@ import { dbConnect, Report } from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
+export const GET = async () => {
+  try {
+    await dbConnect();
+
+    const reports = await Report.find({}).populate("shop");
+
+    return NextResponse.json(reports);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+};
+
 export const POST = async (req: NextRequest) => {
   try {
     const { reportType, boba, shop, comment } = await req.json();

@@ -36,7 +36,7 @@ export const updateSession = async (req: NextRequest) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const privatePaths = ["/profile", "/api/user"];
+  const privatePaths = ["/admin", "/profile", "/api/user"];
 
   if (
     !user &&

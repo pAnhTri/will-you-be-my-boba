@@ -5,7 +5,7 @@ const ReportSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: {
-        values: ["Shop", "Flavor", "Name", "Other"],
+        values: ["Shop", "Flavor", "Name", "Other", "Solved"],
         message: "Invalid report type",
       },
       required: true,

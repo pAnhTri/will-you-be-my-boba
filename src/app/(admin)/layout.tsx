@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "@mantine/core/styles.css";
 import "../globals.css";
-import { Analytics } from "@vercel/analytics/react";
 import {
   ColorSchemeScript,
   MantineProvider,
@@ -9,8 +8,8 @@ import {
 } from "@mantine/core";
 
 export const metadata: Metadata = {
-  title: "Share Your Profile | Will You Be My Boba",
-  description: "Share your profile with others",
+  title: "Admin | Will You Be My Boba",
+  description: "Admin dashboard for Will You Be My Boba",
 };
 
 export default function RootLayout({
@@ -24,10 +23,7 @@ export default function RootLayout({
         <ColorSchemeScript suppressHydrationWarning />
       </head>
       <body className={`antialiased flex flex-col min-h-screen`}>
-        <MantineProvider>
-          {children}
-          <Analytics />
-        </MantineProvider>
+        <MantineProvider>{children}</MantineProvider>
       </body>
     </html>
   );
