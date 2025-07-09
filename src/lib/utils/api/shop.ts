@@ -1,6 +1,7 @@
-import { ShopType } from "@/lib/mongodb/models/Shop";
+import { ShopDocument, ShopType } from "@/lib/mongodb/models/Shop";
 import { Shop } from "@/types";
 import axios from "axios";
+import { getAxiosError } from "../getAxiosError";
 
 export const addShop = async (payload: ShopType) => {
   try {
@@ -22,6 +23,18 @@ export const addShop = async (payload: ShopType) => {
   }
 };
 
+export const getShops = async (): Promise<ShopDocument[]> => {
+  try {
+    const { data } = await axios.get<{
+      success: boolean;
+      shops: ShopDocument[];
+    }>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/shop`);
+    return data.shops;
+  } catch (error) {
+    throw new Error(getAxiosError(error));
+  }
+};
+
 export const getShopById = async (_id: string): Promise<Shop> => {
   try {
     const { data } = await axios.get(
@@ -38,5 +51,19 @@ export const getShopById = async (_id: string): Promise<Shop> => {
       );
     }
     throw new Error("Something went wrong");
+  }
+};
+
+export const getShopDocumentById = async (
+  _id: string
+): Promise<ShopDocument | null> => {
+  try {
+    const { data } = await axios.get<{
+      success: boolean;
+      shop: ShopDocument | null;
+    }>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/shop/${_id}`);
+    return data.shop;
+  } catch (error) {
+    throw new Error(getAxiosError(error));
   }
 };

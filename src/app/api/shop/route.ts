@@ -1,5 +1,39 @@
 import { dbConnect, Shop } from "@/lib/mongodb";
+import { ShopDocument } from "@/lib/mongodb/models/Shop";
 import { NextRequest, NextResponse } from "next/server";
+
+export const GET = async (): Promise<
+  NextResponse<
+    | { success: boolean; shops: ShopDocument[] }
+    | { success: false; message: string }
+  >
+> => {
+  try {
+    await dbConnect();
+
+    const shops = await Shop.find({});
+
+    return NextResponse.json({ success: true, shops }, { status: 200 });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error);
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.message || "Database error occurred",
+        },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal server error",
+      },
+      { status: 500 }
+    );
+  }
+};
 
 export const POST = async (req: NextRequest) => {
   try {

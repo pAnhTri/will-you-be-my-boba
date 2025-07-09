@@ -1,6 +1,8 @@
 import { ReviewInput } from "@/lib/validators/review";
 import { Boba } from "@/types/boba";
 import axios from "axios";
+import { getAxiosError } from "../getAxiosError";
+import { BobaDocument } from "@/lib/mongodb/models/Boba";
 
 export const getBobas = async () => {
   try {
@@ -141,5 +143,33 @@ export const getBobaByName = async (name: string): Promise<Boba> => {
       );
     }
     throw new Error("Something went wrong");
+  }
+};
+
+export const getBobaDocumentByName = async (
+  name: string
+): Promise<BobaDocument | null> => {
+  try {
+    const { data } = await axios.get<{
+      success: boolean;
+      boba: BobaDocument | null;
+    }>(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba/name/${encodeURIComponent(name)}`
+    );
+    return data.boba;
+  } catch (error) {
+    throw new Error(getAxiosError(error));
+  }
+};
+
+export const getFlavors = async (): Promise<string[]> => {
+  try {
+    const { data } = await axios.get<{
+      success: boolean;
+      flavors: string[];
+    }>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba/flavors`);
+    return data.flavors;
+  } catch (error) {
+    throw new Error(getAxiosError(error));
   }
 };

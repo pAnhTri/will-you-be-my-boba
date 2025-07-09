@@ -1,17 +1,22 @@
 import { Boba, dbConnect } from "@/lib/mongodb";
-import { BobaType } from "@/lib/mongodb/models/Boba";
+import { BobaDocument } from "@/lib/mongodb/models/Boba";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   req: NextRequest,
   { params }: { params: Promise<{ bobaName: string }> }
-) => {
+): Promise<
+  NextResponse<
+    | { success: boolean; boba: BobaDocument | null }
+    | { success: false; message: string }
+  >
+> => {
   const { bobaName } = await params;
 
   try {
     await dbConnect();
 
-    const boba: BobaType | null = await Boba.findOne({ name: bobaName });
+    const boba: BobaDocument | null = await Boba.findOne({ name: bobaName });
 
     if (!boba) {
       return NextResponse.json(

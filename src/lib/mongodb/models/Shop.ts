@@ -16,5 +16,8 @@ const ShopSchema = new mongoose.Schema({
 const Shop = mongoose.models.Shop || mongoose.model("Shop", ShopSchema);
 
 export type ShopType = InferSchemaType<typeof ShopSchema>;
+export type ShopDocument = mongoose.HydratedDocumentFromSchema<
+  typeof ShopSchema
+>;
 
 export default Shop;

@@ -1,17 +1,22 @@
 import { dbConnect, Shop } from "@/lib/mongodb";
-import { ShopType } from "@/lib/mongodb/models/Shop";
+import { ShopDocument } from "@/lib/mongodb/models/Shop";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   req: NextRequest,
   { params }: { params: Promise<{ shopId: string }> }
-) => {
+): Promise<
+  NextResponse<
+    | { success: boolean; shop: ShopDocument | null }
+    | { success: false; message: string }
+  >
+> => {
   const { shopId } = await params;
 
   try {
     await dbConnect();
 
-    const shop: ShopType | null = await Shop.findById(shopId);
+    const shop: ShopDocument | null = await Shop.findById(shopId);
 
     if (!shop) {
       return NextResponse.json(

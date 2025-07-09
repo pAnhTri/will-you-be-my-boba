@@ -1,13 +1,17 @@
 import { ReportDocument } from "@/lib/mongodb/models/Report";
 import { cn, toLocalTime } from "@/lib/utils";
 import { Shop } from "@/types";
-import { Badge, Group, Paper, Stack } from "@mantine/core";
+import { Badge, Collapse, Group, Paper, Stack } from "@mantine/core";
+import { useState } from "react";
+import ReportAction from "./ReportAction";
 
 interface ReportCardProps {
   report: ReportDocument;
 }
 
 const ReportCard = ({ report }: ReportCardProps) => {
+  const [isReportActionOpen, setIsReportActionOpen] = useState(false);
+
   const getBadgeColor = (type: string) => {
     console.log(type);
 
@@ -32,6 +36,7 @@ const ReportCard = ({ report }: ReportCardProps) => {
         report.type === "Solved" &&
           "bg-green-100 border-green-500 hover:bg-green-200"
       )}
+      onClick={() => setIsReportActionOpen(!isReportActionOpen)}
     >
       {/* Batch and Name */}
       <Group>
@@ -55,6 +60,10 @@ const ReportCard = ({ report }: ReportCardProps) => {
           {report.comment}
         </div>
       </Stack>
+
+      <Collapse in={isReportActionOpen}>
+        {isReportActionOpen && <ReportAction report={report} />}
+      </Collapse>
     </Paper>
   );
 };

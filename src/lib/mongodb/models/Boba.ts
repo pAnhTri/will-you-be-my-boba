@@ -91,5 +91,8 @@ const Boba = mongoose.models.Boba || mongoose.model("Boba", BobaSchema);
 export type BobaType = InferSchemaType<typeof BobaSchema>;
 export type CommunityReviewType = InferSchemaType<typeof CommunityReviewSchema>;
 export type SweetnessLevelType = InferSchemaType<typeof SweetnessLevelSchema>;
+export type BobaDocument = mongoose.HydratedDocumentFromSchema<
+  typeof BobaSchema
+>;
 
 export default Boba;
