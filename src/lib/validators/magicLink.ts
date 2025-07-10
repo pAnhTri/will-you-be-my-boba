@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const magicLinkValidatorSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
 });
 
 export type MagicLinkInput = z.infer<typeof magicLinkValidatorSchema>;
