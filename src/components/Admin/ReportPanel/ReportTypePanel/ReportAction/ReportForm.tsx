@@ -12,6 +12,7 @@ import {
   Text,
   Group,
   ScrollArea,
+  MultiSelect,
 } from "@mantine/core";
 import { HTMLAttributes, useEffect, useState, useMemo } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -20,12 +21,14 @@ interface ReportFormProps extends HTMLAttributes<HTMLFormElement> {
   availableShops: ShopDocument[];
   availableFlavors: string[];
   currentBoba: BobaDocument;
+  reportType?: "Flavor" | "Shop" | "Name" | "Other" | "Solved";
 }
 
 const ReportForm = ({
   availableFlavors,
   availableShops,
   currentBoba,
+  reportType,
   className,
   ...props
 }: ReportFormProps) => {
@@ -53,11 +56,29 @@ const ReportForm = ({
       .slice(0, 20);
   }, [availableFlavors, searchTerm]);
 
+  const availableShopsDataMap = useMemo(() => {
+    if (!availableShops) return [];
+    return availableShops
+      .map((shop) => {
+        if (shop) {
+          return {
+            value: shop._id.toString(),
+            label: `${shop.name} (${shop.location.city})`,
+          };
+        }
+        return null;
+      })
+      .filter(
+        (item): item is { value: string; label: string } => item !== null
+      );
+  }, [availableShops]);
+
   // Set default values on mount and when currentBoba changes
   useEffect(() => {
     reset({
       name: currentBoba?.name || "",
       flavors: currentBoba?.flavors || [],
+      shops: currentBoba?.shopId.map((shop) => shop.toString()) || [],
     });
   }, [currentBoba, reset]);
 
@@ -135,6 +156,24 @@ const ReportForm = ({
               </ScrollArea.Autosize>
             </Stack>
           </Stack>
+        )}
+      />
+
+      {/* Shop tags select */}
+      <Controller
+        control={control}
+        name="shops"
+        render={({ field }) => (
+          <MultiSelect
+            label="Shops"
+            placeholder="Type to search shops..."
+            {...field}
+            error={errors.shops?.message}
+            clearable
+            searchable
+            data={availableShopsDataMap}
+            disabled={reportType !== "Shop"}
+          />
         )}
       />
       <Button type="submit">Submit</Button>

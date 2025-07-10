@@ -44,6 +44,7 @@ const ReportAction = ({ report }: ReportActionProps) => {
           availableFlavors={availableFlavors ?? []}
           availableShops={availableShops ?? []}
           currentBoba={currentBoba!}
+          reportType={report.type}
         />
       </Paper>
     </>
