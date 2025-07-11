@@ -13,8 +13,6 @@ const ReportCard = ({ report }: ReportCardProps) => {
   const [isReportActionOpen, setIsReportActionOpen] = useState(false);
 
   const getBadgeColor = (type: string) => {
-    console.log(type);
-
     switch (type) {
       case "Flavor":
         return "green";

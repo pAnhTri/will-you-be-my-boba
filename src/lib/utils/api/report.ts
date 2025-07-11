@@ -1,5 +1,7 @@
 import axios from "axios";
 import { ReportInput } from "@/lib/validators/report";
+import { ReportDocument } from "@/lib/mongodb/models/Report";
+import { getAxiosError } from "../getAxiosError";
 
 export const createReport = async (
   payload: ReportInput & { boba: string }
@@ -57,5 +59,20 @@ export const getReportByType = async (type: string) => {
     } else {
       throw new Error("Unknown error");
     }
+  }
+};
+
+export const updateReport = async (
+  reportId: string,
+  payload: Partial<ReportDocument>
+): Promise<ReportDocument | null> => {
+  try {
+    const { data: response } = await axios.patch(
+      `/api/reports/${reportId}`,
+      payload
+    );
+    return response;
+  } catch (error) {
+    throw new Error(getAxiosError(error));
   }
 };

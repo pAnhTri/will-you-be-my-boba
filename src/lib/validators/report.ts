@@ -34,4 +34,17 @@ export const reportValidatorSchema = z
     }
   );
 
+export const reportDocumentValidatorSchema = z.object({
+  reportType: z.enum(["Flavor", "Shop", "Name", "Other", "Solved"]),
+  boba: z.string().min(1, "Boba is required"),
+  shop: z
+    .string()
+    .refine(
+      (val) => mongoose.Types.ObjectId.isValid(val),
+      "Must be a valid shop"
+    )
+    .optional(),
+  comment: z.string().optional(),
+});
+
 export type ReportInput = z.infer<typeof reportValidatorSchema>;

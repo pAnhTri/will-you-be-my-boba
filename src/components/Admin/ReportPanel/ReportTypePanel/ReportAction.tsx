@@ -1,5 +1,5 @@
 import { ReportDocument } from "@/lib/mongodb/models/Report";
-import { useReportInformationGetter } from "@/lib/utils/hooks/useReportInformationGetter";
+import { useReportInformationGetter } from "@/lib/utils/hooks";
 import { Alert, Divider, LoadingOverlay, Paper } from "@mantine/core";
 import { LuCircleAlert } from "react-icons/lu";
 import ReportForm from "./ReportAction/ReportForm";
@@ -44,6 +44,7 @@ const ReportAction = ({ report }: ReportActionProps) => {
           availableFlavors={availableFlavors ?? []}
           availableShops={availableShops ?? []}
           currentBoba={currentBoba!}
+          reportId={report._id.toString()}
           reportType={report.type}
         />
       </Paper>

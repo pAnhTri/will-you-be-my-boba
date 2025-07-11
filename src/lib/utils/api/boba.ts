@@ -173,3 +173,21 @@ export const getFlavors = async (): Promise<string[]> => {
     throw new Error(getAxiosError(error));
   }
 };
+
+export const updateBoba = async (
+  bobaId: string,
+  payload: Partial<BobaDocument>
+): Promise<BobaDocument | null> => {
+  try {
+    const { data } = await axios.patch<{
+      success: boolean;
+      boba: BobaDocument | null;
+    }>(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/boba/${encodeURIComponent(bobaId)}`,
+      payload
+    );
+    return data.boba;
+  } catch (error) {
+    throw new Error(getAxiosError(error));
+  }
+};

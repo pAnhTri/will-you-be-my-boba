@@ -1,6 +1,9 @@
+"use server";
+
 import { Boba } from "@/types/boba";
 import { Boba as BobaModel, dbConnect, Report, Shop, User } from "../mongodb";
 import { createClient } from "../supabase/server";
+import { revalidatePath } from "next/cache";
 
 export const getBobaData = async () => {
   await dbConnect();
@@ -245,4 +248,8 @@ export const getReportByType = async (
     console.error("Error fetching reports by type:", error);
     return null;
   }
+};
+
+export const revalidate = async (path: string) => {
+  revalidatePath(path);
 };
