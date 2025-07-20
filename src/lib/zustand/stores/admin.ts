@@ -1,17 +1,35 @@
+import { ReportDocument } from "@/lib/mongodb/models/Report";
 import { create } from "zustand";
 
 interface AdminStore {
-  activeTab: "reports" | "shops" | "boba";
-  currentReportType: "all" | "flavor" | "shop" | "boba" | "other" | "solved";
-  setActiveTab: (tab: "reports" | "shops" | "boba") => void;
-  setCurrentReportType: (
-    type: "all" | "flavor" | "shop" | "boba" | "other" | "solved"
+  activeReportTab: "all" | "flavors" | "shops" | "bobas" | "others" | "solved";
+  currentReport: ReportDocument | null;
+  isFormDataLoading: boolean;
+  reports: ReportDocument[] | null;
+  setActiveReportTab: (
+    tab: "all" | "flavors" | "shops" | "bobas" | "others" | "solved"
   ) => void;
+  setCurrentReport: (report: ReportDocument | null) => void;
+  setIsFormDataLoading: (isLoading: boolean) => void;
+  setReports: (reports: ReportDocument[] | null) => void;
+  toggleCurrentReport: (report: ReportDocument | null) => void;
 }
 
-export const useAdminStore = create<AdminStore>((set) => ({
-  activeTab: "reports",
-  currentReportType: "all",
-  setActiveTab: (tab) => set({ activeTab: tab }),
-  setCurrentReportType: (type) => set({ currentReportType: type }),
+export const useAdminStore = create<AdminStore>((set, get) => ({
+  activeReportTab: "all",
+  currentReport: null,
+  isFormDataLoading: false,
+  reports: null,
+  setActiveReportTab: (tab) => set({ activeReportTab: tab }),
+  setCurrentReport: (currentReport) => set({ currentReport: currentReport }),
+  setIsFormDataLoading: (isLoading) => set({ isFormDataLoading: isLoading }),
+  setReports: (reports) => set({ reports }),
+  toggleCurrentReport: (report) => {
+    const currentReport = get().currentReport;
+    if (currentReport?._id.toString() === report?._id.toString()) {
+      set({ currentReport: null });
+    } else {
+      set({ currentReport: report });
+    }
+  },
 }));

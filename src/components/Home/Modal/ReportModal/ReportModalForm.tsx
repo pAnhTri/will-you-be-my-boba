@@ -1,5 +1,6 @@
-import { cn, getBobaByName, getShopById } from "@/lib/utils";
+import { cn, getBobaByName } from "@/lib/utils";
 import { createReport } from "@/lib/utils/api/report";
+import { getShopById } from "@/lib/utils/api/shop";
 import { reportValidatorSchema, ReportInput } from "@/lib/validators/report";
 import { useReportStore } from "@/lib/zustand/stores";
 import { zodResolver } from "@hookform/resolvers/zod";

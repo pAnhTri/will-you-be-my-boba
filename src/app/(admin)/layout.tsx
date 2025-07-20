@@ -22,7 +22,7 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript suppressHydrationWarning />
       </head>
-      <body className={`antialiased flex flex-col min-h-screen`}>
+      <body className={`antialiased`}>
         <MantineProvider>{children}</MantineProvider>
       </body>
     </html>

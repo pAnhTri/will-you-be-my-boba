@@ -1,8 +1,13 @@
-import ActiveTab from "@/components/Admin/ActiveTab";
-import NotAdminMessage from "@/components/Admin/NotAdminMessage";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/utils/server";
 import { redirect } from "next/navigation";
+import NotAdminMessage from "@/components/Admin/NotAdminMessage";
+import AdminTabs from "@/components/Admin/AdminTabs";
+import { Suspense } from "react";
+import FlavorFetcher from "@/components/Admin/FlavorFetcher";
+import { Center, Group, Loader, Text } from "@mantine/core";
+import DataFetchLoaders from "@/components/Admin/DataFetchLoaders";
+import ShopsFetcher from "@/components/Admin/ShopsFetcher";
 
 const Admin = async () => {
   const supabase = await createClient();
@@ -28,9 +33,19 @@ const Admin = async () => {
   }
 
   return (
-    <div className="flex flex-col grow">
-      <ActiveTab />
-    </div>
+    <>
+      <div className="full-screen">
+        <Group gap="xs" justify="center">
+          <Suspense fallback={<DataFetchLoaders text="Loading flavors..." />}>
+            <FlavorFetcher />
+          </Suspense>
+          <Suspense fallback={<DataFetchLoaders text="Loading shops..." />}>
+            <ShopsFetcher />
+          </Suspense>
+        </Group>
+        <AdminTabs />
+      </div>
+    </>
   );
 };
 

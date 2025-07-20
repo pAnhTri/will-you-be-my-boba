@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Alert, Container, Text, Title, Stack } from "@mantine/core";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 const NotAdminMessage = () => {
   const router = useRouter();
@@ -15,18 +17,33 @@ const NotAdminMessage = () => {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
-        <div className="text-red-500 text-6xl mb-4">⚠️</div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-        <p className="text-gray-600 mb-4">
-          You don&apos;t have admin privileges to access this page.
-        </p>
-        <p className="text-sm text-gray-500">
-          Redirecting to home page in 3 seconds...
-        </p>
-      </div>
-    </div>
+    <Container size="sm" py="xl">
+      <Stack gap="md" align="center">
+        <Alert
+          icon={<FaExclamationTriangle size="1rem" />}
+          title="Access Denied"
+          color="red"
+          variant="light"
+          w="100%"
+        >
+          <Text size="sm" mb="xs">
+            You do not have administrator privileges to access this page.
+          </Text>
+          <Text size="xs" c="dimmed">
+            Redirecting to home page in 3 seconds...
+          </Text>
+        </Alert>
+
+        <Title order={3} ta="center" c="dimmed">
+          Admin Access Required
+        </Title>
+
+        <Text size="sm" ta="center" c="dimmed">
+          This page is restricted to administrators only. Please contact your
+          system administrator if you believe this is an error.
+        </Text>
+      </Stack>
+    </Container>
   );
 };
 
