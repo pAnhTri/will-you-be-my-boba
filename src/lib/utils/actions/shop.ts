@@ -9,8 +9,6 @@ export const getShops = async (): Promise<ShopDocument[]> => {
 
     const shops = await Shop.find();
 
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-
     return JSON.parse(JSON.stringify(shops));
   } catch (error) {
     throw new Error(

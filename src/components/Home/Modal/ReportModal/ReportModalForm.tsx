@@ -1,4 +1,5 @@
-import { cn, getBobaByName } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { getBobaByName } from "@/lib/utils/api/boba";
 import { createReport } from "@/lib/utils/api/report";
 import { getShopById } from "@/lib/utils/api/shop";
 import { reportValidatorSchema, ReportInput } from "@/lib/validators/report";

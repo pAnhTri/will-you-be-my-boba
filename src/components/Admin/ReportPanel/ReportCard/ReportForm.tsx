@@ -1,4 +1,5 @@
 import { BobaDocument } from "@/lib/mongodb/models/Boba";
+import { revalidatePath } from "@/lib/utils/actions";
 import { ReportFixInput, reportFixValidator } from "@/lib/validators/reportFix";
 import {
   useAdminStore,
@@ -9,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Badge,
   Button,
+  Checkbox,
   Group,
   MultiSelect,
   ScrollArea,
@@ -18,7 +20,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 interface ReportFormProps {
@@ -32,13 +34,22 @@ const ReportForm = ({ boba }: ReportFormProps) => {
   const shops = useShopStore((state) => state.shopDocuments);
   const isShopsLoading = useShopStore((state) => state.isShopsLoading);
 
+  const setCurrentReport = useAdminStore((state) => state.setCurrentReport);
+  const setIsShopLoading = useShopStore((state) => state.setIsShopsLoading);
+  const setIsFlavorLoading = useFlavorStore(
+    (state) => state.setIsFlavorsLoading
+  );
+  const setIsReportsLoading = useAdminStore(
+    (state) => state.setIsReportsLoading
+  );
+
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSolved, setIsSolved] = useState(currentReport?.type === "Solved");
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<ReportFixInput>({
     resolver: zodResolver(reportFixValidator),
     defaultValues: {
@@ -76,6 +87,12 @@ const ReportForm = ({ boba }: ReportFormProps) => {
 
   const onSubmit: SubmitHandler<ReportFixInput> = (data) => {
     console.log(data);
+
+    revalidatePath("/admin");
+    setIsShopLoading(true);
+    setIsFlavorLoading(true);
+    setCurrentReport(null);
+    setIsReportsLoading(true);
   };
 
   return (
@@ -177,7 +194,15 @@ const ReportForm = ({ boba }: ReportFormProps) => {
         }
       />
 
-      <Button type="submit">Submit</Button>
+      <Group justify="end">
+        <Checkbox
+          checked={isSolved}
+          onChange={(e) => setIsSolved(e.target.checked)}
+          color="green"
+          label="Mark as solved"
+        />
+        <Button type="submit">Submit</Button>
+      </Group>
     </form>
   );
 };

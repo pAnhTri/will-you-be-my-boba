@@ -1,29 +1,48 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { getShopNameById as getShopNameByIdAction } from "../actions/shop";
+import {
+  getShopNameById as getShopNameByIdAction,
+  getShops,
+} from "../actions/shop";
+import { useShopStore } from "@/lib/zustand/stores/shop";
+import useSWR from "swr";
+import { ShopDocument } from "@/lib/mongodb/models/Shop";
 
 export const useShopNameByIdFetcher = (shopId: string | null) => {
+  const cachedShopNames = useShopStore((state) => state.cachedShopNames);
+  const setCachedShopNames = useShopStore((state) => state.setCachedShopNames);
+
   const [data, setData] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getShopNameById = useCallback(async (shopId: string) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      setData(null);
+  const getShopNameById = useCallback(
+    async (shopId: string) => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        setData(null);
 
-      const shopName = await getShopNameByIdAction(shopId);
-      setData(shopName);
-    } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Failed to get shop name"
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        if (cachedShopNames.has(shopId)) {
+          setData(cachedShopNames.get(shopId) ?? null);
+          return;
+        }
+
+        const shopName = await getShopNameByIdAction(shopId);
+        setData(shopName);
+        setCachedShopNames(new Map([...cachedShopNames, [shopId, shopName]]));
+      } catch (error) {
+        setError(
+          error instanceof Error ? error.message : "Failed to get shop name"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   useEffect(
     () => {
@@ -39,5 +58,31 @@ export const useShopNameByIdFetcher = (shopId: string | null) => {
     data,
     error,
     isLoading,
+  };
+};
+
+export const useShopNameById = (shopId: string | null) => {
+  const { data, error, isLoading } = useShopNameByIdFetcher(shopId);
+
+  return {
+    data,
+    error,
+    isLoading,
+  };
+};
+
+export const useShops = () => {
+  const {
+    data: shops,
+    isLoading,
+    error,
+    mutate,
+  } = useSWR<ShopDocument[]>("shops", getShops);
+
+  return {
+    shops,
+    isLoading,
+    error,
+    mutate,
   };
 };

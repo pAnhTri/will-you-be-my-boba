@@ -11,17 +11,19 @@ import {
 } from "@mantine/core";
 import ActiveReportPanelTabs from "./ReportPanel/ActiveReportPanelTabs";
 import { useAdminStore } from "@/lib/zustand/stores/admin";
-import { useInitiateReports } from "@/lib/utils/hooks/reports";
 import { useMemo } from "react";
 import ReportCard from "./ReportPanel/ReportCard";
 
 const ReportPanel = () => {
   const activeReportTab = useAdminStore((state) => state.activeReportTab);
   const reports = useAdminStore((state) => state.reports);
+  const isReportsLoading = useAdminStore((state) => state.isReportsLoading);
+  const reportsError = useAdminStore((state) => state.reportsError);
 
   const reportsByTab = useMemo(() => {
     if (!reports) return [];
-    if (activeReportTab === "all") return reports;
+    if (activeReportTab === "all")
+      return reports.filter((report) => report.type !== "Solved");
 
     switch (activeReportTab) {
       case "flavors":
@@ -37,17 +39,15 @@ const ReportPanel = () => {
     }
   }, [reports, activeReportTab]);
 
-  const { isLoading, error } = useInitiateReports();
-
-  if (error) {
+  if (reportsError) {
     return (
       <Alert title="Error" color="red">
-        {error}
+        {reportsError}
       </Alert>
     );
   }
 
-  if (isLoading || !reports) {
+  if (isReportsLoading || !reports) {
     return (
       <Group className="remaining-space justify-center items-center gap-2">
         <Loader />

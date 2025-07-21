@@ -1,33 +1,44 @@
 "use client";
 
-import { ShopDocument } from "@/lib/mongodb/models/Shop";
+import { useShops } from "@/lib/utils/hooks";
 import { useShopStore } from "@/lib/zustand/stores";
-import { Text } from "@mantine/core";
+import { Alert } from "@mantine/core";
 import { useEffect } from "react";
 
 interface ShopsInitiatorProps {
-  shops: ShopDocument[] | null;
-  errorMessage: string | null;
+  error: Error | null;
 }
 
-const ShopsInitiator = ({ shops, errorMessage }: ShopsInitiatorProps) => {
-  const setIsShopsLoading = useShopStore((state) => state.setIsShopsLoading);
+const ShopsInitiator = ({ error }: ShopsInitiatorProps) => {
+  const { shops } = useShops();
+
   const setShopDocuments = useShopStore((state) => state.setShopDocuments);
+  const setShopsError = useShopStore((state) => state.setShopsError);
+  const setIsShopsLoading = useShopStore((state) => state.setIsShopsLoading);
 
-  useEffect(() => {
-    if (shops) {
-      setShopDocuments(shops);
-    } else {
-      setShopDocuments([]);
-    }
-    setIsShopsLoading(false);
+  useEffect(
+    () => {
+      if (shops) {
+        setShopDocuments(shops);
+      }
+
+      if (error) {
+        setShopsError(error.message);
+      }
+
+      setIsShopsLoading(false);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [shops, error]
+  );
 
-  if (errorMessage) {
-    return <Text c="red">{errorMessage}</Text>;
+  if (error) {
+    return (
+      <Alert color="red" title="Error">
+        {error.message}
+      </Alert>
+    );
   }
-
   return null;
 };
 

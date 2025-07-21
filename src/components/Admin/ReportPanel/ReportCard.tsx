@@ -1,11 +1,6 @@
 import { ReportDocument } from "@/lib/mongodb/models/Report";
-import {
-  cn,
-  getReportBadgeColor,
-  toLocalTime,
-  useBobaByNameFetcher,
-} from "@/lib/utils";
-import { useShopNameByIdFetcher } from "@/lib/utils/hooks/shops";
+import { cn, getReportBadgeColor, toLocalTime } from "@/lib/utils";
+import { useBobaByName } from "@/lib/utils/hooks/bobas";
 import { useAdminStore } from "@/lib/zustand/stores";
 import {
   Badge,
@@ -20,6 +15,7 @@ import {
 } from "@mantine/core";
 import React from "react";
 import ReportForm from "./ReportCard/ReportForm";
+import { useShopNameById } from "@/lib/utils/hooks/shops";
 
 interface ReportCardProps {
   report: ReportDocument;
@@ -37,13 +33,13 @@ const ReportCard = ({ report }: ReportCardProps) => {
     error: bobaError,
     fetchBobaByName,
     resetBoba,
-  } = useBobaByNameFetcher();
+  } = useBobaByName(report.boba);
 
   const {
     data: shopName,
     isLoading: isShopNameLoading,
     error: shopNameError,
-  } = useShopNameByIdFetcher(report.shop?.toString() ?? null);
+  } = useShopNameById(report.shop?.toString() ?? null);
 
   if (shopNameError) {
     return (
@@ -57,7 +53,7 @@ const ReportCard = ({ report }: ReportCardProps) => {
     if (currentReport?._id.toString() === report._id.toString()) {
       resetBoba();
     } else {
-      fetchBobaByName(report.boba);
+      fetchBobaByName();
     }
 
     toggleCurrentReport(report);
@@ -136,7 +132,7 @@ const ReportCard = ({ report }: ReportCardProps) => {
           ) : isFormDataLoading ? (
             <Skeleton height={200} width={500} />
           ) : (
-            <ReportForm boba={boba} />
+            <ReportForm boba={boba ?? null} />
           )}
         </Paper>
       </Collapse>

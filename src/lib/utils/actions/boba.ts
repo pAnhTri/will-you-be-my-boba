@@ -20,7 +20,7 @@ export const getBobaByName = async (bobaName: string) => {
   }
 };
 
-export const getBobaFlavors = async () => {
+export const getBobaFlavors = async (): Promise<string[]> => {
   try {
     await dbConnect();
 

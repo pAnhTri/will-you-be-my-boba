@@ -5,7 +5,7 @@ import CloseButton from "./Home-Modal-AddBoba-CloseButton";
 import { useModalStore, useShopStore } from "@/lib/zustand/stores";
 import AddShopForm from "./Home-Modal-AddShop-Form";
 import { SearchResult } from "@/types";
-import { getGooglePlacesDetails } from "@/lib/utils";
+import { getGooglePlacesDetails } from "@/lib/utils/api/googplacesapi";
 import { ShopSearchInput } from "@/lib/validators/shopSearch";
 import { CiCircleAlert } from "react-icons/ci";
 import SearchResultCard from "./Home-Modal-AddShop-SearchResultCard";

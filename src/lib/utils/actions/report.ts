@@ -9,6 +9,8 @@ export const getReports = async (): Promise<ReportDocument[]> => {
 
     const reports = await Report.find<ReportDocument>({});
 
+    //DEBUG
+    // throw new Error("test");
     return JSON.parse(JSON.stringify(reports));
   } catch (error) {
     throw new Error(

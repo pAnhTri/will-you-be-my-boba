@@ -1,8 +1,6 @@
-import {
-  cn,
-  formatSearchResultsToShop,
-  getGooglePlacesDetailsWithLocationBias,
-} from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { formatSearchResultsToShop } from "@/lib/utils/formatSearchResultsToShop";
+import { getGooglePlacesDetailsWithLocationBias } from "@/lib/utils/api/googplacesapi";
 import { useLocationStore } from "@/lib/zustand/stores";
 import { ShopTypeWithDistance } from "@/types/shop";
 import { HTMLAttributes, useEffect, useState, useRef } from "react";
