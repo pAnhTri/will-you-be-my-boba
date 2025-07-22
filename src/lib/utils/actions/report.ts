@@ -2,6 +2,11 @@
 
 import { dbConnect } from "@/lib/mongodb";
 import Report, { ReportDocument } from "@/lib/mongodb/models/Report";
+import {
+  ReportDocumentInput,
+  reportDocumentValidatorSchema,
+} from "@/lib/validators/report";
+import { FilterQuery } from "mongoose";
 
 export const getReports = async (): Promise<ReportDocument[]> => {
   try {
@@ -33,6 +38,51 @@ export const getReportsLimited = async (
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to fetch reports limited"
+    );
+  }
+};
+
+export const updateReport = async (
+  reportUpdateCondition: FilterQuery<ReportDocument>,
+  payload: Partial<ReportDocument>
+): Promise<ReportDocument> => {
+  try {
+    if (Object.keys(payload).length === 0) {
+      throw new Error("No payload provided");
+    }
+
+    const sanitizedPayload: Partial<ReportDocumentInput> = {
+      reportType: payload.type,
+      boba: payload.boba,
+      shop: payload.shop?.toString(),
+      comment: payload.comment?.toString(),
+    };
+
+    // payload validation
+    const validatedPayload = reportDocumentValidatorSchema
+      .partial()
+      .safeParse(sanitizedPayload);
+
+    if (!validatedPayload.success) {
+      throw new Error(validatedPayload.error.message);
+    }
+
+    await dbConnect();
+
+    const report = await Report.findOneAndUpdate<ReportDocument>(
+      reportUpdateCondition,
+      validatedPayload.data,
+      { new: true }
+    );
+
+    if (!report) {
+      throw new Error("Report not found");
+    }
+
+    return JSON.parse(JSON.stringify(report));
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Failed to update report"
     );
   }
 };

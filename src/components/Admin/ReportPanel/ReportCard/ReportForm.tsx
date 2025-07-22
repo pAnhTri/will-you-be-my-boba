@@ -1,5 +1,8 @@
 import { BobaDocument } from "@/lib/mongodb/models/Boba";
-import { revalidatePath } from "@/lib/utils/actions";
+import { ReportDocument } from "@/lib/mongodb/models/Report";
+import { revalidatePath, updateBoba, updateReport } from "@/lib/utils/actions";
+import { useReports } from "@/lib/utils/hooks";
+import { useBobaByName } from "@/lib/utils/hooks/bobas";
 import { ReportFixInput, reportFixValidator } from "@/lib/validators/reportFix";
 import {
   useAdminStore,
@@ -20,7 +23,8 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { useEffect, useMemo, useState } from "react";
+import mongoose from "mongoose";
+import { useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 interface ReportFormProps {
@@ -28,6 +32,9 @@ interface ReportFormProps {
 }
 
 const ReportForm = ({ boba }: ReportFormProps) => {
+  const { mutate: fetchBobaByName } = useBobaByName(boba?.name ?? "");
+  const { mutate: fetchReports, reports } = useReports();
+
   const currentReport = useAdminStore((state) => state.currentReport);
   const flavors = useFlavorStore((state) => state.flavors);
   const isFlavorsLoading = useFlavorStore((state) => state.isFlavorsLoading);
@@ -35,13 +42,6 @@ const ReportForm = ({ boba }: ReportFormProps) => {
   const isShopsLoading = useShopStore((state) => state.isShopsLoading);
 
   const setCurrentReport = useAdminStore((state) => state.setCurrentReport);
-  const setIsShopLoading = useShopStore((state) => state.setIsShopsLoading);
-  const setIsFlavorLoading = useFlavorStore(
-    (state) => state.setIsFlavorsLoading
-  );
-  const setIsReportsLoading = useAdminStore(
-    (state) => state.setIsReportsLoading
-  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isSolved, setIsSolved] = useState(currentReport?.type === "Solved");
@@ -85,14 +85,39 @@ const ReportForm = ({ boba }: ReportFormProps) => {
       );
   }, [shops]);
 
-  const onSubmit: SubmitHandler<ReportFixInput> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ReportFixInput> = async (data) => {
+    const bobaPayload: Partial<BobaDocument> = {
+      name: data.name,
+      flavors: data.flavors,
+      shopId: data.shops.map((shop) => new mongoose.Types.ObjectId(shop)),
+    };
 
+    const updatedBoba = await updateBoba(
+      { name: currentReport?.boba },
+      bobaPayload
+    );
+
+    // Update success, optimistically update the boba data
+    fetchBobaByName(updatedBoba);
+
+    const reportPayload: Partial<ReportDocument> = {
+      type: isSolved ? "Solved" : undefined,
+      boba: data.name,
+    };
+
+    const updatedReport = await updateReport(
+      { _id: currentReport?._id },
+      reportPayload
+    );
+
+    const optimisticData = reports?.map((report) =>
+      report._id === updatedReport._id ? updatedReport : report
+    );
+
+    fetchReports(optimisticData ?? []);
+
+    // Prep the server to refetch on next compile
     revalidatePath("/admin");
-    setIsShopLoading(true);
-    setIsFlavorLoading(true);
-    setCurrentReport(null);
-    setIsReportsLoading(true);
   };
 
   return (

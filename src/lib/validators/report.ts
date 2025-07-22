@@ -48,3 +48,4 @@ export const reportDocumentValidatorSchema = z.object({
 });
 
 export type ReportInput = z.infer<typeof reportValidatorSchema>;
+export type ReportDocumentInput = z.infer<typeof reportDocumentValidatorSchema>;

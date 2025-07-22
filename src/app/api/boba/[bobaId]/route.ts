@@ -112,7 +112,7 @@ export const PATCH = async (
     }
 
     // Validate payload
-    const validatedPayload = bobaDocumentValidatorSchema.safeParse({
+    const validatedPayload = bobaDocumentValidatorSchema.partial().safeParse({
       name,
       flavors,
       shopId,

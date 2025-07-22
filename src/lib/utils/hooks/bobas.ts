@@ -103,11 +103,13 @@ export const useBobaByName = (bobaName: string) => {
   // Provide a fetcher to SWR so it manages cache/fetch automatically
   const {
     data: boba,
+    isLoading,
+    error: bobaError,
     mutate,
     isValidating,
   } = useSWR<BobaDocument | null>(
     bobaName ? `boba-by-name-${bobaName}` : null,
-    null,
+    () => getBobaByName(bobaName),
     {
       fallbackData: null,
       revalidateOnMount: false,
@@ -150,7 +152,10 @@ export const useBobaByName = (bobaName: string) => {
 
   return {
     boba,
+    isLoading,
+    bobaError,
     error,
+    mutate,
     fetchBobaByName,
     resetBoba,
   };
