@@ -5,11 +5,11 @@ import NotAdminMessage from "@/components/Admin/NotAdminMessage";
 import AdminTabs from "@/components/Admin/AdminTabs";
 import { Suspense } from "react";
 import { Group } from "@mantine/core";
-import { getBobaFlavors, getReports, getShops } from "@/lib/utils/actions";
 import DataFetchLoaders from "@/components/Admin/DataFetchLoaders";
-import ReportsFetcher from "@/components/Admin/ReportsFetcher";
-import BobaFlavorsFetcher from "@/components/Admin/BobaFlavorsFetcher";
-import ShopsFetcher from "@/components/Admin/ShopsFetcher";
+import ReportsInitializer from "@/components/Admin/ReportsInitializer";
+import ReportsHydrater from "@/components/Admin/ReportsHydrater";
+import ShopsInitializer from "@/components/Admin/ShopsInitializer";
+import BobaFlavorsInitializer from "@/components/Admin/BobaFlavorsInitializer";
 
 const Admin = async () => {
   const supabase = await createClient();
@@ -34,25 +34,20 @@ const Admin = async () => {
     return <NotAdminMessage />;
   }
 
-  // Fire the fetchers
-  const reportsPromise = getReports();
-  const flavorsPromise = getBobaFlavors();
-  const shopsPromise = getShops();
-
   return (
     <>
       <div className="full-screen">
         <Group gap="xs" justify="center">
           <Suspense fallback={<DataFetchLoaders text="Loading reports..." />}>
-            <ReportsFetcher reportsPromise={reportsPromise} />
+            <ReportsInitializer />
           </Suspense>
 
           <Suspense fallback={<DataFetchLoaders text="Loading flavors..." />}>
-            <BobaFlavorsFetcher flavorsPromise={flavorsPromise} />
+            <BobaFlavorsInitializer />
           </Suspense>
 
           <Suspense fallback={<DataFetchLoaders text="Loading shops..." />}>
-            <ShopsFetcher shopsPromise={shopsPromise} />
+            <ShopsInitializer />
           </Suspense>
         </Group>
         <AdminTabs />

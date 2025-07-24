@@ -71,7 +71,7 @@ export const updateReport = async (
 
     const report = await Report.findOneAndUpdate<ReportDocument>(
       reportUpdateCondition,
-      validatedPayload.data,
+      payload,
       { new: true }
     );
 
@@ -83,6 +83,41 @@ export const updateReport = async (
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to update report"
+    );
+  }
+};
+
+export const updateManyReports = async (
+  reportUpdateCondition: FilterQuery<ReportDocument>,
+  payload: Partial<ReportDocument>
+): Promise<void> => {
+  try {
+    if (Object.keys(payload).length === 0) {
+      throw new Error("No payload provided");
+    }
+
+    const sanitizedPayload: Partial<ReportDocumentInput> = {
+      reportType: payload.type,
+      boba: payload.boba,
+      shop: payload.shop?.toString(),
+      comment: payload.comment?.toString(),
+    };
+
+    // payload validation
+    const validatedPayload = reportDocumentValidatorSchema
+      .partial()
+      .safeParse(sanitizedPayload);
+
+    if (!validatedPayload.success) {
+      throw new Error(validatedPayload.error.message);
+    }
+
+    await dbConnect();
+
+    await Report.updateMany(reportUpdateCondition, validatedPayload.data);
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Failed to update many reports"
     );
   }
 };

@@ -1,42 +1,14 @@
 "use client";
 
 import { BobaDocument } from "@/lib/mongodb/models/Boba";
-import { useCallback, useState, useEffect } from "react";
-import { updateBoba as updateBobaApi } from "../api/boba";
-import { getBobaByName, getBobaFlavors } from "../actions";
+import { useCallback, useState } from "react";
+import {
+  getBobaByName,
+  getBobaFlavors,
+  updateBoba as updateBobaAction,
+} from "../actions";
 import { useAdminStore } from "@/lib/zustand/stores";
 import useSWR from "swr";
-
-export const useBobaUpdater = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [updatedBoba, setUpdatedBoba] = useState<BobaDocument | null>(null);
-
-  const updateBoba = useCallback(
-    async (bobaId: string, payload: Partial<BobaDocument>) => {
-      setIsLoading(true);
-      setError(null);
-      setUpdatedBoba(null);
-
-      try {
-        const updatedBoba = await updateBobaApi(bobaId, payload);
-        setUpdatedBoba(updatedBoba);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : "An error occurred");
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
-
-  return {
-    isLoading,
-    error,
-    updatedBoba,
-    updateBoba,
-  };
-};
 
 export const useBobaByNameFetcher = () => {
   const setIsFormDataLoading = useAdminStore(
@@ -82,81 +54,78 @@ export const useBobaFlavors = () => {
   const {
     data: flavors,
     isLoading,
+    isValidating,
     error,
     mutate,
-  } = useSWR<string[]>("boba-flavors", getBobaFlavors);
+  } = useSWR<string[]>("boba-flavors", getBobaFlavors, {
+    revalidateOnMount: false,
+  });
 
   return {
     flavors,
     isLoading,
+    isValidating,
     error,
     mutate,
   };
 };
 
 export const useBobaByName = (bobaName: string) => {
-  const setIsFormDataLoading = useAdminStore(
-    (state) => state.setIsFormDataLoading
-  );
-  const [error, setError] = useState<string | null>(null);
-
-  // Provide a fetcher to SWR so it manages cache/fetch automatically
   const {
     data: boba,
     isLoading,
-    error: bobaError,
-    mutate,
+    error,
     isValidating,
+    mutate,
   } = useSWR<BobaDocument | null>(
     bobaName ? `boba-by-name-${bobaName}` : null,
     () => getBobaByName(bobaName),
     {
-      fallbackData: null,
       revalidateOnMount: false,
     }
   );
 
-  useEffect(
-    () => {
-      setIsFormDataLoading(isValidating);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isValidating]
-  );
-
-  const fetchBobaByName = useCallback(
-    async () => {
-      if (boba !== null) return;
-
-      setIsFormDataLoading(true);
-      setError(null);
-
-      try {
-        const fetchedBoba = await getBobaByName(bobaName);
-        await mutate(fetchedBoba, { revalidate: false });
-      } catch (error) {
-        setError(error instanceof Error ? error.message : "An error occurred");
-        await mutate(null, { revalidate: false });
-      } finally {
-        setIsFormDataLoading(false);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [bobaName, mutate, boba]
-  );
-
-  const resetBoba = useCallback(() => {
-    mutate(null, { revalidate: false, populateCache: false });
-    setError(null);
-  }, [mutate]);
-
   return {
     boba,
     isLoading,
-    bobaError,
     error,
+    isValidating,
     mutate,
-    fetchBobaByName,
-    resetBoba,
+  };
+};
+
+export const useBobaUpdater = (bobaName: string) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { boba, mutate } = useBobaByName(bobaName);
+
+  const updateBoba = useCallback(
+    async (payload: Partial<BobaDocument>) => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const updatedBoba = await updateBobaAction({ _id: boba?._id }, payload);
+        mutate(updatedBoba, { revalidate: false });
+      } catch (error) {
+        setError(error instanceof Error ? error.message : "An error occurred");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [boba, mutate]
+  );
+
+  if (!boba)
+    return {
+      isLoading,
+      error,
+      updateBoba: () => {},
+    };
+
+  return {
+    isLoading,
+    error,
+    updateBoba,
   };
 };

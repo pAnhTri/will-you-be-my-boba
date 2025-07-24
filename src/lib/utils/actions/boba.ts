@@ -65,7 +65,7 @@ export const updateBoba = async (
     const boba = await Boba.findOneAndUpdate<BobaDocument>(
       bobaUpdateCondition,
       validatedPayload.data,
-      { new: true }
+      { new: true, lean: true }
     );
 
     if (!boba) {

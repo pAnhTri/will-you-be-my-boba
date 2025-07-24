@@ -5,6 +5,7 @@ import {
   Center,
   Group,
   Loader,
+  LoadingOverlay,
   ScrollArea,
   Stack,
   Text,
@@ -13,10 +14,11 @@ import ActiveReportPanelTabs from "./ReportPanel/ActiveReportPanelTabs";
 import { useAdminStore } from "@/lib/zustand/stores/admin";
 import { useMemo } from "react";
 import ReportCard from "./ReportPanel/ReportCard";
+import { useReports } from "@/lib/utils/hooks";
 
 const ReportPanel = () => {
+  const { reports, isValidating } = useReports();
   const activeReportTab = useAdminStore((state) => state.activeReportTab);
-  const reports = useAdminStore((state) => state.reports);
   const isReportsLoading = useAdminStore((state) => state.isReportsLoading);
   const reportsError = useAdminStore((state) => state.reportsError);
 
@@ -64,7 +66,14 @@ const ReportPanel = () => {
       <ScrollArea
         classNames={{ root: "grow-1 min-h-0 p-2 overflow-hidden" }}
         offsetScrollbars
+        pos="relative"
       >
+        <LoadingOverlay
+          visible={isValidating}
+          overlayProps={{
+            blur: 2,
+          }}
+        />
         <Stack gap="xs">
           {reportsByTab.length === 0 ? (
             <Center>

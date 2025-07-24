@@ -1,6 +1,5 @@
 import { ReportDocument } from "@/lib/mongodb/models/Report";
 import { cn, getReportBadgeColor, toLocalTime } from "@/lib/utils";
-import { useBobaByName } from "@/lib/utils/hooks/bobas";
 import { useAdminStore } from "@/lib/zustand/stores";
 import {
   Badge,
@@ -12,6 +11,7 @@ import {
   Skeleton,
   Collapse,
   Divider,
+  Loader,
 } from "@mantine/core";
 import React from "react";
 import ReportForm from "./ReportCard/ReportForm";
@@ -23,41 +23,24 @@ interface ReportCardProps {
 
 const ReportCard = ({ report }: ReportCardProps) => {
   const currentReport = useAdminStore((state) => state.currentReport);
-  const isFormDataLoading = useAdminStore((state) => state.isFormDataLoading);
   const toggleCurrentReport = useAdminStore(
     (state) => state.toggleCurrentReport
   );
 
   const {
-    boba,
-    error: bobaError,
-    fetchBobaByName,
-    resetBoba,
-  } = useBobaByName(report.boba);
-
-  const {
-    data: shopName,
+    shopName,
     isLoading: isShopNameLoading,
     error: shopNameError,
-  } = useShopNameById(report.shop?.toString() ?? null);
+    isValidating: isShopNameValidating,
+  } = useShopNameById(report.shop?.toString() ?? "");
 
   if (shopNameError) {
     return (
       <Alert title="Error" color="red">
-        {shopNameError}
+        {shopNameError.message}
       </Alert>
     );
   }
-
-  const handleOnClick = () => {
-    if (currentReport?._id.toString() === report._id.toString()) {
-      resetBoba();
-    } else {
-      fetchBobaByName();
-    }
-
-    toggleCurrentReport(report);
-  };
 
   return (
     <Paper
@@ -66,7 +49,7 @@ const ReportCard = ({ report }: ReportCardProps) => {
         currentReport?._id.toString() === report._id.toString() &&
           "bg-pink-500/10 border-pink-500 hover:bg-pink-500/20"
       )}
-      onClick={handleOnClick}
+      onClick={() => toggleCurrentReport(report)}
     >
       <Stack gap="xs">
         {/* Header: Badge, Boba Name, and Timestamp */}
@@ -97,9 +80,12 @@ const ReportCard = ({ report }: ReportCardProps) => {
           (isShopNameLoading ? (
             <Skeleton height={20} width={500} />
           ) : (
-            <Text size="xs" c="dimmed">
-              Shop: {shopName ?? "Unknown Shop"}
-            </Text>
+            <Group gap="xs">
+              <Text size="xs" c="dimmed">
+                Shop: {shopName ?? "Unknown Shop"}
+              </Text>
+              {isShopNameValidating && <Loader size="xs" color="gray" />}
+            </Group>
           ))}
 
         {/* Comment if available */}
@@ -124,17 +110,11 @@ const ReportCard = ({ report }: ReportCardProps) => {
             label: "text-gray-700",
           }}
         />
-        <Paper p="xs" radius="md">
-          {bobaError ? (
-            <Alert color="red" title="Error">
-              {bobaError}
-            </Alert>
-          ) : isFormDataLoading ? (
-            <Skeleton height={200} width={500} />
-          ) : (
-            <ReportForm boba={boba ?? null} />
-          )}
-        </Paper>
+        {currentReport?._id.toString() === report._id.toString() && (
+          <Paper p="xs" radius="md">
+            <ReportForm bobaName={report.boba} />
+          </Paper>
+        )}
       </Collapse>
     </Paper>
   );

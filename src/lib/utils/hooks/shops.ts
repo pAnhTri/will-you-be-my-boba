@@ -61,13 +61,25 @@ export const useShopNameByIdFetcher = (shopId: string | null) => {
   };
 };
 
-export const useShopNameById = (shopId: string | null) => {
-  const { data, error, isLoading } = useShopNameByIdFetcher(shopId);
-
-  return {
-    data,
+export const useShopNameById = (shopId: string) => {
+  const {
+    data: shopName,
     error,
     isLoading,
+    isValidating,
+    mutate,
+  } = useSWR<string>(
+    shopId ? `shop-name-${shopId}` : null,
+    () => getShopNameByIdAction(shopId),
+    { keepPreviousData: true }
+  );
+
+  return {
+    shopName,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
   };
 };
 
@@ -75,13 +87,17 @@ export const useShops = () => {
   const {
     data: shops,
     isLoading,
+    isValidating,
     error,
     mutate,
-  } = useSWR<ShopDocument[]>("shops", getShops);
+  } = useSWR<ShopDocument[]>("shops", getShops, {
+    revalidateOnMount: false,
+  });
 
   return {
     shops,
     isLoading,
+    isValidating,
     error,
     mutate,
   };

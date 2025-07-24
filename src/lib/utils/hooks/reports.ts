@@ -1,61 +1,71 @@
 "use client";
 
 import useSWR from "swr";
-
-import { useCallback, useEffect, useState } from "react";
-import { getReports } from "../actions/report";
-import { useAdminStore } from "@/lib/zustand/stores/admin";
+import { getReports } from "../actions";
 import { ReportDocument } from "@/lib/mongodb/models/Report";
+import { useCallback, useState } from "react";
+import {
+  updateReport as updateReportAction,
+  updateManyReports,
+} from "../actions";
 
-export const useInitiateReports = () => {
-  const setReports = useAdminStore((state) => state.setReports);
+export const useReports = () => {
+  const {
+    data: reports,
+    isLoading,
+    isValidating,
+    error,
+    mutate,
+  } = useSWR<ReportDocument[]>("reports", getReports, {
+    revalidateOnMount: false,
+  });
+
+  return {
+    reports,
+    isLoading,
+    isValidating,
+    error,
+    mutate,
+  };
+};
+
+export const useReportUpdater = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { mutate } = useReports();
 
-  const initializeReports = useCallback(
-    async () => {
+  const updateReport = useCallback(
+    async (
+      reportId: string,
+      payload: Partial<ReportDocument>,
+      isUpdatingName: boolean = false,
+      oldName: string | null = null
+    ) => {
       setIsLoading(true);
       setError(null);
 
-      try {
-        const reports = await getReports();
+      console.log("Report payload:", payload);
 
-        if (typeof reports === "string") {
-          throw new Error(reports);
+      try {
+        await updateReportAction({ _id: reportId }, payload);
+
+        if (isUpdatingName) {
+          await updateManyReports({ boba: oldName }, { boba: payload.boba });
         }
 
-        setReports(reports);
+        mutate();
       } catch (error) {
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Failed to initialize reports"
-        );
+        setError(error instanceof Error ? error.message : "An error occurred");
       } finally {
         setIsLoading(false);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [mutate]
   );
 
-  // Immediately initialize reports upon mount
-  useEffect(
-    () => {
-      initializeReports();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  return { isLoading, error, initializeReports };
-};
-
-export const useReports = () => {
-  const { data, isLoading, error, mutate } = useSWR<ReportDocument[]>(
-    "boba-reports",
-    getReports
-  );
-
-  return { reports: data, isLoading, error, mutate };
+  return {
+    isLoading,
+    error,
+    updateReport,
+  };
 };
