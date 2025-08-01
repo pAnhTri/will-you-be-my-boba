@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { UnstyledButton, FloatingIndicator } from "@mantine/core";
+import { UnstyledButton, FloatingIndicator, Group } from "@mantine/core";
 import { cn, getIndicatorColorClass, getTabColorClasses } from "@/lib/utils";
 import { useAdminStore } from "@/lib/zustand/stores/admin";
 
@@ -19,9 +19,12 @@ const ActiveReportPanelTabs = () => {
   };
 
   return (
-    <div
+    <Group
       ref={rootRef}
-      className="relative inline-flex bg-gray-100 border border-gray-200 rounded-md p-1 gap-1"
+      className="bg-gray-100 border border-gray-200 rounded-md"
+      pos="relative"
+      p="xs"
+      gap="xs"
     >
       {tabs.map((tab) => {
         const isActive = activeReportTab === tab.toLowerCase();
@@ -56,7 +59,7 @@ const ActiveReportPanelTabs = () => {
           getIndicatorColorClass(activeReportTab)
         )}
       />
-    </div>
+    </Group>
   );
 };
 

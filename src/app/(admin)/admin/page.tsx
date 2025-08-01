@@ -3,13 +3,43 @@ import { getUser } from "@/lib/utils/server";
 import { redirect } from "next/navigation";
 import NotAdminMessage from "@/components/Admin/NotAdminMessage";
 import AdminTabs from "@/components/Admin/AdminTabs";
-import { Suspense } from "react";
-import { Group } from "@mantine/core";
+import { Group, Tabs, TabsList, TabsPanel } from "@mantine/core";
 import DataFetchLoaders from "@/components/Admin/DataFetchLoaders";
-import ReportsInitializer from "@/components/Admin/ReportsInitializer";
-import ReportsHydrater from "@/components/Admin/ReportsHydrater";
-import ShopsInitializer from "@/components/Admin/ShopsInitializer";
-import BobaFlavorsInitializer from "@/components/Admin/BobaFlavorsInitializer";
+import dynamic from "next/dynamic";
+import ReportPanel from "@/components/Admin/ReportPanel";
+import { Suspense } from "react";
+
+const BobaPanel = dynamic(() => import("@/components/Admin/BobaPanel"), {
+  loading: () => <DataFetchLoaders text="Loading boba panel..." />,
+});
+
+const ReportsInitializer = dynamic(
+  () => import("@/components/Admin/ReportsInitializer"),
+  {
+    loading: () => <DataFetchLoaders text="Loading reports..." />,
+  }
+);
+
+const BobaFlavorsInitializer = dynamic(
+  () => import("@/components/Admin/BobaFlavorsInitializer"),
+  {
+    loading: () => <DataFetchLoaders text="Loading flavors..." />,
+  }
+);
+
+const ShopsInitializer = dynamic(
+  () => import("@/components/Admin/ShopsInitializer"),
+  {
+    loading: () => <DataFetchLoaders text="Loading shops..." />,
+  }
+);
+
+const BobasInitiator = dynamic(
+  () => import("@/components/Admin/BobasInitiator"),
+  {
+    loading: () => <DataFetchLoaders text="Loading bobas..." />,
+  }
+);
 
 const Admin = async () => {
   const supabase = await createClient();
@@ -35,24 +65,38 @@ const Admin = async () => {
   }
 
   return (
-    <>
-      <div className="full-screen">
+    <div className="full-screen">
+      <Suspense
+        fallback={<DataFetchLoaders text="Initializing admin data..." />}
+      >
         <Group gap="xs" justify="center">
-          <Suspense fallback={<DataFetchLoaders text="Loading reports..." />}>
-            <ReportsInitializer />
-          </Suspense>
-
-          <Suspense fallback={<DataFetchLoaders text="Loading flavors..." />}>
-            <BobaFlavorsInitializer />
-          </Suspense>
-
-          <Suspense fallback={<DataFetchLoaders text="Loading shops..." />}>
-            <ShopsInitializer />
-          </Suspense>
+          <ReportsInitializer />
+          <BobaFlavorsInitializer />
+          <ShopsInitializer />
+          <BobasInitiator />
         </Group>
-        <AdminTabs />
-      </div>
-    </>
+      </Suspense>
+      <Tabs
+        className="grow-1 min-h-0 flex flex-col"
+        defaultValue="reports"
+        variant="pills"
+        color="dark"
+      >
+        <TabsList grow p="xs">
+          <AdminTabs />
+        </TabsList>
+
+        <TabsPanel value="reports" className="grow-1 min-h-0 flex flex-col">
+          <ReportPanel />
+        </TabsPanel>
+        <TabsPanel value="boba" className="grow-1 min-h-0 flex flex-col">
+          <BobaPanel />
+        </TabsPanel>
+        <TabsPanel value="shops" className="h-full p-2">
+          Shops
+        </TabsPanel>
+      </Tabs>
+    </div>
   );
 };
 

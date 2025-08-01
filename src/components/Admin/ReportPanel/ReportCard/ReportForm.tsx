@@ -2,7 +2,7 @@ import { BobaDocument } from "@/lib/mongodb/models/Boba";
 import { ReportDocument } from "@/lib/mongodb/models/Report";
 import { cn } from "@/lib/utils";
 import { revalidatePath } from "@/lib/utils/actions";
-import { useReportUpdater, useReports, useShops } from "@/lib/utils/hooks";
+import { useReportUpdater, useShops } from "@/lib/utils/hooks";
 import {
   useBobaByName,
   useBobaFlavors,
@@ -27,7 +27,6 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import mongoose from "mongoose";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -131,14 +130,16 @@ const ReportForm = ({ bobaName }: ReportFormProps) => {
   }, [shops]);
 
   if (isBobaLoading) {
-    return <Skeleton height={200} width={500} />;
+    return <Skeleton height={200} width="100%" maw={500} />;
   }
 
   const onSubmit: SubmitHandler<ReportFixInput> = async (data) => {
-    const bobaPayload: Partial<BobaDocument> = {
+    const bobaPayload: Omit<Partial<BobaDocument>, "shopId"> & {
+      shopId: string[];
+    } = {
       name: data.name,
       flavors: data.flavors,
-      shopId: data.shops as unknown as mongoose.Types.ObjectId[],
+      shopId: data.shops,
     };
 
     await updateBoba(bobaPayload);
@@ -147,8 +148,6 @@ const ReportForm = ({ bobaName }: ReportFormProps) => {
       type: isSolved ? "Solved" : undefined,
       boba: data.name,
     };
-
-    console.log("Report payload:", reportPayload);
 
     const isUpdatingName = currentReport?.boba !== data.name;
 

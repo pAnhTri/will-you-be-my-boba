@@ -36,7 +36,7 @@ export const useReportUpdater = () => {
 
   const updateReport = useCallback(
     async (
-      reportId: string,
+      reportId: string | null = null,
       payload: Partial<ReportDocument>,
       isUpdatingName: boolean = false,
       oldName: string | null = null
@@ -44,10 +44,10 @@ export const useReportUpdater = () => {
       setIsLoading(true);
       setError(null);
 
-      console.log("Report payload:", payload);
-
       try {
-        await updateReportAction({ _id: reportId }, payload);
+        if (reportId) {
+          await updateReportAction({ _id: reportId }, payload);
+        }
 
         if (isUpdatingName) {
           await updateManyReports({ boba: oldName }, { boba: payload.boba });

@@ -94,5 +94,11 @@ export type SweetnessLevelType = InferSchemaType<typeof SweetnessLevelSchema>;
 export type BobaDocument = mongoose.HydratedDocumentFromSchema<
   typeof BobaSchema
 >;
+export type SweetnessDocument = mongoose.HydratedDocumentFromSchema<
+  typeof SweetnessLevelSchema
+>;
+export type CommunityReviewDocument = mongoose.HydratedDocumentFromSchema<
+  typeof CommunityReviewSchema
+>;
 
 export default Boba;

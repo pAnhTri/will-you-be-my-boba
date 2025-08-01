@@ -1,3 +1,5 @@
+"use client";
+
 import { ReportDocument } from "@/lib/mongodb/models/Report";
 import { cn, getReportBadgeColor, toLocalTime } from "@/lib/utils";
 import { useAdminStore } from "@/lib/zustand/stores";
@@ -13,9 +15,14 @@ import {
   Divider,
   Loader,
 } from "@mantine/core";
-import React from "react";
-import ReportForm from "./ReportCard/ReportForm";
 import { useShopNameById } from "@/lib/utils/hooks/shops";
+import dynamic from "next/dynamic";
+import { memo } from "react";
+
+const ReportForm = dynamic(() => import("./ReportCard/ReportForm"), {
+  loading: () => <Skeleton height={200} width="100%" maw={500} />,
+  ssr: false,
+});
 
 interface ReportCardProps {
   report: ReportDocument;
@@ -78,7 +85,7 @@ const ReportCard = ({ report }: ReportCardProps) => {
         {/* Shop ID if available */}
         {report.shop &&
           (isShopNameLoading ? (
-            <Skeleton height={20} width={500} />
+            <Skeleton height={20} width="100%" maw={500} />
           ) : (
             <Group gap="xs">
               <Text size="xs" c="dimmed">
@@ -120,4 +127,4 @@ const ReportCard = ({ report }: ReportCardProps) => {
   );
 };
 
-export default ReportCard;
+export default memo(ReportCard);
