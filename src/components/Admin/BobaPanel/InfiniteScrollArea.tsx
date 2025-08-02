@@ -11,6 +11,8 @@ import {
   Alert,
   Skeleton,
   ActionIcon,
+  Select,
+  Button,
 } from "@mantine/core";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useBobasPagination } from "@/lib/utils/hooks/bobas";
@@ -18,6 +20,7 @@ import { useDebouncedValue, useIntersection } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 import { LuPlus } from "react-icons/lu";
 import { useAdminStore } from "@/lib/zustand/stores/admin";
+import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 
 const ScrollToTop = dynamic(() => import("./ScrollToTop"), {
   ssr: false,
@@ -36,6 +39,9 @@ const InfiniteScrollArea = () => {
   const [debouncedFlavors] = useDebouncedValue(flavors, 300);
   const [sort, setSort] = useState<string>("name");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
+
+  const [sortByEnjoymentFactorToggle, setSortByEnjoymentFactorToggle] =
+    useState<"None" | "Ascending" | "Descending">("None");
 
   const setIsBobaModalOpen = useAdminStore((state) => state.setIsBobaModalOpen);
 
@@ -83,11 +89,26 @@ const InfiniteScrollArea = () => {
   const { completeBobaList, totalBobas } = useMemo(() => {
     if (!bobas) return { completeBobaList: [], totalBobas: 0 };
 
-    const completeBobaList = bobas.flat();
+    let completeBobaList = bobas.flat();
     const totalBobas = completeBobaList.length;
 
+    switch (sortByEnjoymentFactorToggle) {
+      case "Ascending":
+        completeBobaList = completeBobaList.sort(
+          (a, b) => (a.enjoymentFactor ?? 0) - (b.enjoymentFactor ?? 0)
+        );
+        break;
+      case "Descending":
+        completeBobaList = completeBobaList.sort(
+          (a, b) => (b.enjoymentFactor ?? 0) - (a.enjoymentFactor ?? 0)
+        );
+        break;
+      default:
+        break;
+    }
+
     return { completeBobaList, totalBobas };
-  }, [bobas]);
+  }, [bobas, sortByEnjoymentFactorToggle]);
 
   if (bobas && bobas.length === 0) {
     return <Alert title="No boba found" color="red" />;
@@ -107,10 +128,20 @@ const InfiniteScrollArea = () => {
         scrollPosition={scrollPosition}
         scrollAreaRef={scrollAreaRef}
       />
-      <Group justify="space-between" align="center" py="md" px="md">
-        <Group>
-          <Text>There are {totalBobas} boba(s)</Text>
-          {isValidating && <Loader size="xs" />}
+      <Group
+        justify="space-between"
+        align="center"
+        py="md"
+        px="md"
+        className="flex-col-reverse sm:flex-row"
+      >
+        <Group justify="space-between" align="center" gap="md">
+          <Group>
+            <Text fw={700} size="lg">
+              Showing {totalBobas} boba(s)
+            </Text>
+            {isValidating && <Loader size="xs" />}
+          </Group>
           <TextInput
             placeholder="Search"
             value={query}
@@ -130,6 +161,62 @@ const InfiniteScrollArea = () => {
               }
             }}
           />
+          <TextInput
+            placeholder="Flavor"
+            value={flavors}
+            onChange={(e) => setFlavors(e.currentTarget.value)}
+          />
+          <Select
+            placeholder="Sort"
+            value={sort}
+            onChange={(value) => setSort(value as string)}
+            data={[
+              { label: "Name", value: "name" },
+              { label: "Created At", value: "createdAt" },
+              { label: "Updated At", value: "updatedAt" },
+            ]}
+          />
+          <Select
+            placeholder="Order"
+            value={order}
+            onChange={(value) => setOrder(value as "asc" | "desc")}
+            data={[
+              { label: "Ascending", value: "asc" },
+              { label: "Descending", value: "desc" },
+            ]}
+          />
+          <Button.Group>
+            <Button
+              onClick={() =>
+                setSortByEnjoymentFactorToggle(
+                  sortByEnjoymentFactorToggle === "None"
+                    ? "Ascending"
+                    : sortByEnjoymentFactorToggle === "Ascending"
+                      ? "Descending"
+                      : "None"
+                )
+              }
+              variant="light"
+              color="gray"
+            >
+              {sortByEnjoymentFactorToggle === "None" ? (
+                <FaSort size={16} className="text-gray-500" />
+              ) : sortByEnjoymentFactorToggle === "Ascending" ? (
+                <FaSortUp size={16} className="text-green-500" />
+              ) : (
+                <FaSortDown size={16} className="text-red-500" />
+              )}
+            </Button>
+            <Button.GroupSection variant="outline">
+              {sortByEnjoymentFactorToggle === "None" ? (
+                <Text>Sort by Enjoyment Factor</Text>
+              ) : sortByEnjoymentFactorToggle === "Ascending" ? (
+                <Text>Sort by Enjoyment Factor (Ascending)</Text>
+              ) : (
+                <Text>Sort by Enjoyment Factor (Descending)</Text>
+              )}
+            </Button.GroupSection>
+          </Button.Group>
         </Group>
         <ActionIcon
           onClick={() => setIsBobaModalOpen(true)}

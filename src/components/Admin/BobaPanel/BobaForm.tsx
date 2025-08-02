@@ -7,7 +7,6 @@ import {
   useReportUpdater,
   useShops,
 } from "@/lib/utils/hooks";
-import { revalidatePath } from "@/lib/utils/actions/utils";
 import {
   BobaDocumentInput,
   BobaFormInput,
@@ -36,7 +35,6 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
-import { PopulatedBoba } from "@/types";
 
 const BobaForm = () => {
   const currentBoba = useAdminStore((state) => state.currentBoba);
@@ -236,13 +234,20 @@ const BobaForm = () => {
   const isReportOrPaginationLoading =
     isUpdateReportLoading || isUpdateLoading || isCreateLoading;
 
-  if (flavorsError || shopsError || updateError || updateReportError) {
+  if (
+    flavorsError ||
+    shopsError ||
+    updateError ||
+    updateReportError ||
+    createError
+  ) {
     return (
       <Alert color="red" title="Error">
         {flavorsError && flavorsError.message}
         {shopsError && shopsError.message}
         {updateError && updateError}
         {updateReportError && updateReportError}
+        {createError && createError}
       </Alert>
     );
   }

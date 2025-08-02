@@ -15,7 +15,6 @@ import { useAdminStore } from "@/lib/zustand/stores";
 import useSWR from "swr";
 import { PopulatedBoba } from "@/types";
 import useSWRInfinite from "swr/infinite";
-import { BobaDocumentInput } from "@/lib/validators/boba";
 
 export const useBobaByNameFetcher = () => {
   const setIsFormDataLoading = useAdminStore(
