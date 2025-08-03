@@ -92,9 +92,6 @@ const Admin = async () => {
         <TabsPanel value="boba" className="grow-1 min-h-0 flex flex-col">
           <BobaPanel />
         </TabsPanel>
-        <TabsPanel value="shops" className="h-full p-2">
-          Shops
-        </TabsPanel>
       </Tabs>
     </div>
   );
